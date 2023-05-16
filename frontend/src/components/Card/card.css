@@ -1,0 +1,35 @@
+.card-cnt{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    padding: 20px 10px;
+    background-color: rgb(87, 85, 85);
+    color: white;
+    border: 6px solid rgb(187,178,180);
+}
+.pic-cnt{
+    user-select: none;
+}
+.pic{
+    width: 100%;
+    max-width: 640px;
+}
+.info-cnt{
+    display: flex;
+    flex-direction: column;
+}
+.title{
+    margin: 0px;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+.description{
+    margin: 1px;
+    font-size: 1rem;
+    padding: 2px;
+}
+.price{
+    margin: 1px;
+    font-style: italic;
+}
