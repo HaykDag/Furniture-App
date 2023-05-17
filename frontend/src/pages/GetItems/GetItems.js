@@ -1,34 +1,36 @@
 import "./getItems.css";
 import { Table, Popconfirm, Button, Avatar, Form, Input, Tag } from "antd";
 import Header from "../../components/Header/Header";
-import { useLoaderData, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import defaultImage from "../../components/Card/chair.png";
 import TextArea from "antd/es/input/TextArea";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
-import { EditItem, deleteItem } from "../../hooks/useDbControllers";
-
-//loader
-export const itemsLoader = async () => {
-    const response = await fetch("/items");
-
-    return await response.json();
-    /*if I send with the image
-    const {items,imageData} = await response.json();
-    return {items,imageData}
-    */
-};
+import { EditItem, DeleteItem } from "../../hooks/useDbControllers";
+import { useSelector, useDispatch } from 'react-redux'
+import {
+        updateItem,
+        deleteItem, 
+        fetchItems, 
+        selectAllItems, 
+        getItemsError, 
+        getItemsStatus 
+    } from "../../features/items/itemsSlice"
 
 const GetItems = () => {
-    /*destructuring items from response, response comes as an object with items and dataImage
-        if I pass the image from backend
-        const destItems = useLoaderData();
-        const [items, setItems] = useState(destItems.items);
-    */
-    //use loader hook to set the items
-    const [items, setItems] = useState(useLoaderData());
     
+    const items = useSelector(selectAllItems)
+    const itemsStatus = useSelector(getItemsStatus)
+    const error = useSelector(getItemsError)
   
+    const dispatch = useDispatch();
+
+    useEffect(()=>{
+        if(itemsStatus==="idle"){
+          dispatch(fetchItems())
+        }
+      },[itemsStatus,dispatch])
+
     //use these to mark the editing row and get the values
     const [editingRow, setEditingRow] = useState(null);
     const [form] = Form.useForm();
@@ -39,37 +41,24 @@ const GetItems = () => {
     
     //change the _id to key in the data for the table
     const data = items?.map((item,i) => {
-        /*
-        if I am passing imageData from backend
-        let base64String = ""
-        if(item.images.length>0){
-            base64String = btoa(String.fromCharCode(...new Uint8Array(destItems.imageData[i]?.data?.data)));
-        }
-        
-        return {...item, key: item._id, thumbnail: base64String };
-        */
         return {...item, key: item._id };
     });
     
     const handleDelete = (record) => {
         //Delete from db
-        deleteItem(record._id);
+        DeleteItem(record._id);
+
         //delete from local State
-        const filteredData = [...data].filter(
-            (item) => item._id !== record._id
-        );
-        setItems(filteredData);
+        dispatch(deleteItem(record._id))
     };
 
     const handleEdit = (values) => {
         //Edit in the db
         EditItem(editingRow, values);
+
         //Edit in the local state
-        const updatedDataSourse = data.map((item) => {
-            return item.key === editingRow ? { ...item, ...values } : item;
-        });
-        setItems(updatedDataSourse);
-        setEditingRow(null);
+        dispatch(updateItem({id:editingRow,...values}))
+        setEditingRow(null)
     };
     
     const columns = [
