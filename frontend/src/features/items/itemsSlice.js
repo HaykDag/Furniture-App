@@ -17,6 +17,24 @@ export const fetchItems = createAsyncThunk('items/fetchItems', async ()=>{
         return err.message
     }
 })
+export const addItems = createAsyncThunk('items/addItems', async (initialItem)=>{
+    try{
+        const response = await axios.get(ITEMS_URL,initialItem)
+        return response.data
+    } catch(err){
+        return err.message
+    }
+})
+export const updateItems = createAsyncThunk('items/updateItems', async (initialItem)=>{
+    
+    const { id } = initialItem
+    try{
+        const response = await axios.patch(`${ITEMS_URL}/${id}`,initialItem)
+        return response.data
+    } catch(err){
+        return err.message
+    }
+})
 
 const itemsSlice = createSlice({
     name:"items",
@@ -29,13 +47,13 @@ const itemsSlice = createSlice({
             const item = state.items.find(action.payload);
             return item;
         },
-        addItem:(state,action)=>{
-            state.items.unshift(action.payload)
-        },
-        updateItem:(state,action)=>{
-            const items = state.items.map(item=>item._id===action.payload.id?{...item,...action.payload}:item);
-            state.items = items
-        },
+        // addItem:(state,action)=>{
+        //     state.items.unshift(action.payload)
+        // },
+        // updateItem:(state,action)=>{
+        //     const items = state.items.map(item=>item._id===action.payload.id?{...item,...action.payload}:item);
+        //     state.items = items
+        // },
         deleteItem:(state,action)=>{
            const items = state.items.filter(item=>item._id!==action.payload);
            state.items = items
@@ -53,6 +71,13 @@ const itemsSlice = createSlice({
         .addCase(fetchItems.rejected,(state,action)=>{
             state.status = 'failed'
             state.error = action.error
+        })
+        .addCase(addItems.fulfilled,(state,action)=>{//test this 
+            state.items.unshift(action.payload)
+        })
+        .addCase(updateItems.fulfilled,(state,action)=>{//this is working
+            const items = state.items.map(item=>item._id===action.payload.id?{...item,...action.payload}:item);
+            state.items = items
         })
     }
 })
