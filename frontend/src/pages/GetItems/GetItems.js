@@ -6,11 +6,10 @@ import { useState, useEffect } from "react";
 import defaultImage from "../../components/Card/chair.png";
 import TextArea from "antd/es/input/TextArea";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
-import { EditItem, DeleteItem } from "../../hooks/useDbControllers";
 import { useSelector, useDispatch } from 'react-redux'
 import {
-        updateItem,
-        deleteItem, 
+        updateItems,
+        deleteItems, 
         fetchItems, 
         selectAllItems, 
         getItemsError, 
@@ -45,19 +44,11 @@ const GetItems = () => {
     });
     
     const handleDelete = (record) => {
-        //Delete from db
-        DeleteItem(record._id);
-
-        //delete from local State
-        dispatch(deleteItem(record._id))
+        dispatch(deleteItems(record._id))
     };
 
     const handleEdit = (values) => {
-        //Edit in the db
-        EditItem(editingRow, values);
-
-        //Edit in the local state
-        dispatch(updateItem({id:editingRow,...values}))
+        dispatch(updateItems({id:editingRow,...values})).unwrap()
         setEditingRow(null)
     };
     

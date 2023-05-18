@@ -1,10 +1,12 @@
 import Header from "../components/Header/Header";
 import Card from "../components/Card/Card";
-import { useItems } from "../hooks/useItems";
+import { useSelector } from "react-redux";
+import { selectAllItems } from "../features/items/itemsSlice";
+
 
 const Home = ()=>{
     
-    const {items} = useItems();
+    const items = useSelector(selectAllItems)
  
     return(
         <div className="home">

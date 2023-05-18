@@ -1,11 +1,11 @@
 
 import { useState } from "react";
 import { useAuth } from "./useAuth";
+
 export const useLogin = ()=>{
     const [error,setError] = useState(null);
     const [isLoading,setIsLoading] = useState(null);
 
-    // const { dispatch } = useContext(AdminContext);
     const { dispatch } = useAuth();
 
     const login = async (userName,password)=>{
@@ -18,6 +18,7 @@ export const useLogin = ()=>{
             body:JSON.stringify({userName,password})
         })
         const json = await response.json()
+        
         if(!response.ok){
             setIsLoading(false);
             setError(json.error)

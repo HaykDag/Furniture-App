@@ -5,7 +5,7 @@ const itemRoutes = require('./routes/items');
 const adminRoutes = require('./routes/admin');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-
+const verifyToken = require('./utils/verifyToken');
 
 
 // express app
@@ -13,14 +13,14 @@ const app = express();
 
 
 // middleWares
-app.use(cors());
 app.use(cookieParser());
+app.use(cors());
 app.use(express.json());
 
 
 // routes
-app.use('/items',itemRoutes);
-app.use('/admin',adminRoutes);
+app.use('/items', verifyToken ,itemRoutes);
+app.use('/admin', adminRoutes);
 
 
 //error handling

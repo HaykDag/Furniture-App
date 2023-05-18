@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const ITEMS_URL = '/items'
@@ -19,17 +19,26 @@ export const fetchItems = createAsyncThunk('items/fetchItems', async ()=>{
 })
 export const addItems = createAsyncThunk('items/addItems', async (initialItem)=>{
     try{
-        const response = await axios.get(ITEMS_URL,initialItem)
+        const response = await axios.post(ITEMS_URL,initialItem)
         return response.data
     } catch(err){
         return err.message
     }
 })
 export const updateItems = createAsyncThunk('items/updateItems', async (initialItem)=>{
-    
     const { id } = initialItem
     try{
         const response = await axios.patch(`${ITEMS_URL}/${id}`,initialItem)
+        return response.data
+    } catch(err){
+        return err.message
+    }
+})
+export const deleteItems = createAsyncThunk('items/deleteItems', async (initialItem)=>{
+    
+    const  id  = initialItem
+    try{
+        const response = await axios.delete(`${ITEMS_URL}/${id}`)
         return response.data
     } catch(err){
         return err.message
@@ -44,7 +53,7 @@ const itemsSlice = createSlice({
             return state
         },
         getOneItem:(state,action)=>{
-            const item = state.items.find(action.payload);
+            const item = state.items?.items?.find(i=>i._id===action.payload);
             return item;
         },
         // addItem:(state,action)=>{
@@ -54,14 +63,14 @@ const itemsSlice = createSlice({
         //     const items = state.items.map(item=>item._id===action.payload.id?{...item,...action.payload}:item);
         //     state.items = items
         // },
-        deleteItem:(state,action)=>{
-           const items = state.items.filter(item=>item._id!==action.payload);
-           state.items = items
-        }
+        // deleteItem:(state,action)=>{
+        //    const items = state.items.filter(item=>item._id!==action.payload);
+        //    state.items = items
+        // }
     },
     extraReducers(builder) {
         builder
-        .addCase(fetchItems.pending,(state,action)=>{
+        .addCase(fetchItems.pending,(state)=>{
             state.status = 'loading'
         })
         .addCase(fetchItems.fulfilled,(state,action)=>{
@@ -72,20 +81,39 @@ const itemsSlice = createSlice({
             state.status = 'failed'
             state.error = action.error
         })
-        .addCase(addItems.fulfilled,(state,action)=>{//test this 
+        .addCase(addItems.fulfilled,(state,action)=>{//this is working
+            state.status = 'succeeded'
             state.items.unshift(action.payload)
         })
+        .addCase(addItems.rejected,(state,action)=>{//not sure if I need this
+            state.status = 'failed'
+            state.error = action.error
+        })
         .addCase(updateItems.fulfilled,(state,action)=>{//this is working
+            state.status = 'succeeded'
             const items = state.items.map(item=>item._id===action.payload.id?{...item,...action.payload}:item);
             state.items = items
+        })
+        .addCase(updateItems.rejected,(state,action)=>{//not sure if I need this
+            state.status = 'failed'
+            state.error = action.error
+        })
+        .addCase(deleteItems.fulfilled,(state,action)=>{ // //this is working
+            state.status = 'succeeded'
+            const items = state.items.filter(item=>item._id!==action.payload._id);
+            state.items = items
+        })
+        .addCase(deleteItems.rejected,(state,action)=>{//not sure if I need this
+            state.status = 'failed'
+            state.error = action.error
         })
     }
 })
 
 export const selectAllItems = (state)=> state.items.items
-//export const selecItemById = (state,id)=> state.items.find(id)
 export const getItemsStatus = (state)=> state.items.status
 export const getItemsError = (state)=> state.items.error
 
-export const { getAllItems, getOneItem, addItem, updateItem, deleteItem } = itemsSlice.actions;
+export const { getAllItems, getOneItem } = itemsSlice.actions;
+//export const { getAllItems, getOneItem, addItem, updateItem, deleteItem } = itemsSlice.actions;
 export default itemsSlice.reducer;

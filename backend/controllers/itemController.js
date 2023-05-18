@@ -52,6 +52,7 @@ const getItem = async (req,res,next)=>{
 
 //create an item
 const addItem = async(req,res,next)=>{
+    
     const {title,description,price,images,tags=[]} = req.body;
     //add item to db
     try{
@@ -71,7 +72,7 @@ const uploadImg = async (req,res,next)=>{
 //delete an item
 const deleteItem = async (req,res,next)=>{
     const { id } = req.params;
-
+ 
     if(!mongoose.Types.ObjectId.isValid(id)){
         next(createError(404,"no such item"))
     }
@@ -81,14 +82,13 @@ const deleteItem = async (req,res,next)=>{
     if(!item){
         next(createError(404,"no such item"))
     }
-
     res.status(200).json(item);
 }
 
 //update an item
 const EditItem = async (req,res,next)=>{
     const { id } = req.params;
-
+    
     if(!mongoose.Types.ObjectId.isValid(id)){
         next(createError(404,"no such item"))
     }
@@ -100,8 +100,9 @@ const EditItem = async (req,res,next)=>{
     if(!item){
         next(createError(404,"no such item"))
     }
+    const newItem = {...item,...req.body}
 
-    res.status(200).json(item);
+    res.status(200).json(newItem);
 }
 
 

@@ -24,8 +24,9 @@ adminSchema.statics.signup = async function (userName,password){
     }
 
     const exist = await this.findOne({ userName });
+
     if(exist){
-        throw Error('UserName is already in use')
+        throw Error('UserName is already in use');
     }
 
     const salt = await bcrypt.genSalt(15);
@@ -35,8 +36,10 @@ adminSchema.statics.signup = async function (userName,password){
 
     return admin
 }
+
 //static login method
 adminSchema.statics.login = async function (userName,password){
+
     //valid check
     if(!userName || !password){
         throw Error('All fields must be filled');
@@ -56,4 +59,5 @@ adminSchema.statics.login = async function (userName,password){
     
     return admin
 }
+
 module.exports = mongoose.model("Admin",adminSchema);

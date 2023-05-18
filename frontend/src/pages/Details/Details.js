@@ -1,43 +1,33 @@
 import './details.css'
 import Header from '../../components/Header/Header';
-import { getOneItem } from '../../hooks/useDbControllers';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Button, Form, Input, InputNumber, Tag } from 'antd';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { EditItem } from '../../hooks/useDbControllers';
 import Upload from 'antd/es/upload/Upload';
 import TextArea from 'antd/es/input/TextArea';
+import { updateItems,getOneItem } from '../../features/items/itemsSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Details = ()=>{
-//we can have the options in another file and import it here
+//we can have the options in another file or in the DB and import it here
   const tagOptions = ["Chair","Table","Sofa","Bed","Wood","Metal","Handmade"];
   const [componentDisabled, setComponentDisabled] = useState(true);
+  const dispatch = useDispatch();
+  const {id}  = useParams();
+  // const items = useSelector(selectAllItems)
+  // const item = items.find(i=>i._id===id)
+  const item = useSelector((state)=>state.items.items.find(i=>i._id===id))
+  //const item = dispatch(getOneItem(id))
+  
+  
 
-  const {id} = useParams();
-
-  const [item,setItem] = useState(null);
-
-  const [title,setTitle] = useState(null);
-  const [tags,setTags] = useState([]);
+  const [title,setTitle] = useState("");
+  const [tags,setTags] = useState("");
   const [price,setPrice] = useState(null);
-  const [description,setDescription] = useState(null);
+  const [description,setDescription] = useState("");
   const [images,setImages] = useState([])
 
-  useEffect(()=>{
-    const fetchItem = async()=>{
-    const imageArr = [];
-    const data = await getOneItem(id);
-     data.imageData.forEach(obj=>{
-      const base64String = btoa(String.fromCharCode(...new Uint8Array(obj.data.data)));
-      imageArr.push(base64String)
-     })
-     setItem(data.item);
-     setImages(imageArr)
-    }
-    
-    fetchItem()
-  },[id]);
 
   useEffect(()=>{
     setTitle(item?.title);
@@ -46,25 +36,22 @@ const Details = ()=>{
      setDescription(item?.description);
   },[item])
 
-  const handleDeleteImage = async (index)=>{
-    const newItem = {...item,...item.images.splice(index,1)};
-   const response = await EditItem(item._id,newItem);
-    if(response.error){
-      return
-    }
+  // const handleDeleteImage = async (index)=>{
+  //   const newItem = {...item,...item.images.splice(index,1)};
+  //  const response = await EditItem(item._id,newItem);
+  //   if(response.error){
+  //     return
+  //   }
 
-    setItem(newItem)
-  }
+  //   setItem(newItem)
+  // }
 
-  const handleUpdate = async()=>{
-    const newItem = {...item,title,description,price,tags};
-    const response = await EditItem(item._id,newItem);
-    if(response.error){
-      return
-    }
-    setItem(newItem)
+  const handleUpdate = ()=>{
+    dispatch(updateItems({id,title,description,price,tags}))
+
     setComponentDisabled(true);
   }
+
   const handleTag = (tag)=>{
     if(tags.join("").includes(tag)){
         setTags([...tags].filter(t=>t!==tag))
@@ -142,7 +129,7 @@ const Details = ()=>{
           {item && images?.map((src,index)=>(
             <div className='image-card' key={index}>
               <DeleteOutlined 
-                onClick={()=>handleDeleteImage(index)}
+                // onClick={()=>handleDeleteImage(index)}
                 className='del-img' />
               <img alt="img" src={`data:image/png;base64,${src}`}/>
             </div>
