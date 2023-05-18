@@ -1,18 +1,23 @@
 import { useState } from 'react';
-
+import { useSelector } from 'react-redux';
+import { selectAdmin } from '../../features/admin/adminSlice';
 import './header.css'
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
-const Header = ({isAdmin=false})=>{
+const Header = ()=>{
 
     const [toggle,setToggle] = useState(false);
     const {userName, dispatch}  = useAuth()
+    
 
+    const { admin } = useSelector(selectAdmin);
+    
     const handlLogout = ()=>{
         localStorage.removeItem('admin');
         dispatch({type:"LOGOUT"})
     }
+    
     return(
         <header>
             <nav className='navbar'>
@@ -34,16 +39,16 @@ const Header = ({isAdmin=false})=>{
                         <li>
                             <Link to='/admin'>DASHBOARD</Link>
                         </li>
-                        {isAdmin &&<li>
+                        {admin &&<li>
                             <Link to='/admin/store'>STORE</Link>
                         </li>}
-                        {isAdmin &&<li>
+                        {admin &&<li>
                             <Link to='/admin/Add'>ADD</Link>
                         </li>}
                     </ul>
                 </div>
-                {isAdmin && <div className='logout'>
-                    <span>{userName}</span>
+                {admin && <div className='logout'>
+                    <span>{admin}</span>
                      <span
                         onClick={handlLogout}
                      >logout</span>
