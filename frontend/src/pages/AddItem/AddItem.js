@@ -1,11 +1,12 @@
 import './addItem.css'
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header/Header";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Form, Input, InputNumber, Tag, Upload } from "antd";
 import TextArea from "antd/es/input/TextArea";
-
+import { addItems } from '../../features/items/itemsSlice';
+import { useDispatch } from 'react-redux';
 
 const AddItem = ()=>{
 
@@ -15,24 +16,20 @@ const AddItem = ()=>{
     const [price,setPrice] = useState("");
     const [tags,setTags] = useState([]);
     
-
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const handleAdd = async(e)=>{
-        const response = await fetch('/items',{
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({title,description,price,tags})
-        })
+    const handleAdd = async()=>{
+
+        dispatch(addItems({title,description,price,tags}))
         
-        if(response.ok){
-            setTitle("");
-            setDescription("");
-            setPrice("");
-            setTags([]);
-            //setImages([]);
-            navigate('../admin/store')
-        }
+        setTitle("");
+        setDescription("");
+        setPrice("");
+        setTags([]);
+        //setImages([]);
+        navigate('../admin/store')
+        
     }
 
     const handleTag = (tag)=>{
@@ -42,9 +39,7 @@ const AddItem = ()=>{
             setTags([...tags,tag])
         }
     }
-    useEffect(()=>{
-
-    },[]);
+  
 
     /* 
     uploading the img to the server and returning the path and name in one string
