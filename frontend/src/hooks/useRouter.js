@@ -30,10 +30,13 @@ const MyRouter = ()=>{
         createRoutesFromElements(
             <>
             <Route path="/" element={<Home />} />
-            <Route path="/admin" element={userName?<Dashboard />:<Login/>} />
-            <Route path="/admin/add" element={userName?<AddItem />:<Login/>} />
-            <Route path="/admin/signup" element={userName?<Signup />:<Login/>} />
-            <Route path="/admin/store" element={userName?<GetItems />:<Login/>}/>
+            <Route path="/admin" element={userName?<AddItem />:<Login/>} >
+                <Route path="/admin/add" element={userName?<AddItem />:<Login/>} />
+                <Route path="/admin/signup" element={userName?<Signup />:<Login/>} />
+                <Route path="/admin/store" element={userName?<GetItems />:<Login/>}/>
+            </Route>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Signup />} />
             <Route path="/items/:id" element={userName?<Details/>:<Login/>} />
             </>
         )

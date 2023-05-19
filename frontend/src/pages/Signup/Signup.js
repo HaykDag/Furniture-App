@@ -32,7 +32,7 @@ const Signup = ()=>{
                 className="login"
                 onSubmit={handleSubmit}
             >
-                <h3>Register new ADMIN</h3>
+                <h3>Register</h3>
                 <label>Username:</label>
                 <input
                     type="text"

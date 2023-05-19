@@ -44,16 +44,16 @@ const Header = ()=>{
                         {userName &&<li>
                             <Link to='/admin/Add'>ADD</Link>
                         </li>}
+                        {!userName && <>
+                        <li>
+                            <Link to='/login'>Login</Link>
+                        </li>
+                        <li>
+                            <Link to='/register'>Register</Link>
+                        </li>
+                        </>}
                     </ul>
                 </div>
-                {!userName &&<>
-                 <div className='logout'>
-                    <span onClick={handlLogout} >Login</span>
-                </div>
-                <div className='logout'>
-                    <span onClick={handlLogout} >Register</span>
-                </div>
-                </>}
                 {userName && <div className='logout'>
                     <span>{userName}</span>
                      <span
