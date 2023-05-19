@@ -8,9 +8,14 @@ const router = express.Router();
 
 //verify
 router.get('/verify',verifyToken, (req,res,next)=>{
-    userName = req.adminUserName
     
-    res.status(200).json({userName})
+    try {
+        userName = req.userName
+        res.status(200).json({userName})
+    } catch (err) {
+        next(err)
+    }
+    
 })
 
 //login

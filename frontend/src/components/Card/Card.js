@@ -4,15 +4,7 @@ import './card.css'
 const Card = ({ item })=>{
 
     const formattedNumber = (Number(item.price)).toLocaleString("en-US");
-    /*
-    if I am passing the image
-    let base64String = ''
-    if(item.images.length>0){
-        base64String = btoa(String.fromCharCode(...new Uint8Array(imageData.data.data)));
-    }
-
-        src={item.images.length>0?`data:image/png;base64,${base64String}`: defaultImage}
-    */
+    
     return(
         <div className='card-cnt'>
             <div className='pic-cnt'>

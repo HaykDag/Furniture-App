@@ -15,11 +15,13 @@ function App() {
   //const error = useSelector(getItemsError)
   
   const dispatch = useDispatch();
-//fetching items as soon as app loads
+  //fetching items as soon as app loads
   useEffect(()=>{
+
     if(itemsStatus==="idle"){
       dispatch(fetchItems())
     }
+    
   },[itemsStatus,dispatch])
  
   return (
