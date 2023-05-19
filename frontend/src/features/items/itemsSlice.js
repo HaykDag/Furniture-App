@@ -5,7 +5,7 @@ const ITEMS_URL = '/items'
 
 const initialState = {
     items:[],
-    status:'idle',//idle | loading | succeeded | failed
+    status:'idle',
     error: null
 }
 

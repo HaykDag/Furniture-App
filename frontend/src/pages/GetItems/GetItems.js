@@ -20,7 +20,7 @@ const GetItems = () => {
     
     const items = useSelector(selectAllItems)
     const itemsStatus = useSelector(getItemsStatus)
-    const error = useSelector(getItemsError)
+    //const error = useSelector(getItemsError) if I need 
   
     const dispatch = useDispatch();
 
@@ -215,7 +215,7 @@ const GetItems = () => {
 
     return (
         <>
-            <Header isAdmin={true} />
+            <Header />
             <div className="table-cnt">
                 <header className="table-header">
                     <Input.Search 

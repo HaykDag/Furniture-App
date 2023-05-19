@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 const AddItem = ()=>{
 
     const tagOptions = ["Chair","Table","Sofa","Bed","Wood","Metal","Handmade"];
+
     const [title,setTitle] = useState("");
     const [description,setDescription] = useState("");
     const [price,setPrice] = useState("");
@@ -27,7 +28,7 @@ const AddItem = ()=>{
         setDescription("");
         setPrice("");
         setTags([]);
-        //setImages([]);
+        
         navigate('../admin/store')
         
     }
@@ -41,20 +42,9 @@ const AddItem = ()=>{
     }
   
 
-    /* 
-    uploading the img to the server and returning the path and name in one string
-    const [images,setImages] = useState([]);
-    const handleUpload = (dataList) => {
-        dataList.fileList.forEach(list=>{
-            if(list.response){
-                setImages([list.response[0].name,...images])
-            }
-        })
-    };
-    */
     return(
         <>
-        <Header isAdmin={true} />
+        <Header />
         <div className='details-cnt'>
         <Form 
         className='form'

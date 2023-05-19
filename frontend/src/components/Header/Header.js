@@ -1,21 +1,19 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectAdmin } from '../../features/admin/adminSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectAdmin, logoutAdmin } from '../../features/admin/adminSlice';
 import './header.css'
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+
 
 const Header = ()=>{
 
     const [toggle,setToggle] = useState(false);
-    const {userName, dispatch}  = useAuth()
-    
-
-    const { admin } = useSelector(selectAdmin);
-    
+   
+    const dispatch = useDispatch();
+    const {userName}  = useSelector(selectAdmin);
+   
     const handlLogout = ()=>{
-        localStorage.removeItem('admin');
-        dispatch({type:"LOGOUT"})
+        dispatch(logoutAdmin())
     }
     
     return(
@@ -39,16 +37,16 @@ const Header = ()=>{
                         <li>
                             <Link to='/admin'>DASHBOARD</Link>
                         </li>
-                        {admin &&<li>
+                        {userName &&<li>
                             <Link to='/admin/store'>STORE</Link>
                         </li>}
-                        {admin &&<li>
+                        {userName &&<li>
                             <Link to='/admin/Add'>ADD</Link>
                         </li>}
                     </ul>
                 </div>
-                {admin && <div className='logout'>
-                    <span>{admin}</span>
+                {userName && <div className='logout'>
+                    <span>{userName}</span>
                      <span
                         onClick={handlLogout}
                      >logout</span>

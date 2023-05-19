@@ -6,22 +6,20 @@ import { Button, Form, Input, InputNumber, Tag } from 'antd';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import Upload from 'antd/es/upload/Upload';
 import TextArea from 'antd/es/input/TextArea';
-import { updateItems,getOneItem } from '../../features/items/itemsSlice';
+import { updateItems } from '../../features/items/itemsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Details = ()=>{
+
 //we can have the options in another file or in the DB and import it here
   const tagOptions = ["Chair","Table","Sofa","Bed","Wood","Metal","Handmade"];
+
   const [componentDisabled, setComponentDisabled] = useState(true);
   const dispatch = useDispatch();
-  const {id}  = useParams();
-  // const items = useSelector(selectAllItems)
-  // const item = items.find(i=>i._id===id)
-  const item = useSelector((state)=>state.items.items.find(i=>i._id===id))
-  //const item = dispatch(getOneItem(id))
-  
-  
 
+  const {id}  = useParams();
+  const item = useSelector((state)=>state.items.items.find(i=>i._id===id))
+ 
   const [title,setTitle] = useState("");
   const [tags,setTags] = useState("");
   const [price,setPrice] = useState(null);
@@ -36,15 +34,6 @@ const Details = ()=>{
      setDescription(item?.description);
   },[item])
 
-  // const handleDeleteImage = async (index)=>{
-  //   const newItem = {...item,...item.images.splice(index,1)};
-  //  const response = await EditItem(item._id,newItem);
-  //   if(response.error){
-  //     return
-  //   }
-
-  //   setItem(newItem)
-  // }
 
   const handleUpdate = ()=>{
     dispatch(updateItems({id,title,description,price,tags}))
@@ -62,7 +51,7 @@ const Details = ()=>{
 
   return(
   <>
-    <Header isAdmin={true} />
+    <Header />
     <div className='details-cnt'>
     <Form 
       className='form'
