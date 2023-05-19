@@ -1,19 +1,19 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginAdmin, selectAdmin } from "../../features/admin/adminSlice";
+import { loginUser, selectUser } from "../../features/users/usersSlice";
 import './login.css'
 const Login = ()=>{
 
     const [userName, setUserName] = useState("");
     const [password,setPassword] = useState("");
 
-    const { error } = useSelector(selectAdmin)
+    const { error } = useSelector(selectUser)
     const dispatch = useDispatch();
 
     const handleSubmit = async (e)=>{
         e.preventDefault();
 
-        dispatch(loginAdmin({userName,password}))
+        dispatch(loginUser({userName,password}))
         
         setUserName('');
         setPassword('');

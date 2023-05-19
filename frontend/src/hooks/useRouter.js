@@ -3,7 +3,7 @@ import { createBrowserRouter,createRoutesFromElements,Route} from "react-router-
 import { useEffect } from "react";
 // import { useAuth } from "./useAuth";
 import { useSelector, useDispatch } from "react-redux";
-import { selectAdmin, fetchAdmin } from "../features/admin/adminSlice";
+import { selectUser, fetchUser } from "../features/users/usersSlice";
 
 //pages
 import Home from "../pages/Home";
@@ -17,12 +17,13 @@ import Details from "../pages/Details/Details";
 const MyRouter = ()=>{
     
     
-    const {userName}  = useSelector(selectAdmin)
+    //const {userName}  = useSelector(selectUser)
+    const userName = ""
+    
     //check if there is access-cookie as soon as loading
-  
     const dispatch = useDispatch()
     useEffect(()=>{
-        dispatch(fetchAdmin())
+        dispatch(fetchUser())
     },[dispatch]);
 
     const router = createBrowserRouter(

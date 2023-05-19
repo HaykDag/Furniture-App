@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { signupAdmin, selectAdmin } from "../../features/admin/adminSlice";
+import { signupUser, selectUser } from "../../features/users/usersSlice";
 import { useNavigate } from "react-router-dom";
 import './signup.css'
 
@@ -9,14 +9,15 @@ const Signup = ()=>{
     const [userName, setUserName] = useState("");
     const [password,setPassword] = useState("");
 
-    const { status, error } = useSelector(selectAdmin)
+    const { status, error } = useSelector(selectUser)
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     
     const handleSubmit = async (e)=>{
         e.preventDefault();
 
-        dispatch(signupAdmin({userName,password}))
+        dispatch(signupUser({userName,password}))
         
         if(!error){
             setUserName('');

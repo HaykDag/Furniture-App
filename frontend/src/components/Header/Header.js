@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectAdmin, logoutAdmin } from '../../features/admin/adminSlice';
+import { selectUser, logoutUser } from '../../features/users/usersSlice';
 import './header.css'
 import { Link } from 'react-router-dom';
 
@@ -10,10 +10,11 @@ const Header = ()=>{
     const [toggle,setToggle] = useState(false);
    
     const dispatch = useDispatch();
-    const {userName}  = useSelector(selectAdmin);
+
+    const {userName}  = useSelector(selectUser);
    
     const handlLogout = ()=>{
-        dispatch(logoutAdmin())
+        dispatch(logoutUser())
     }
     
     return(
@@ -45,6 +46,14 @@ const Header = ()=>{
                         </li>}
                     </ul>
                 </div>
+                {!userName &&<>
+                 <div className='logout'>
+                    <span onClick={handlLogout} >Login</span>
+                </div>
+                <div className='logout'>
+                    <span onClick={handlLogout} >Register</span>
+                </div>
+                </>}
                 {userName && <div className='logout'>
                     <span>{userName}</span>
                      <span

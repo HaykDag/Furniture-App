@@ -5,24 +5,7 @@ const fs = require('fs');
 
 //get all items
 const getItems = async (req,res)=>{
-
     const items = await Item.find({}).sort({createdAt:-1});
-    /*
-    if I want to send the image file too
-    const imageData = [];
-    items.map(item=>{
-        if(item.images.length>0){
-            const thumbnail = ({
-                data: fs.readFileSync(item.images[0]),
-                contentType: "image/png"
-            })
-           imageData.push(thumbnail)
-        }else{
-            imageData.push("")
-        }
-    })
-    res.status(200).json({items,imageData})
-    */
     res.status(200).json(items)
 }
 
@@ -39,14 +22,7 @@ const getItem = async (req,res,next)=>{
     if(!item){
         next(createError(404,"no such item"))
     }
-    let imageData = [];
-    item.images.forEach(image=>{
-        imageData.push({
-            data: fs.readFileSync(image),
-            contentType: "image/png"
-        })
-    })
-    
+
     res.status(200).json({item,imageData});
 }
 
@@ -62,13 +38,7 @@ const addItem = async(req,res,next)=>{
         next(error)
     }
 }
-const uploadImg = async (req,res,next)=>{
-    const images = [];
-    req.files.forEach(image =>{
-        images.push({name:'./images/' + image.filename});
-    });
-    res.status(200).json(images);
-}
+
 //delete an item
 const deleteItem = async (req,res,next)=>{
     const { id } = req.params;
@@ -106,4 +76,4 @@ const EditItem = async (req,res,next)=>{
 }
 
 
-module.exports = { addItem, getItems, getItem, deleteItem, EditItem, uploadImg}
+module.exports = { addItem, getItems, getItem, deleteItem, EditItem}

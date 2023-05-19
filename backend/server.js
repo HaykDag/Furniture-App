@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
 const itemRoutes = require('./routes/items');
-const adminRoutes = require('./routes/admin');
+const userRoutes = require('./routes/user');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const verifyToken = require('./utils/verifyToken');
@@ -19,8 +19,8 @@ app.use(express.json());
 
 
 // routes
-app.use('/items', verifyToken ,itemRoutes);
-app.use('/admin', adminRoutes);
+app.use('/items', itemRoutes);
+app.use('/user', userRoutes);
 
 
 //error handling
@@ -28,7 +28,7 @@ app.use((err,req,res,next)=>{
     
     const errorStatus = err.status || 500;
     const errorMessage = err.message || 'Something went wrong'
-    
+   
     return res.status(errorStatus).json({error:errorMessage})
 });
 
