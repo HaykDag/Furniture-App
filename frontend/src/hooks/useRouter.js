@@ -1,5 +1,9 @@
 //router
-import { createBrowserRouter,createRoutesFromElements,Route} from "react-router-dom";
+import {
+    createBrowserRouter,
+    createRoutesFromElements,
+    Route,
+} from "react-router-dom";
 import { useEffect } from "react";
 // import { useAuth } from "./useAuth";
 import { useSelector, useDispatch } from "react-redux";
@@ -13,35 +17,51 @@ import Signup from "../pages/Signup/Signup";
 import AddItem from "../pages/AddItem/AddItem";
 import GetItems from "../pages/GetItems/GetItems";
 import Details from "../pages/Details/Details";
+import NotFound from "../pages/NotFound/NotFound";
 
-const MyRouter = ()=>{
+const MyRouter = () => {
+
+    const { user } = useSelector(selectUser);
+    const { userName, isAdmin } = user;
     
-    
-    //const {userName}  = useSelector(selectUser)
-    const userName = ""
-    
+   
     //check if there is access-cookie as soon as loading
-    const dispatch = useDispatch()
-    useEffect(()=>{
-        dispatch(fetchUser())
-    },[dispatch]);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(fetchUser());
+    }, [dispatch]);
 
     const router = createBrowserRouter(
         createRoutesFromElements(
             <>
-            <Route path="/" element={<Home />} />
-            <Route path="/admin" element={userName?<AddItem />:<Login/>} >
-                <Route path="/admin/add" element={userName?<AddItem />:<Login/>} />
-                <Route path="/admin/signup" element={userName?<Signup />:<Login/>} />
-                <Route path="/admin/store" element={userName?<GetItems />:<Login/>}/>
-            </Route>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Signup />} />
-            <Route path="/items/:id" element={userName?<Details/>:<Login/>} />
+                <Route path="/" element={<Home />} />
+                <Route
+                    path="/admin"
+                    // if there is an Admin show the Dashboard, else if there is user show not found else show login page
+                    element={isAdmin ? <Dashboard /> : userName ? <NotFound/> : <Login />}
+                />
+                <Route
+                    path="/admin/add"
+                    element={isAdmin ? <AddItem /> : userName ? <NotFound/> : <Login />}
+                />
+                <Route
+                    path="/admin/signup"
+                    element={isAdmin ? <Signup /> : userName ? <NotFound/> : <Login />}
+                />
+                <Route
+                    path="/admin/store"
+                    element={isAdmin ? <GetItems /> : userName ? <NotFound/> : <Login />}
+                />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Signup />} />
+                <Route
+                    path="/items/:id"
+                    element={isAdmin ? <Details /> : <Login />}
+                />
             </>
         )
-    )
+    );
     return router;
-}
+};
 
 export default MyRouter;

@@ -8,8 +8,9 @@ const Signup = ()=>{
 
     const [userName, setUserName] = useState("");
     const [password,setPassword] = useState("");
+    const [admin,setAdmin] = useState(false);
 
-    const { status, error } = useSelector(selectUser)
+    const { status, error, user} = useSelector(selectUser)
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -17,7 +18,7 @@ const Signup = ()=>{
     const handleSubmit = async (e)=>{
         e.preventDefault();
 
-        dispatch(signupUser({userName,password}))
+        dispatch(signupUser({userName,password,admin}))
         
         if(!error){
             setUserName('');
@@ -45,6 +46,14 @@ const Signup = ()=>{
                     onChange={(e)=>setPassword(e.target.value)}
                     value={password}
                 />
+                {user.isAdmin && <div className="isAdmin">
+                <label>Admin</label>
+                <input
+                    type="checkbox"
+                    onChange={()=>setAdmin(!admin)}
+                    value={admin}
+                />
+                </div>}
                 <button>Register</button>
                 {status==='failed' && <div className="error">{error}</div>}
             </form>

@@ -2,23 +2,31 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, selectUser } from "../../features/users/usersSlice";
 import './login.css'
+import Header from "../../components/Header/Header";
+
 const Login = ()=>{
 
     const [userName, setUserName] = useState("");
     const [password,setPassword] = useState("");
 
     const { error } = useSelector(selectUser)
+    
     const dispatch = useDispatch();
 
     const handleSubmit = async (e)=>{
         e.preventDefault();
 
         dispatch(loginUser({userName,password}))
+
+        if(!error){
+            setUserName('');
+            setPassword('');
+        }
         
-        setUserName('');
-        setPassword('');
     }
     return(
+        <>
+        <Header />
         <div className="log-cnt">
             <form
                 className="login"
@@ -41,6 +49,7 @@ const Login = ()=>{
                 {error && <div className="error">{error}</div>}
             </form>
         </div>
+        </>
     )
 }
 

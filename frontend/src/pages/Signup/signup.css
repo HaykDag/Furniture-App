@@ -1,0 +1,14 @@
+.isAdmin{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    
+}
+.isAdmin label {
+    margin: 1px;
+}
+.isAdmin input {
+    width: 18px;
+    height: 18px;
+    margin: 1px;
+}
