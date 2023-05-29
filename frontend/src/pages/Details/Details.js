@@ -1,5 +1,4 @@
 import './details.css'
-import Header from '../../components/Header/Header';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Button, Form, Input, InputNumber, Tag } from 'antd';
@@ -8,6 +7,7 @@ import Upload from 'antd/es/upload/Upload';
 import TextArea from 'antd/es/input/TextArea';
 import { updateItems } from '../../features/items/itemsSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import NotFound from '../NotFound/NotFound';
 
 const Details = ()=>{
 
@@ -18,8 +18,9 @@ const Details = ()=>{
   const dispatch = useDispatch();
 
   const {id}  = useParams();
+
   const item = useSelector((state)=>state.items.items.find(i=>i._id===id))
- 
+
   const [title,setTitle] = useState("");
   const [tags,setTags] = useState("");
   const [price,setPrice] = useState(null);
@@ -47,12 +48,12 @@ const Details = ()=>{
     }else{
         setTags([...tags,tag])
     }
-}
+  }
 
   return(
-  <>
-    <Header />
-    <div className='details-cnt'>
+    <>
+    {!item && <NotFound />}
+    {item && <div className='details-cnt'>
     <Form 
       className='form'
       disabled={componentDisabled}
@@ -125,7 +126,7 @@ const Details = ()=>{
           ))}
         </div>
       </div>
-      </div>
+      </div>}
     </>
   )
 }
