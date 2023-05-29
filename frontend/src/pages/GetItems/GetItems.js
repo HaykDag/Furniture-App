@@ -1,6 +1,5 @@
 import "./getItems.css";
 import { Table, Popconfirm, Button, Avatar, Form, Input, Tag } from "antd";
-import Header from "../../components/Header/Header";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import defaultImage from "../../components/Card/chair.png";
@@ -11,8 +10,7 @@ import {
         updateItems,
         deleteItems, 
         fetchItems, 
-        selectAllItems, 
-        getItemsError, 
+        selectAllItems,
         getItemsStatus 
     } from "../../features/items/itemsSlice"
 
@@ -196,7 +194,7 @@ const GetItems = () => {
                                 Edit
                             </Button>
                             <Button
-                                onClick={() => navigate(`/items/${record.key}`)}
+                                onClick={() => navigate(`${record.key}`)}
                             >
                                 Details
                             </Button>
@@ -214,8 +212,6 @@ const GetItems = () => {
     ];
 
     return (
-        <>
-            <Header />
             <div className="table-cnt">
                 <header className="table-header">
                     <Input.Search 
@@ -233,7 +229,6 @@ const GetItems = () => {
                     />
                 </Form>
             </div>
-        </>
     );
 };
 

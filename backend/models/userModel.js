@@ -52,7 +52,7 @@ userSchema.statics.login = async function (userName,password){
     const user = await this.findOne({ userName });
 
     if(!user){
-        throw Error("Admin doesn't exist")
+        throw Error("User doesn't exist")
     }
 
     const match = await bcrypt.compare(password,user.password);

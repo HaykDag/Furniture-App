@@ -1,6 +1,5 @@
 import './addItem.css'
 import { useNavigate } from "react-router-dom";
-import Header from "../../components/Header/Header";
 import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Form, Input, InputNumber, Tag, Upload } from "antd";
@@ -29,7 +28,7 @@ const AddItem = ()=>{
         setPrice("");
         setTags([]);
         
-        navigate('../admin/store')
+        navigate('../store')
         
     }
 
@@ -43,8 +42,7 @@ const AddItem = ()=>{
   
 
     return(
-        <>
-        <Header />
+        
         <div className='details-cnt'>
         <Form 
         className='form'
@@ -110,7 +108,7 @@ const AddItem = ()=>{
             </Form.Item>
         </Form>
     </div>
-    </>
+
     )
 }
 

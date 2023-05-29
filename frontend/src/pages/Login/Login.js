@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, selectUser } from "../../features/users/usersSlice";
+import {  loginUser ,selectUser } from "../../features/users/usersSlice";
 import './login.css'
-import Header from "../../components/Header/Header";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login = ()=>{
 
@@ -10,23 +11,25 @@ const Login = ()=>{
     const [password,setPassword] = useState("");
 
     const { error } = useSelector(selectUser)
-    
+    const navigate = useNavigate()
     const dispatch = useDispatch();
 
     const handleSubmit = async (e)=>{
         e.preventDefault();
-
-        dispatch(loginUser({userName,password}))
-
-        if(!error){
+        // dispatch(loginUser({userName,password}))
+        try{
+            const response = await axios.post(`/user/login`,{userName,password});
+            dispatch(loginUser(response.data))
+            navigate('../')
             setUserName('');
             setPassword('');
+        }catch(err){
+            dispatch(loginUser(err.response.data.error))
         }
-        
+       
     }
+    
     return(
-        <>
-        <Header />
         <div className="log-cnt">
             <form
                 className="login"
@@ -49,7 +52,6 @@ const Login = ()=>{
                 {error && <div className="error">{error}</div>}
             </form>
         </div>
-        </>
     )
 }
 

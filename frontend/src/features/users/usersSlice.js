@@ -19,15 +19,6 @@ export const fetchUser = createAsyncThunk('user/fetchUser', async ()=>{
         return err.response.data.errorMessage
     }
 })
-
-export const loginUser = createAsyncThunk('user/loginUser', async (userData)=>{
-    try {
-        const response = await axios.post(`${USER_URL}/login`,userData)
-        return response.data
-    } catch (err) {
-        return err.response.data.error
-    }
-})
 export const signupUser = createAsyncThunk('user/signupUser', async (userData)=>{
     try {
         const response = await axios.post(`${USER_URL}/signup`,userData)
@@ -52,6 +43,14 @@ const usersSlice = createSlice({
         getUser:(state)=>{
             return state
         },
+        loginUser:(state,action)=>{
+            if(action.payload?.userName){
+                state.user.userName = action.payload.userName
+                state.user.isAdmin = action.payload.isAdmin
+            }else{
+                state.error = action.payload
+            }
+        }
     },
     extraReducers(builder) {
         builder
@@ -67,15 +66,6 @@ const usersSlice = createSlice({
         })
         .addCase(fetchUser.rejected,(state,action)=>{
             state.error = action.payload
-        })
-        .addCase(loginUser.fulfilled,(state,action)=>{
-            //checking if response isOk or not 
-            if(action.payload?.userName){
-                state.user.userName = action.payload.userName
-                state.user.isAdmin = action.payload.isAdmin
-            }else{
-                state.error = action.payload
-            }
         })
         .addCase(signupUser.fulfilled,(state,action)=>{
             //checking if response isOk or not 
@@ -96,5 +86,5 @@ const usersSlice = createSlice({
 }) 
 
 export const selectUser = (state=>state.users);
-
+export const { loginUser } = usersSlice.actions
 export default usersSlice.reducer
