@@ -18,6 +18,8 @@
 .info-cnt{
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 .title{
     margin: 0px;
@@ -32,4 +34,7 @@
 .price{
     margin: 1px;
     font-style: italic;
+}
+.info-cnt button{
+    width: 180px;
 }

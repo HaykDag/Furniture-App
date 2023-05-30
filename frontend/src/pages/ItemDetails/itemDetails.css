@@ -1,0 +1,61 @@
+.item-box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: aqua;
+    padding: 15px;
+}
+.item-card-cnt{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    width: 80%;
+    height: 100%;
+    padding: 20px 10px;
+    background-color: rgb(87, 85, 85);
+    color: white;
+    border: 6px solid rgb(187,178,180);
+    border-radius: 25px;
+}
+.item-pic-cnt{
+    user-select: none;
+}
+.item-pic{
+  min-width: 340px;
+}
+.item-info-cnt{
+    margin: 15px;
+    display: flex;
+    flex-direction: column;
+}
+.item-title{
+    margin: 0px;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+.item-description{
+    margin: 1px;
+    font-size: 1rem;
+    padding: 2px;
+}
+.item-price{
+    margin: 1px;
+    font-style: italic;
+}
+.btn-cnt{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    gap: 10px;
+}
+.btn-cnt button:last-child{
+    background-color: rgb(222, 25, 25);
+    color: white;
+}
+.btn-cnt button:last-child:hover{
+    background-color: rgba(235, 9, 9, 0.915);
+    color: white;
+    transition: 0.5s;
+}

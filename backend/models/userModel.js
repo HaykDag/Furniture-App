@@ -16,11 +16,14 @@ const userSchema = new Schema({
     isAdmin:{
         type: Boolean,
         required: true
+    },
+    basket:{
+        type: [String]
     }
 })
 
 //static signup method
-userSchema.statics.signup = async function (userName,password, isAdmin = false){
+userSchema.statics.signup = async function (userName,password, isAdmin = false,basket=[]){
 
     //valid check
     if(!userName || !password){
@@ -36,7 +39,7 @@ userSchema.statics.signup = async function (userName,password, isAdmin = false){
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password,salt);
 
-    const user = await this.create({userName,password:hash, isAdmin});
+    const user = await this.create({userName,password:hash, isAdmin,basket});
 
     return user
 }

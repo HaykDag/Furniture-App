@@ -1,0 +1,22 @@
+.cart{
+    display: flex;
+    font-size: 1rem;
+    cursor: pointer;
+}
+.cart-icon{
+    font-size: 2.5rem;
+}
+.cart:hover{
+    color: #66dd74;
+}
+.cart-list{
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 15px;
+}
+.cart-list span{
+    border: 1px solid #555;
+    padding: 8px;
+    border-radius: 5px;
+}

@@ -5,6 +5,7 @@ const initialState = {
     user:{
         userName: "",
         isAdmin: false,
+        basket: []
     },
     status:"idle",
     error:null,
@@ -36,6 +37,15 @@ export const logoutUser = createAsyncThunk('user/logoutUser', async ()=>{
     }
 })
 
+export const updateUser = createAsyncThunk('user/updateUser', async ({userName,basket})=>{
+    try {
+        const response = await axios.post(`${USER_URL}/update`,{userName,basket})
+        return response.data
+    } catch (err) {
+        return err.message
+    }
+})
+
 const usersSlice = createSlice({
     name: "users",
     initialState,
@@ -47,6 +57,8 @@ const usersSlice = createSlice({
             if(action.payload?.userName){
                 state.user.userName = action.payload.userName
                 state.user.isAdmin = action.payload.isAdmin
+                state.user.basket = action.payload.basket
+                state.error = null;
             }else{
                 state.error = action.payload
             }
@@ -62,6 +74,7 @@ const usersSlice = createSlice({
             if(action.payload){
                 state.user.userName = action.payload?.userName
                 state.user.isAdmin = action.payload?.isAdmin
+                state.user.basket = action.payload?.basket
             }
         })
         .addCase(fetchUser.rejected,(state,action)=>{
@@ -80,6 +93,9 @@ const usersSlice = createSlice({
         .addCase(logoutUser.fulfilled,(state)=>{
             state.user.userName = ""
             state.user.isAdmin = false
+        })
+        .addCase(updateUser.fulfilled,(state,action)=>{
+            state.user.basket = [...action.payload.basket];
         })
         
     }

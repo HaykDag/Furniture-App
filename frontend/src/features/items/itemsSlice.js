@@ -50,7 +50,7 @@ const itemsSlice = createSlice({
     initialState,
     reducers:{
         getAllItems:(state)=>{
-            return state
+            return state.items?.items
         },
         getOneItem:(state,action)=>{
             const item = state.items?.items?.find(i=>i._id===action.payload);
@@ -115,5 +115,4 @@ export const getItemsStatus = (state)=> state.items.status
 export const getItemsError = (state)=> state.items.error
 
 export const { getAllItems, getOneItem } = itemsSlice.actions;
-//export const { getAllItems, getOneItem, addItem, updateItem, deleteItem } = itemsSlice.actions;
 export default itemsSlice.reducer;
