@@ -18,7 +18,6 @@ const Details = ()=>{
   const dispatch = useDispatch();
 
   const {id}  = useParams();
-
   const item = useSelector((state)=>state.items.items.find(i=>i._id===id))
 
   const [title,setTitle] = useState("");
@@ -121,7 +120,7 @@ const Details = ()=>{
               <DeleteOutlined 
                 // onClick={()=>handleDeleteImage(index)}
                 className='del-img' />
-              <img alt="img" src={`data:image/png;base64,${src}`}/>
+              <img alt="img" src={src}/>
             </div>
           ))}
         </div>

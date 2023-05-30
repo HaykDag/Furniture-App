@@ -14,6 +14,7 @@ const ItemDetails = ()=>{
     const item = useSelector((state)=>state.items.items.find(i=>i._id===id))
     const formattedNumber = (Number(item?.price)).toLocaleString("en-US");
     const dispatch = useDispatch();
+    
     const handleOrder = ()=>{
         //write logic about orderiing items
         console.log(`order - ${id} item`)

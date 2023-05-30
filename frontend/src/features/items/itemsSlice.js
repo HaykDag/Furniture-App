@@ -55,18 +55,7 @@ const itemsSlice = createSlice({
         getOneItem:(state,action)=>{
             const item = state.items?.items?.find(i=>i._id===action.payload);
             return item;
-        },
-        // addItem:(state,action)=>{
-        //     state.items.unshift(action.payload)
-        // },
-        // updateItem:(state,action)=>{
-        //     const items = state.items.map(item=>item._id===action.payload.id?{...item,...action.payload}:item);
-        //     state.items = items
-        // },
-        // deleteItem:(state,action)=>{
-        //    const items = state.items.filter(item=>item._id!==action.payload);
-        //    state.items = items
-        // }
+        }
     },
     extraReducers(builder) {
         builder

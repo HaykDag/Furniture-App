@@ -16,6 +16,7 @@ import AddItem from "../pages/AddItem/AddItem";
 import GetItems from "../pages/GetItems/GetItems";
 import Details from "../pages/Details/Details";
 import ItemDetails from "../pages/ItemDetails/ItemDetails";
+import GetUsers from "../pages/GetUsers/GetUsers";
 import NotFound from "../pages/NotFound/NotFound";
 
 const MyRouter = () => {
@@ -46,6 +47,7 @@ const MyRouter = () => {
                     <Route path="signup" element={<Signup />} />
                     <Route path="store/:id" element={<Details />} />
                     <Route path="store" element={<GetItems /> } />
+                    <Route path="users" element={<GetUsers /> } />
                 </Route>
                 {/* <Route path="/items/:id" element={isAdmin ? <Details /> : userName ? <NotFound/> : <Login />} /> */}
                 <Route path="*" element={<NotFound />} />

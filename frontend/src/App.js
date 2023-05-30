@@ -10,11 +10,8 @@ function App() {
   const myRouter = MyRouter()
   const itemsStatus = useSelector(getItemsStatus)
 
-  //I am not sure if I need this
-  //const items = useSelector(selectAllItems)
-  //const error = useSelector(getItemsError)
-  
   const dispatch = useDispatch();
+
   //fetching items as soon as app loads
   useEffect(()=>{
 

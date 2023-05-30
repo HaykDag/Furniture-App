@@ -4,8 +4,6 @@ import { selectUser, logoutUser } from '../../features/users/usersSlice';
 import { useNavigate } from 'react-router-dom';
 import './header.css'
 import { Link } from 'react-router-dom';
-import { MinusCircleOutlined, PlusOutlined, ShoppingCartOutlined } from "@ant-design/icons"
-import {Badge, Dropdown} from 'antd';
 import { selectAllItems } from '../../features/items/itemsSlice';
 import ShoppingCart from '../ShoppingCart/ShoppingCart';
 const Header = ()=>{
@@ -24,19 +22,6 @@ const Header = ()=>{
         navigate('/login')
     }
     
-    // const basketItems = user.basket.map((id) => {
-    //     const item = items.find(el=>el._id===id)
-    //     return {
-    //         key:id,
-    //         label:(
-    //             <div className='cart-list'>
-    //                 <span>{item?.title} - {item?.price}&#1423;</span>
-    //                 <PlusOutlined style={{backgroundColor:"lightgreen"}} />
-    //                 <MinusCircleOutlined style={{backgroundColor:"red"}} />
-    //             </div>
-    //             )
-    //     }
-    // })
     return(
         <header>
             <nav className='navbar'>
@@ -76,25 +61,15 @@ const Header = ()=>{
                         </>}
                     </ul>
                 </div>
-                {user.userName && <>
+                {user.userName && <div className='cart-logout'>
                     <ShoppingCart user={user} items={items}/>
-                    {/* <div className='cart'>
-                        <Dropdown
-                            menu={{items:basketItems}}
-                            placement="bottom"
-                        >
-                        <Badge count={user.basket.length} size='small'>
-                            <ShoppingCartOutlined className='cart-icon' />
-                        </Badge>
-                        </Dropdown>
-                    </div> */}
                     <div className='logout'>
                     <span>{user.userName}</span>
                      <span
                         onClick={handlLogout}
                      >logout</span>
                 </div>
-                </>}
+                </div>}
             </nav>
         </header>
     )

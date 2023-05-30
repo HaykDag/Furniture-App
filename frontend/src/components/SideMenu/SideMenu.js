@@ -6,6 +6,7 @@ import {
   AppstoreOutlined,
   UserAddOutlined,
   UserOutlined,
+  UsergroupAddOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
@@ -44,12 +45,11 @@ const SideMenu = () => {
           icon: <PlusCircleOutlined />,
           key: "/admin/Add",
         },
-        getItem('ADMINS', 'sub4', <UserOutlined />, [
-          getItem('Option 9', '9'),
-          getItem('Option 10', '10'),
-          getItem('Option 11', '11'),
-          getItem('Option 12', '12'),
-        ]),
+        {
+          label: "Users",
+          icon: <UsergroupAddOutlined /> ,
+          key: "/admin/users",
+        },
         {
           label: "Add ADMIN",
           icon: <UserAddOutlined /> ,

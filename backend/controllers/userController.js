@@ -15,6 +15,19 @@ const loginUser = async (req, res, next) => {
         next(error);
     }
 };
+
+//get All users 
+const getAllUsers = async(req,res,next)=>{
+
+    try {
+        const users = await User.find({},{password:false});
+
+        res.status(201).json({ users });
+    } catch (error) {
+        next(error);
+    }
+}
+
 //update user
 const updateUser = async (req, res, next) => {
     const { userName, basket } = req.body;
@@ -64,4 +77,4 @@ const verifyUser = async (req, res, next) => {
     }
 };
 
-module.exports = { loginUser, signupUser, logoutUser, verifyUser, updateUser };
+module.exports = { loginUser, signupUser, logoutUser, verifyUser, updateUser, getAllUsers };
