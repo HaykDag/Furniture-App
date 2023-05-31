@@ -19,10 +19,10 @@ router.get('/:id',getItem)
 router.post('/',  addItem)
 
 //DELETE an Item
-router.delete('/:id', verifyToken, deleteItem)
+router.delete('/:id', deleteItem)
 
 //EDIT an Item
-router.patch('/:id', verifyToken, EditItem)
+router.patch('/:id',EditItem)
 
 
 module.exports = router

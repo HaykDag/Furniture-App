@@ -5,20 +5,20 @@ import { Button, Form, Input, InputNumber, Tag } from 'antd';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import Upload from 'antd/es/upload/Upload';
 import TextArea from 'antd/es/input/TextArea';
-import { updateItems } from '../../features/items/itemsSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import NotFound from '../NotFound/NotFound';
-
+import { useUpdateItemMutation } from '../../services/items';
+import { useGetItemsQuery } from '../../services/items';
 const Details = ()=>{
 
 //we can have the options in another file or in the DB and import it here
   const tagOptions = ["Chair","Table","Sofa","Bed","Wood","Metal","Handmade"];
 
   const [componentDisabled, setComponentDisabled] = useState(true);
-  const dispatch = useDispatch();
 
   const {id}  = useParams();
-  const item = useSelector((state)=>state.items.items.find(i=>i._id===id))
+  const {data} = useGetItemsQuery();
+  const item = data?.find(i=>i._id===id)
 
   const [title,setTitle] = useState("");
   const [tags,setTags] = useState("");
@@ -34,10 +34,10 @@ const Details = ()=>{
      setDescription(item?.description);
   },[item])
 
+  const [updateItem] = useUpdateItemMutation();
 
   const handleUpdate = ()=>{
-    dispatch(updateItems({id,title,description,price,tags}))
-
+    updateItem({id,title,description,price,tags})
     setComponentDisabled(true);
   }
 
@@ -110,7 +110,7 @@ const Details = ()=>{
           <Button 
             disabled={false}
             onClick={()=>setComponentDisabled(!componentDisabled)}
-          >Update</Button>
+          >{componentDisabled ? 'Update' : 'Cancel' }</Button>
         </Form.Item>
     </Form>
       <div className='images'>

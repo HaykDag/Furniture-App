@@ -4,7 +4,6 @@ import { selectUser, logoutUser } from '../../features/users/usersSlice';
 import { useNavigate } from 'react-router-dom';
 import './header.css'
 import { Link } from 'react-router-dom';
-import { selectAllItems } from '../../features/items/itemsSlice';
 import ShoppingCart from '../ShoppingCart/ShoppingCart';
 const Header = ()=>{
 
@@ -14,11 +13,10 @@ const Header = ()=>{
     const navigate = useNavigate();
 
     const {user}  = useSelector(selectUser);
-    const items = useSelector(selectAllItems);
+
     
     const handlLogout = ()=>{
         dispatch(logoutUser())
-
         navigate('/login')
     }
     
@@ -62,7 +60,7 @@ const Header = ()=>{
                     </ul>
                 </div>
                 {user.userName && <div className='cart-logout'>
-                    <ShoppingCart user={user} items={items}/>
+                    <ShoppingCart user={user} />
                     <div className='logout'>
                     <span>{user.userName}</span>
                      <span

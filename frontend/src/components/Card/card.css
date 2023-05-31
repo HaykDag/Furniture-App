@@ -36,5 +36,18 @@
     font-style: italic;
 }
 .info-cnt button{
+    background-color: rgb(15, 154, 154);
     width: 180px;
+}
+.trash-can{
+    margin-top: 15px;
+    font-size: 1.5rem;
+    border: 1px solid rgb(236, 229, 229);
+    padding: 4px;
+    background-color: red;
+    border-radius: 50%;
+}
+.trash-can:hover{
+    font-size: 1.7rem;
+    transition: 0.15s;
 }

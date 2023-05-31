@@ -1,20 +1,22 @@
-
 import Card from "../components/Card/Card";
-import { useSelector } from "react-redux";
-import { selectAllItems } from "../features/items/itemsSlice";
-
+import { useGetItemsQuery } from "../services/items";
 
 const Home = ()=>{
     
-    const items = useSelector(selectAllItems)
-    
+    const {data,error,isLoading} = useGetItemsQuery();
+    let content;
+    if(isLoading){
+        content = <p>loading...</p>
+    }else if(error){
+        content = <p>error</p>
+    }else{
+        content = data.map(((item,i)=>(<Card key={i} item={item} />)))
+    }
     return(
         <div className="home">
             <h1>Home sweet Home</h1>
             <div className="main">
-                {items?.map(((item,i)=>(
-                    <Card key={i} item={item}  />
-                )))}
+                {content}
             </div>
         </div>
     )

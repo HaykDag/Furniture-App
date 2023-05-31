@@ -9,10 +9,10 @@ import { useDispatch } from 'react-redux';
 import { useEffect } from "react";
 import './shoppingCart.css'
 import { Link } from "react-router-dom";
+import { useGetItemsQuery } from "../../services/items";
 
-
-const ShoppingCart = ({user,items}) => {
-
+const ShoppingCart = ({user}) => {
+    
     useEffect(() => {
         window.addEventListener('error', e => {
             if (e.message === 'ResizeObserver loop limit exceeded') {
@@ -33,7 +33,8 @@ const ShoppingCart = ({user,items}) => {
     }, []);
     
     const dispatch = useDispatch();
-    
+    const {data:items} = useGetItemsQuery();
+
     const handleOrder = (id)=>{
         //write the logic for ordering items
         console.log('order',id)
@@ -44,12 +45,12 @@ const ShoppingCart = ({user,items}) => {
         dispatch(updateUser({userName,basket}))
     }
     const basketItems = user.basket.map((id) => {
-        const item = items.find((el) => el._id === id);
+        const item = items?.find((el) => el._id === id);
         return {
             key: id,
             label: (
                 <div className="cart-list">
-                    <Link to={`items/${item?._id}`}>
+                    <Link to={`../items/${item?._id}`}>
                         <span>
                             {item?.title} - {item?.price}&#1423;
                         </span>

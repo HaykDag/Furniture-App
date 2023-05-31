@@ -4,14 +4,18 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, updateUser } from '../../features/users/usersSlice';
 import { Button } from 'antd';
+import { useGetItemsQuery } from '../../services/items';
+
 
 const ItemDetails = ()=>{
-
 
     const {id}  = useParams();
     const {user} = useSelector(selectUser)
     const {userName} = user;
-    const item = useSelector((state)=>state.items.items.find(i=>i._id===id))
+
+    const {data} = useGetItemsQuery();
+    const item = data?.find(i=>i._id===id)
+
     const formattedNumber = (Number(item?.price)).toLocaleString("en-US");
     const dispatch = useDispatch();
     

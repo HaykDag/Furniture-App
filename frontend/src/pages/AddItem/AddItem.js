@@ -4,9 +4,7 @@ import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Form, Input, InputNumber, Tag, Upload } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { addItems } from '../../features/items/itemsSlice';
-import { useDispatch } from 'react-redux';
-
+import { useAddItemMutation } from '../../services/items';
 const AddItem = ()=>{
 
     const tagOptions = ["Chair","Table","Sofa","Bed","Wood","Metal","Handmade"];
@@ -16,20 +14,16 @@ const AddItem = ()=>{
     const [price,setPrice] = useState("");
     const [tags,setTags] = useState([]);
     
-    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [addItem] = useAddItemMutation();
 
     const handleAdd = async()=>{
-
-        dispatch(addItems({title,description,price,tags}))
-        
+        addItem({title,description,price,tags})
         setTitle("");
         setDescription("");
         setPrice("");
         setTags([]);
-        
-        navigate('../store')
-        
+        navigate('../store');
     }
 
     const handleTag = (tag)=>{
@@ -40,9 +34,7 @@ const AddItem = ()=>{
         }
     }
   
-
     return(
-        
         <div className='details-cnt'>
         <Form 
         className='form'
@@ -81,10 +73,6 @@ const AddItem = ()=>{
             </Form.Item>
             <Form.Item valuePropName="image" >
             <Upload 
-                // action="http://localhost:4000/items/upload"
-                // onChange={handleUpload}
-                // enctype='multipart/form-data'
-                // method='POST'
                 multiple
                 maxCount={5}
                 name='images'
