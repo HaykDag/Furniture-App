@@ -1,33 +1,22 @@
 import "./getItems.css";
 import { Table, Popconfirm, Button, Avatar, Form, Input, Tag } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import defaultImage from "../../components/Card/chair.png";
 import TextArea from "antd/es/input/TextArea";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
-import { useSelector, useDispatch } from 'react-redux'
-import {
-        updateItems,
-        deleteItems, 
-        fetchItems, 
-        selectAllItems,
-        getItemsStatus 
-    } from "../../features/items/itemsSlice"
+import { useGetItemsQuery, 
+        useUpdateItemMutation,
+        useDeleteItemMutation
+     } from "../../services/items";
 
+     
 const GetItems = () => {
     
-    const items = useSelector(selectAllItems)
-    const itemsStatus = useSelector(getItemsStatus)
-    //const error = useSelector(getItemsError) if I need 
-  
-    const dispatch = useDispatch();
-
-    useEffect(()=>{
-        if(itemsStatus==="idle"){
-          dispatch(fetchItems())
-        }
-      },[itemsStatus,dispatch])
-
+    const {data,error,isLoading} = useGetItemsQuery();
+    const [updateItem] = useUpdateItemMutation();
+    const [deleteItem] = useDeleteItemMutation();
+   
     //use these to mark the editing row and get the values
     const [editingRow, setEditingRow] = useState(null);
     const [form] = Form.useForm();
@@ -37,16 +26,16 @@ const GetItems = () => {
     const [searchTag,setSearchTag] = useState("");
     
     //change the _id to key in the data for the table
-    const data = items?.map((item,i) => {
+    const dataItems = data?.map((item,i) => {
         return {...item, key: item._id };
     });
     
     const handleDelete = (record) => {
-        dispatch(deleteItems(record._id))
+        deleteItem(record._id)
     };
 
     const handleEdit = (values) => {
-        dispatch(updateItems({id:editingRow,...values})).unwrap()
+        updateItem({id:editingRow,...values})
         setEditingRow(null)
     };
     
@@ -224,7 +213,7 @@ const GetItems = () => {
                     <Table
                         className="table"
                         pagination={{ position: ["bottomCenter"], pageSize: 5 }}
-                        dataSource={data}
+                        dataSource={dataItems}
                         columns={columns}
                     />
                 </Form>
