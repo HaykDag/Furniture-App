@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
-    allUsers:[],
     user:{
         userName: "",
         isAdmin: false,
@@ -13,14 +12,6 @@ const initialState = {
 }
 const USER_URL = '/user'
 
-export const fetchUsers = createAsyncThunk('user/fetchUsers', async ()=>{
-    try{
-        const response = await axios.get(`${USER_URL}/allUsers`)
-        return response.data.users
-    } catch(err){
-        return err.response.data.errorMessage
-    }
-})
 
 export const fetchUser = createAsyncThunk('user/fetchUser', async ()=>{
     try{
@@ -56,8 +47,8 @@ export const updateUser = createAsyncThunk('user/updateUser', async ({userName,b
     }
 })
 
-const usersSlice = createSlice({
-    name: "users",
+const userSlice = createSlice({
+    name: "user",
     initialState,
     reducers:{
         getUser:(state)=>{
@@ -65,9 +56,7 @@ const usersSlice = createSlice({
         },
         loginUser:(state,action)=>{
             if(action.payload?.userName){
-                state.user.userName = action.payload.userName
-                state.user.isAdmin = action.payload.isAdmin
-                state.user.basket = action.payload.basket
+                state.user = action.payload;
                 state.error = null;
             }else{
                 state.error = action.payload
@@ -76,27 +65,13 @@ const usersSlice = createSlice({
     },
     extraReducers(builder) {
         builder
-        .addCase(fetchUsers.pending,(state)=>{
-            state.status = "loading"
-        })
-        .addCase(fetchUsers.fulfilled,(state,action)=>{
-            state.status = 'idle'
-            if(action.payload){
-                state.allUsers = action.payload
-            }
-        })
-        .addCase(fetchUsers.rejected,(state,action)=>{
-            state.error = action.payload
-        })
         .addCase(fetchUser.pending,(state)=>{
             state.status = "loading"
         })
         .addCase(fetchUser.fulfilled,(state,action)=>{
             state.status = 'idle'
             if(action.payload){
-                state.user.userName = action.payload?.userName
-                state.user.isAdmin = action.payload?.isAdmin
-                state.user.basket = action.payload?.basket
+                state.user = action.payload;
             }
         })
         .addCase(fetchUser.rejected,(state,action)=>{
@@ -106,7 +81,7 @@ const usersSlice = createSlice({
             //checking if response isOk or not 
             if(action.payload?.userName){
                 console.log(action.payload)
-                state.status = action.payload.userName
+                state.user.status = action.payload.userName
             }else{
                 state.status = "failed"
                 state.error = action.payload
@@ -123,7 +98,6 @@ const usersSlice = createSlice({
     }
 }) 
 
-export const selectAllUsers = (state=>state.users.allUsers);
-export const selectUser = (state=>state.users);
-export const { loginUser } = usersSlice.actions
-export default usersSlice.reducer
+export const selectUser = (state=>state.user);
+export const { loginUser } = userSlice.actions
+export default userSlice.reducer

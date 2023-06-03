@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { signupUser, selectUser } from "../../features/users/usersSlice";
+import { signupUser, selectUser } from "../../features/users/userSlice";
 import { useNavigate } from "react-router-dom";
 import './signup.css'
 
@@ -11,21 +11,20 @@ const Signup = ()=>{
     const [admin,setAdmin] = useState(false);
 
     const { status, error, user} = useSelector(selectUser)
-
+    console.log(status)
     const dispatch = useDispatch();
     const navigate = useNavigate();
     
-    const handleSubmit = async (e)=>{
+    const handleSubmit = (e)=>{
         e.preventDefault();
 
         dispatch(signupUser({userName,password,admin}))
-        
+        //think this through
         if(!error){
             setUserName('');
             setPassword('');
-            navigate('../admin')
+            navigate('../')
         }
-        
     }
     return(
         <div className="log-cnt">
@@ -55,6 +54,7 @@ const Signup = ()=>{
                 />
                 </div>}
                 <button>Register</button>
+                {status===userName && <div>{userName} registered</div>}
                 {status==='failed' && <div className="error">{error}</div>}
             </form>
         </div>

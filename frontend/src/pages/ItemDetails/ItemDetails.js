@@ -2,7 +2,7 @@ import './itemDetails.css'
 import defaultImage from'./chair.png'
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUser, updateUser } from '../../features/users/usersSlice';
+import { selectUser, updateUser } from '../../features/users/userSlice';
 import { Button } from 'antd';
 import { useGetItemsQuery } from '../../services/items';
 

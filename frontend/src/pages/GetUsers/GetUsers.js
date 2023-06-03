@@ -1,26 +1,20 @@
 import "./getUsers.css";
 import { Table, Popconfirm, Button, Avatar, Input, Tag } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import defaultImage from "./user.jpg";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchUsers, selectAllUsers } from "../../features/users/usersSlice";
+import { useGetUsersQuery } from "../../services/users";
 
 const GetUsers = () => {
 
-    const dispatch = useDispatch();
-    const users = useSelector(selectAllUsers);
     
-    useEffect(() => {
-        //dispatch and fetch all the users
-        dispatch(fetchUsers());
-    }, [dispatch]);
+    const {data:users,error,isLoading} = useGetUsersQuery();
     
     const navigate = useNavigate();
     const [searchText, setSearchText] = useState("");
 
     //change the _id to key in the data for the table
-    const data = users?.map((user) => {
+    const data = users?.users.map((user) => {
         return { ...user, key: user._id };
     });
 
@@ -108,12 +102,14 @@ const GetUsers = () => {
                     onChange={(e) => setSearchText(e.target.value)}
                 />
             </header>
-            <Table
+            {isLoading ? <p>loading...</p> :
+                error ? <p>{error}</p> :
+                <Table
                 className="table"
                 pagination={{ position: ["bottomCenter"], pageSize: 5 }}
                 dataSource={data}
                 columns={columns}
-            />
+            />}
         </div>
     );
 };

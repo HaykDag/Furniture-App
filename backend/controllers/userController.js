@@ -68,7 +68,7 @@ const logoutUser = async (req, res, next) => {
 //verify user
 const verifyUser = async (req, res, next) => {
     try {
-        userName = req.userName;
+        const userName = req.userName;
         const user = await User.findOne({ userName });
         const { isAdmin, basket } = user;
         res.status(200).json({ userName, isAdmin, basket });

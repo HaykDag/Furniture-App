@@ -3,7 +3,7 @@ import {createBrowserRouter,createRoutesFromElements,Route} from "react-router-d
 import { useEffect } from "react";
 // import { useAuth } from "./useAuth";
 import { useSelector, useDispatch } from "react-redux";
-import { selectUser, fetchUser } from "../features/users/usersSlice";
+import { selectUser, fetchUser } from "../features/users/userSlice";
 
 //pages
 import HomeLayout from "../layouts/HomeLayout";

@@ -4,7 +4,7 @@ import {
     ShoppingCartOutlined,
 } from "@ant-design/icons";
 import { Badge, Dropdown } from "antd";
-import { updateUser } from "../../features/users/usersSlice";
+import { updateUser } from "../../features/users/userSlice";
 import { useDispatch } from 'react-redux';
 import { useEffect } from "react";
 import './shoppingCart.css'

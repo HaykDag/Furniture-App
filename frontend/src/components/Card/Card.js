@@ -1,7 +1,7 @@
 import defaultImage from'./chair.png'
 import './card.css'
 import { Button } from 'antd';
-import { updateUser , selectUser} from '../../features/users/usersSlice';
+import { updateUser , selectUser} from '../../features/users/userSlice';
 import { useDispatch , useSelector} from 'react-redux';
 import { Link } from 'react-router-dom';
 import { DeleteOutlined } from '@ant-design/icons'

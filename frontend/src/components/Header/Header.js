@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectUser, logoutUser } from '../../features/users/usersSlice';
+import { selectUser, logoutUser } from '../../features/users/userSlice';
 import { useNavigate } from 'react-router-dom';
 import './header.css'
 import { Link } from 'react-router-dom';

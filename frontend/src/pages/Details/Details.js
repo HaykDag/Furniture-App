@@ -5,7 +5,6 @@ import { Button, Form, Input, InputNumber, Tag } from 'antd';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import Upload from 'antd/es/upload/Upload';
 import TextArea from 'antd/es/input/TextArea';
-import { useSelector } from 'react-redux';
 import NotFound from '../NotFound/NotFound';
 import { useUpdateItemMutation } from '../../services/items';
 import { useGetItemsQuery } from '../../services/items';
