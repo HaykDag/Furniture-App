@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const itemRoutes = require('./routes/items');
 const userRoutes = require('./routes/user');
+const categoryRoutes = require('./routes/categories')
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const verifyToken = require('./utils/verifyToken');
@@ -20,6 +21,7 @@ app.use(express.json());
 
 // routes
 app.use('/items', itemRoutes);
+app.use('/categories', categoryRoutes);
 app.use('/user', userRoutes);
 
 

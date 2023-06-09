@@ -6,10 +6,12 @@ import { Button, Form, Input, InputNumber, Tag, Upload } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { addItems } from '../../features/items/itemsSlice';
 import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+
 
 const AddItem = ()=>{
 
-    const tagOptions = ["Chair","Table","Sofa","Bed","Wood","Metal","Handmade"];
+    const tagOptions = useSelector((state)=>state.category.categories)
 
     const [title,setTitle] = useState("");
     const [description,setDescription] = useState("");

@@ -11,9 +11,9 @@ import NotFound from '../NotFound/NotFound';
 
 const Details = ()=>{
 
-//we can have the options in another file or in the DB and import it here
-  const tagOptions = ["Chair","Table","Sofa","Bed","Wood","Metal","Handmade"];
 
+  const tagOptions = useSelector((state)=>state.category.categories)
+  console.log(tagOptions)
   const [componentDisabled, setComponentDisabled] = useState(true);
   const dispatch = useDispatch();
 

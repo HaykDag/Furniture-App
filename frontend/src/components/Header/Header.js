@@ -48,6 +48,9 @@ const Header = ()=>{
                             <Link to='/admin/store'>STORE</Link>
                         </li>
                         <li>
+                            <Link to='/admin/category/'>CATEGORY</Link>
+                        </li>
+                        <li>
                             <Link to='/admin/Add'>ADD</Link>
                         </li>
                         </>}

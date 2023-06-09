@@ -10,6 +10,7 @@ import HomeLayout from "../layouts/HomeLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
 import Home from "../pages/Home";
 import Dashboard from "../pages/dashboard/Dashboard";
+import Category from "../pages/Category";
 import Login from "../pages/Login/Login";
 import Signup from "../pages/Signup/Signup";
 import AddItem from "../pages/AddItem/AddItem";
@@ -47,6 +48,7 @@ const MyRouter = () => {
                     <Route path="signup" element={<Signup />} />
                     <Route path="store/:id" element={<Details />} />
                     <Route path="store" element={<GetItems /> } />
+                    <Route path="category" element={<Category /> } />
                     <Route path="users" element={<GetUsers /> } />
                 </Route>
                 {/* <Route path="/items/:id" element={isAdmin ? <Details /> : userName ? <NotFound/> : <Login />} /> */}
