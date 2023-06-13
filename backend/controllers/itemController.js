@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Item = require('../models/itemModel');
 const createError   = require('../utils/error');
-const fs = require('fs');
+
 
 //get all items
 const getItems = async (req,res)=>{
@@ -12,18 +12,17 @@ const getItems = async (req,res)=>{
 //get a single item
 const getItem = async (req,res,next)=>{
     const { id } = req.params;
-
+    
     if(!mongoose.Types.ObjectId.isValid(id)){
         next(createError(404,"no such item"))
     }
 
     const item = await Item.findById(id);
-
+    
     if(!item){
         next(createError(404,"no such item"))
     }
-
-    res.status(200).json({item,imageData});
+    res.status(200).json({item});
 }
 
 //create an item

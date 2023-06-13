@@ -8,9 +8,12 @@
 }
 .table-header{
     display: flex;
-    gap: 15px;
+    flex-direction: column;
     margin-top: 35px;
-    max-width: 550px;
+    max-width: 150px;
     width: 70%;
     user-select: none;
+}
+.table-header input{
+    margin: 2px;
 }

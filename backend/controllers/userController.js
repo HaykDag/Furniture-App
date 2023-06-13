@@ -21,8 +21,8 @@ const getAllUsers = async(req,res,next)=>{
 
     try {
         const users = await User.find({},{password:false});
-
-        res.status(201).json({ users });
+        
+        res.status(201).json(users);
     } catch (error) {
         next(error);
     }

@@ -54,6 +54,7 @@ const itemsSlice = createSlice({
         },
         getOneItem:(state,action)=>{
             const item = state.items?.items?.find(i=>i._id===action.payload);
+            
             return item;
         }
     },

@@ -13,7 +13,7 @@ const Home = ()=>{
             <h1>Home sweet Home</h1>
             <div className="main">
                 {items?.map(((item,i)=>(
-                    <Card key={i} item={item}  />
+                    <Card key={i} id={item._id}  />
                 )))}
             </div>
         </div>
