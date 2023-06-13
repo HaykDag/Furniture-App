@@ -74,6 +74,7 @@ const GetItems = () => {
         <ListView
             columns={columns}
             getUrl={AppUrl.Items}
+            deleteUrl = {AppUrl.Items}
         />
     );
 };

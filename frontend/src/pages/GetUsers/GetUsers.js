@@ -63,7 +63,8 @@ const GetUsers = () => {
     return (
 
         <ListView
-            getUrl = {AppUrl.users} 
+            getUrl = {AppUrl.Users.Get}
+            deleteUrl={AppUrl.Users.Delete} 
             columns={columns}
         />
     );

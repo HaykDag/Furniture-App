@@ -1,6 +1,6 @@
 const express = require('express');
 //controller functions 
-const { loginUser, signupUser, logoutUser, verifyUser, updateUser, getAllUsers } = require("../controllers/userController");
+const { loginUser, signupUser, logoutUser, verifyUser, updateUser, getAllUsers, deleteUser } = require("../controllers/userController");
 const verifyToken = require('../utils/verifyToken');
 
 
@@ -23,5 +23,8 @@ router.post('/signup',signupUser)
 
 //logout
 router.get('/logout',logoutUser)
+
+//delete user
+router.delete('/:id', deleteUser);
 
 module.exports = router;

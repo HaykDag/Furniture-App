@@ -12,7 +12,6 @@ const verifyToken = require('./utils/verifyToken');
 // express app
 const app = express();
 
-
 // middleWares
 app.use(cookieParser());
 app.use(cors());

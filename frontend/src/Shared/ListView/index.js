@@ -4,15 +4,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 const ListView = (props) => {
-    const { columns, getUrl, isCategory = false} = props;
+    const { columns, getUrl, deleteUrl, isCategory = false} = props;
 
     const [searchText,setSearchText] = useState('');
     const [addText,setAddText] = useState("")
     const [data, setData] = useState([]);
-
-    //think how to impliment editting
-    const [editRow,setEditRow] = useState(null);
-   
+    axios.defaults.withCredentials = true
     const cols = [
         ...columns,
         {
@@ -26,18 +23,14 @@ const ListView = (props) => {
             },
         },
         {
-            title: "Action", 
+            title: "Delete", 
             dataIndex: "action",
             render:(_,record)=>{
                 return (
-                    <div>
-                        <EditOutlined
-                            onClick={()=>setEditRow(record._id)}
-                        />
                         <DeleteOutlined 
+                        style={{fontSize:"20px"}}
                             onClick={()=>handleDelete(record._id)}
                         />
-                    </div>
                 )
             }
         }
@@ -56,7 +49,7 @@ useEffect(() => {
 }, []);
 
 const handleDelete = async (id)=>{
-    const response = await axios.delete(getUrl+id);
+    const response = await axios.delete(deleteUrl+id);
     if(response.status === 200){
         const newData = data.filter(d=>d._id!==id);
         setData(newData);

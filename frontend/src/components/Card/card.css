@@ -38,3 +38,14 @@
 .info-cnt button{
     width: 180px;
 }
+.btn-cnt{
+    margin-top: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+.btn-cnt button {
+    max-width: 100px;
+    padding: 5px;
+}

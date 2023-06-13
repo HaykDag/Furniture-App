@@ -1,6 +1,6 @@
 const User = require("../models/userModel");
 const generateToken = require("../utils/generateToken");
-
+const mongoose = require('mongoose')
 //login user
 const loginUser = async (req, res, next) => {
     const { userName, password } = req.body;
@@ -64,7 +64,21 @@ const logoutUser = async (req, res, next) => {
     });
     res.status(200).json({ message: "logged out" });
 };
+//delete a user
+const deleteUser = async (req,res,next)=>{
+    const { id } = req.params;
+ 
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        next(createError(404,"no such user"))
+    }
 
+    const user = await User.findByIdAndDelete(id);
+    console.log(req.userName)
+    if(!user){
+        next(createError(404,"no such user"))
+    }
+    res.status(200).json(user);
+}
 //verify user
 const verifyUser = async (req, res, next) => {
     try {
@@ -77,4 +91,4 @@ const verifyUser = async (req, res, next) => {
     }
 };
 
-module.exports = { loginUser, signupUser, logoutUser, verifyUser, updateUser, getAllUsers };
+module.exports = { loginUser, signupUser, logoutUser, verifyUser, updateUser, getAllUsers, deleteUser };

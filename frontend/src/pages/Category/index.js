@@ -14,6 +14,7 @@ const Category = ()=>{
     return <ListView 
                 columns={columns} 
                 getUrl={AppUrl.Categories}
+                deleteUrl={AppUrl.Categories}
                 isCategory = {true} 
             />
 }
