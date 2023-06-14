@@ -16,7 +16,6 @@ const GetUsers = () => {
             render: () => {
                 return (
                     <Avatar
-                        // src={images.length > 0 ? images[0] : defaultImage}
                         src={defaultImage}
                         style={{ width: "40px", height: "40px" }}
                     />
@@ -63,8 +62,8 @@ const GetUsers = () => {
     return (
 
         <ListView
-            getUrl = {AppUrl.Users.Get}
-            deleteUrl={AppUrl.Users.Delete} 
+            getUrl = {AppUrl.Users}
+            deleteUrl={AppUrl.Users} 
             columns={columns}
         />
     );

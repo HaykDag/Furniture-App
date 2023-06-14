@@ -103,10 +103,13 @@ const usersSlice = createSlice({
             state.error = action.payload
         })
         .addCase(signupUser.fulfilled,(state,action)=>{
-            //checking if response isOk or not 
+            //checking if response is Ok or not
+            state.error = null; 
             if(action.payload?.userName){
-                console.log(action.payload)
-                state.status = action.payload.userName
+                state.user.userName = action.payload.userName
+                state.user.isAdmin = action.payload.isAdmin
+                state.user.basket = [];
+                
             }else{
                 state.status = "failed"
                 state.error = action.payload

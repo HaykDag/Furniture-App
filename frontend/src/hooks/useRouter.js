@@ -37,7 +37,7 @@ const MyRouter = () => {
                 <Route path="/" element={<HomeLayout />}>
                     <Route index element={<Home />} />
                     <Route path="login" element={<Login />} />
-                    <Route path="register" element={<Signup />} />
+                    <Route path="register" element={userName? <Home /> : <Signup />} />
                     <Route path="items/:id" element={<ItemDetails />} />
                 </Route>
                 

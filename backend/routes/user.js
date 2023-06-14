@@ -1,6 +1,13 @@
 const express = require('express');
 //controller functions 
-const { loginUser, signupUser, logoutUser, verifyUser, updateUser, getAllUsers, deleteUser } = require("../controllers/userController");
+const { loginUser, 
+        signupUser, 
+        logoutUser, 
+        verifyUser, 
+        updateUser, 
+        getAllUsers, 
+        deleteUser ,
+    } = require("../controllers/userController");
 const verifyToken = require('../utils/verifyToken');
 
 

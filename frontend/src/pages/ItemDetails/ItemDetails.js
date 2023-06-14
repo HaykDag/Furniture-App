@@ -7,7 +7,6 @@ const ItemDetails = ()=>{
 
     const {id}  = useParams();
     
-   
     return(
         <div className='item-box'>
             <Card id={id}/>   

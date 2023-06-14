@@ -1,3 +1,4 @@
+import './index.css'
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -11,7 +12,7 @@ const Auth = ({isLogin=false})=>{
     const [password,setPassword] = useState("");
     const [admin,setAdmin] = useState(false);
 
-    const { error, user} = useSelector(selectUser);
+    const { error, user } = useSelector(selectUser);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -19,14 +20,18 @@ const Auth = ({isLogin=false})=>{
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(isLogin? AppUrl.users : AppUrl.users.signup, {
-                userName,
-                password,
-                admin
-            })
-    
-            dispatch(loginUser(response.data));
-            navigate("../");
+            
+            if(isLogin){
+                const response = await axios.post(AppUrl.Users+'login',{
+                    userName,
+                    password,
+                    admin
+                })
+                dispatch(loginUser(response.data));
+                navigate("../");
+            }else{
+                dispatch(signupUser({userName,password,admin}));
+            }
             setUserName("");
             setPassword("");
         } catch (err) {
@@ -40,7 +45,7 @@ const Auth = ({isLogin=false})=>{
                 className="login"
                 onSubmit={handleSubmit}
             >
-                <h3>Register</h3>
+                <h3>{isLogin ? "Login" : "Register"}</h3>
                 <label>Username:</label>
                 <input
                     type="text"

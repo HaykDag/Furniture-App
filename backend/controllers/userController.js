@@ -57,6 +57,7 @@ const signupUser = async (req, res, next) => {
 
     try {
         const user = await User.signup(userName, password, isAdmin);
+        generateToken(res, userName);
         res.status(201).json({ _id: user._id, userName, isAdmin });
     } catch (error) {
         next(error);
@@ -81,7 +82,7 @@ const deleteUser = async (req,res,next)=>{
     }
 
     const user = await User.findByIdAndDelete(id);
-    console.log(req.userName)
+    
     if(!user){
         next(createError(404,"no such user"))
     }

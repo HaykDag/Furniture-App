@@ -1,0 +1,59 @@
+.log-cnt{
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+  .login{
+      display: flex;
+      flex-direction: column;
+      max-width: 65%;
+      min-width:  30%;
+    }
+    label,input{
+      display: block;
+    }
+    input{
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    form button{
+      background-color: #1aac83;
+      border: 0;
+      color: #fff;
+      margin:3px;
+      padding: 10px;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    div.error{
+      padding: 10px;
+      background-color: #ffefef;
+      border: 1px solid rgb(223, 75, 75);
+      border-radius: 4px;
+      margin: 20px 0;
+    }
+    input.error{
+      border: 1px solid #e7195a;
+    }
+    .isAdmin{
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        
+    }
+    .isAdmin label {
+        margin: 1px;
+    }
+    .isAdmin input {
+        width: 18px;
+        height: 18px;
+        margin: 1px;
+    }
