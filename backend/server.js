@@ -12,9 +12,25 @@ const verifyToken = require('./utils/verifyToken');
 // express app
 const app = express();
 
+// app.use(function (req,res,next){
+//     res.header("Access-Control-Allow-Credentials",true);
+//     res.header("Access-Control-Allow-origin","*");
+//     res.header("Access-Contol-Allow-Methods",
+//     "GET,PUT,POST,DELETE,UPDATE,OPTIONS");
+//     res.header(
+//         "Access-Control-Allow-Headers",
+//         "X-Requested-With,X-HTTP-Method-Override, Content-Type, Accept"
+//     );
+//     next();
+// })
+
+app.use(cors({
+    origin:"http://localhost:3000",
+    credentials:true
+}));
+
 // middleWares
 app.use(cookieParser());
-app.use(cors());
 app.use(express.json());
 
 

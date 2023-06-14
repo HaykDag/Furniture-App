@@ -1,6 +1,7 @@
 const express = require('express');
 const {getCategories, addCategory, updateCategory,deleteCategory} = require('../controllers/categoryController');
 const router = express.Router();
+const verifyToken = require('../utils/verifyToken');
 
 //Get all the categories
 router.get('/', getCategories);
@@ -12,7 +13,7 @@ router.post('/', addCategory);
 router.patch('/:id', updateCategory);
 
 //delete category
-router.delete('/:id', deleteCategory);
+router.delete('/:id', verifyToken, deleteCategory);
 
 
 module.exports = router
