@@ -1,6 +1,8 @@
 const User = require("../models/userModel");
 const generateToken = require("../utils/generateToken");
 const mongoose = require('mongoose')
+const authCheck = require('../utils/authCheck');
+
 //login user
 const loginUser = async (req, res, next) => {
     const { userName, password } = req.body;
@@ -19,6 +21,10 @@ const loginUser = async (req, res, next) => {
 //get All users 
 const getAllUsers = async(req,res,next)=>{
 
+    if(!authCheck(req.userName)){
+        next(createError(401,'You are not authenticated!'))
+    }
+    
     try {
         const users = await User.find({},{password:false});
         
@@ -56,6 +62,7 @@ const signupUser = async (req, res, next) => {
         next(error);
     }
 };
+
 // logOut
 const logoutUser = async (req, res, next) => {
     res.cookie("access_token", "", {
@@ -64,6 +71,7 @@ const logoutUser = async (req, res, next) => {
     });
     res.status(200).json({ message: "logged out" });
 };
+
 //delete a user
 const deleteUser = async (req,res,next)=>{
     const { id } = req.params;
@@ -79,6 +87,7 @@ const deleteUser = async (req,res,next)=>{
     }
     res.status(200).json(user);
 }
+
 //verify user
 const verifyUser = async (req, res, next) => {
     try {

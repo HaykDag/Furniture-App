@@ -10,13 +10,13 @@ const router = express.Router();
 router.get('/verify',verifyToken, verifyUser)
 
 //get all users
-router.get('/allUsers',getAllUsers)
+router.get('/', verifyToken, getAllUsers)
 
 //login
 router.post('/login',loginUser)
 
 //update
-router.post('/update',updateUser)
+router.post('/update', verifyToken, updateUser)
 
 //singup
 router.post('/signup',signupUser)
@@ -25,6 +25,6 @@ router.post('/signup',signupUser)
 router.get('/logout',logoutUser)
 
 //delete user
-router.delete('/:id', deleteUser);
+router.delete('/:id', verifyToken, deleteUser);
 
 module.exports = router;

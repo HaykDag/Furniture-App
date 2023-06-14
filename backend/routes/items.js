@@ -16,13 +16,13 @@ router.get('/', getItems)
 router.get('/:id',getItem)
 
 //POST a new item
-router.post('/',  addItem)
+router.post('/', verifyToken, addItem)
 
 //DELETE an Item
-router.delete('/:id', deleteItem)
+router.delete('/:id',verifyToken, deleteItem)
 
 //EDIT an Item
-router.patch('/:id', EditItem)
+router.patch('/:id', verifyToken, EditItem)
 
 
 module.exports = router

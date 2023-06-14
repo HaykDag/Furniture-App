@@ -15,7 +15,7 @@ const USER_URL = '/user'
 
 export const fetchUsers = createAsyncThunk('user/fetchUsers', async ()=>{
     try{
-        const response = await axios.get(`${USER_URL}/allUsers`)
+        const response = await axios.get(USER_URL)
         return response.data.users
     } catch(err){
         return err.response.data.errorMessage

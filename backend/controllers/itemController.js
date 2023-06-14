@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Item = require('../models/itemModel');
 const createError   = require('../utils/error');
-
+const authCheck = require('../utils/authCheck');
 
 //get all items
 const getItems = async (req,res)=>{
@@ -29,6 +29,11 @@ const getItem = async (req,res,next)=>{
 const addItem = async(req,res,next)=>{
     
     const {title,description,price,images,tags=[]} = req.body;
+
+    if(!authCheck(req.userName)){
+        next(createError(401,'You are not authenticated!'))
+    }
+
     //add item to db
     try{
         const item = await Item.create({title,description,price,tags,images});
@@ -41,7 +46,11 @@ const addItem = async(req,res,next)=>{
 //delete an item
 const deleteItem = async (req,res,next)=>{
     const { id } = req.params;
- 
+    
+    if(!authCheck(req.userName)){
+        next(createError(401,'You are not authenticated!'))
+    }
+
     if(!mongoose.Types.ObjectId.isValid(id)){
         next(createError(404,"no such item"))
     }
@@ -58,6 +67,10 @@ const deleteItem = async (req,res,next)=>{
 const EditItem = async (req,res,next)=>{
     const { id } = req.params;
     
+    if(!authCheck(req.userName)){
+        next(createError(401,'You are not authenticated!'))
+    }
+
     if(!mongoose.Types.ObjectId.isValid(id)){
         next(createError(404,"no such item"))
     }

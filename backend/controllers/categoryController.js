@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Category = require('../models/categoryModel');
-
+const User = require("../models/userModel");
+const authCheck = require('../utils/authCheck');
 
 //get all categories
 const getCategories = async(req,res,next)=>{
@@ -16,6 +17,11 @@ const getCategories = async(req,res,next)=>{
 //add a category
 const addCategory = async(req,res,next)=>{
     const category = req.body;
+
+    if(!authCheck(req.userName)){
+        next(createError(401,'You are not authenticated!'))
+    }
+
     try{
         await Category.create({...category})
         res.status(200).json(category);
@@ -27,6 +33,11 @@ const addCategory = async(req,res,next)=>{
 //update category
 const updateCategory = async (req,res,next)=>{
     const { id } = req.params;
+
+    if(!authCheck(req.userName)){
+        next(createError(401,'You are not authenticated!'))
+    }
+    
     if(!mongoose.Types.ObjectId.isValid(id)){
         next(createError(404,"no such item"))
     }
@@ -45,6 +56,11 @@ const updateCategory = async (req,res,next)=>{
 //delete category
 const deleteCategory = async (req,res,next)=>{
     const { id } = req.params;
+
+    if(!authCheck(req.userName)){
+        next(createError(401,'You are not authenticated!'))
+    }
+
     if(!mongoose.Types.ObjectId.isValid(id)){
         next(createError(404,"no such item"))
     }

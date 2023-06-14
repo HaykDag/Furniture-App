@@ -49,7 +49,7 @@ useEffect(() => {
 }, []);
 
 const handleDelete = async (id)=>{
-    const response = await axios.delete(deleteUrl+id);
+    const response = await axios.delete(deleteUrl+id,{withCredentials:true});
     if(response.status === 200){
         const newData = data.filter(d=>d._id!==id);
         setData(newData);
