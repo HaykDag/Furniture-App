@@ -20,7 +20,6 @@ const Auth = ({isLogin=false})=>{
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            
             if(isLogin){
                 const response = await axios.post(AppUrl.Users+'login',{
                     userName,
@@ -30,7 +29,14 @@ const Auth = ({isLogin=false})=>{
                 dispatch(loginUser(response.data));
                 navigate("../");
             }else{
-                dispatch(signupUser({userName,password,admin}));
+                const response = await axios.post(AppUrl.Users+'signup',{
+                    userName,
+                    password,
+                    admin
+                })
+                console.log(response.data)
+                dispatch(signupUser(response.data));
+                navigate("../");
             }
             setUserName("");
             setPassword("");
