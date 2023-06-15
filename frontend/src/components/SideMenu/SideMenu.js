@@ -5,7 +5,6 @@ import {
   ShopFilled,
   AppstoreOutlined,
   UserAddOutlined,
-  UserOutlined,
   UsergroupAddOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";

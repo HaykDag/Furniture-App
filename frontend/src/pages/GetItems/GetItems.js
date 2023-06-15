@@ -1,4 +1,3 @@
-import "./getItems.css";
 import { Avatar, Tag } from "antd";
 import { useNavigate } from "react-router-dom";
 import defaultImage from "../../components/Card/chair.png";

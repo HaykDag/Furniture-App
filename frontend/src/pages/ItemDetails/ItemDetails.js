@@ -1,4 +1,3 @@
-import './itemDetails.css'
 import { useParams } from 'react-router-dom';
 import Card from '../../components/Card/Card';
 

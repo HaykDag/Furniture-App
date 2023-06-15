@@ -30,14 +30,7 @@ export const fetchUser = createAsyncThunk('user/fetchUser', async ()=>{
         return err.response.data.errorMessage
     }
 })
-export const signupUser = createAsyncThunk('user/signupUser', async (userData)=>{
-    try {
-        const response = await axios.post(`${USER_URL}/signup`,userData)
-        return response.data
-    } catch (err) {
-        return err.response.data.error
-    }
-})
+
 export const logoutUser = createAsyncThunk('user/logoutUser', async ()=>{
     try {
         const response = await axios.get(`${USER_URL}/logout`)
@@ -64,6 +57,16 @@ const usersSlice = createSlice({
             return state
         },
         loginUser:(state,action)=>{
+            if(action.payload?.userName){
+                state.user.userName = action.payload.userName
+                state.user.isAdmin = action.payload.isAdmin
+                state.user.basket = action.payload.basket
+                state.error = null;
+            }else{
+                state.error = action.payload
+            }
+        },
+        signupUser:(state,action)=>{
             if(action.payload?.userName){
                 state.user.userName = action.payload.userName
                 state.user.isAdmin = action.payload.isAdmin
@@ -102,19 +105,6 @@ const usersSlice = createSlice({
         .addCase(fetchUser.rejected,(state,action)=>{
             state.error = action.payload
         })
-        .addCase(signupUser.fulfilled,(state,action)=>{
-            //checking if response is Ok or not
-            state.error = null; 
-            if(action.payload?.userName){
-                state.user.userName = action.payload.userName
-                state.user.isAdmin = action.payload.isAdmin
-                state.user.basket = [];
-                
-            }else{
-                state.status = "failed"
-                state.error = action.payload
-            }
-        })
         .addCase(logoutUser.fulfilled,(state)=>{
             state.user.userName = ""
             state.user.isAdmin = false
@@ -128,5 +118,5 @@ const usersSlice = createSlice({
 
 export const selectAllUsers = (state=>state.users.allUsers);
 export const selectUser = (state=>state.users);
-export const { loginUser } = usersSlice.actions
+export const { loginUser, signupUser } = usersSlice.actions
 export default usersSlice.reducer

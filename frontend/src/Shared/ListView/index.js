@@ -1,3 +1,4 @@
+import './index.css'
 import { Table, Input } from "antd"
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import axios from "axios";

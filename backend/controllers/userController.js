@@ -58,7 +58,7 @@ const signupUser = async (req, res, next) => {
     try {
         const user = await User.signup(userName, password, isAdmin);
         generateToken(res, userName);
-        res.status(201).json({ _id: user._id, userName, isAdmin });
+        res.status(201).json({ _id: user._id, userName, isAdmin, basket:user.basket });
     } catch (error) {
         next(error);
     }
