@@ -34,14 +34,9 @@ app.use((err,req,res,next)=>{
     return res.status(errorStatus).json({error:errorMessage})
 });
 
-//connect to db
-mongoose.connect(process.env.MONGO_URI)
-    .then(()=>{
-        app.listen(process.env.PORT,()=>{
-            console.log('listening to port ' + process.env.PORT)
-        })
-    })
-    .catch((error)=>{
-        console.log(error)
-    })
+
+app.listen(process.env.PORT,()=>{
+    console.log('listening to port ' + process.env.PORT)
+})
+
 
