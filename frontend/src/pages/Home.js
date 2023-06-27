@@ -7,13 +7,13 @@ import { selectAllItems } from "../features/items/itemsSlice";
 const Home = ()=>{
     
     const items = useSelector(selectAllItems)
-    
+
     return(
         <div className="home">
             <h1>Home sweet Home</h1>
             <div className="main">
                 {items?.map(((item,i)=>(
-                    <Card key={i} id={item._id}  />
+                    <Card key={i} item={item}  />
                 )))}
             </div>
         </div>

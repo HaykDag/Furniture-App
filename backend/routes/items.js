@@ -4,6 +4,8 @@ const { addItem,
         getItem,
         deleteItem,
         EditItem,
+        getItemsWithTags,
+        getItemsWithTagsAndImages
     } = require('../controllers/itemController')
 const verifyToken = require('../utils/verifyToken');
 
@@ -12,17 +14,22 @@ const router = express.Router();
 //Get all the items
 router.get('/', getItems)
 
+//test
+router.get('/getItemsWithTags', getItemsWithTags)
+//test 2
+router.get('/getItemsWithTagsAndImages', getItemsWithTagsAndImages)
+
 //Get a single item
-router.get('/:id',getItem)
+router.get('/:id',getItem);
 
 //POST a new item
-router.post('/', verifyToken, addItem)
+router.post('/',verifyToken, addItem)
 
 //DELETE an Item
 router.delete('/:id',verifyToken, deleteItem)
 
 //EDIT an Item
-router.patch('/:id', verifyToken, EditItem)
+router.put('/:id',verifyToken, EditItem)
 
 
 module.exports = router

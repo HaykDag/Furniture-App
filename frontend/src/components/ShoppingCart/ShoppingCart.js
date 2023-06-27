@@ -43,30 +43,30 @@ const ShoppingCart = ({user,items}) => {
         const {userName} = user;
         dispatch(updateUser({userName,basket}))
     }
-    const basketItems = user.basket.map((id) => {
-        const item = items.find((el) => el._id === id);
+    
+    const basketItems = user.basket.map((item) => {
         return {
-            key: id,
+            key: item.id,
             label: (
                 <div className="cart-list">
-                    <Link to={`items/${item?._id}`}>
+                    <Link to={`items/${item.id}`}>
                         <span>
                             {item?.title} - {item?.price}&#1423;
                         </span>
                     </Link>
                     <PlusOutlined 
                         style={{ backgroundColor: "lightgreen" }}
-                        onClick={()=>handleOrder(id)}
+                        onClick={()=>handleOrder(item.id)}
                     />
                     <MinusCircleOutlined 
                         style={{ backgroundColor: "red" }}
-                        onClick={()=>handleRemove(id)} 
+                        onClick={()=>handleRemove(item.id)} 
                     />
                 </div>
             ),
         };
     });
-    
+ 
     return (
         <div className="cart">
             <Dropdown 

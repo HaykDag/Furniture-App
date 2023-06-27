@@ -1,76 +1,84 @@
-const mongoose = require('mongoose');
-const Category = require('../models/categoryModel');
-const User = require("../models/userModel");
+const {pool} = require('../Database/database');
 const authCheck = require('../utils/authCheck');
+const createError   = require('../utils/error');
 
 //get all categories
 const getCategories = async(req,res,next)=>{
     try{
-        const categories = await Category.find({});
+        const result = await pool.query('SELECT * FROM category');
+        const categories = result[0]
         res.status(200).json(categories);
     }catch(err){
         next(err)
     }
     
 }
+const getOneCategoryById = async(req,res,next)=>{
 
-//add a category
-const addCategory = async(req,res,next)=>{
-    const category = req.body;
-
-    if(!authCheck(req.userName)){
-        next(createError(401,'You are not authenticated!'))
-    }
-
+    const {id} = req.params;
     try{
-        await Category.create({...category})
-        res.status(200).json(category);
+        const result = await pool.query(`SELECT * FROM category WHERE category_id = ${id}`);
+        const category = result[0];
+        res.status(200).json(category)
     }catch(err){
         next(err)
+    }
+}
+//add a category
+const addCategory = async(req,res,next)=>{
+    const {category_title} = req.body;
+
+    const isAdmin = await authCheck(req.username);
+    
+    if(!isAdmin){
+        next(createError(401,'You are not authenticated!'))
+    }else{
+        try{
+            const result =  await pool.query(`
+                INSERT INTO category(category_title)
+                VALUES (?)
+                `,[category_title]);
+            const id = result[0].insertId;
+            res.status(200).json({id,category_title});
+        }catch(err){
+            next(err)
+        }
     }
 }
 
 //update category
 const updateCategory = async (req,res,next)=>{
     const { id } = req.params;
+    const {category_title} = req.body;
 
-    if(!authCheck(req.userName)){
+    const isAdmin = await authCheck(req.username);
+    if(!isAdmin){
         next(createError(401,'You are not authenticated!'))
-    }
-    
-    if(!mongoose.Types.ObjectId.isValid(id)){
-        next(createError(404,"no such item"))
-    }
+    }else{
+        const result = await pool.query(`UPDATE category 
+                                    SET category_title = ? 
+                                    WHERE category_id = ?`,[category_title,id]);
 
-    const category = await Category.findByIdAndUpdate(id,{
-        ...req.body
-    })
-
-    if(!category){
-        next(createError(404,"no such category"))
-    }
     
-    res.status(200).json(category);
+    if(!result[0].affectedRows){
+            next(createError(404,"no such category"))
+        }else{
+            res.status(200).json({id,category_title})
+        }
+    }
 }
 
 //delete category
 const deleteCategory = async (req,res,next)=>{
     const { id } = req.params;
 
-    if(!authCheck(req.userName)){
+    const isAdmin = await authCheck(req.username);
+    if(!isAdmin){
         next(createError(401,'You are not authenticated!'))
+    }else{
+        await pool.query(`DELETE FROM category WHERE category_id = ?`,[id]);
+        res.status(200).json(`category with id: ${id} is deleted.`)
     }
-
-    if(!mongoose.Types.ObjectId.isValid(id)){
-        next(createError(404,"no such item"))
-    }
-
-    const category = await Category.findByIdAndDelete(id);
-    
-    if(!category){
-        next(createError(404,"no such item"))
-    }
-    res.status(200).json(category);
 }
 
-module.exports = { getCategories, addCategory, updateCategory, deleteCategory }
+module.exports = { getCategories,getOneCategoryById, addCategory, updateCategory, deleteCategory }

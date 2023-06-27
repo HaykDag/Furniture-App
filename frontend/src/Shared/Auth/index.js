@@ -8,7 +8,7 @@ import { AppUrl } from "../../components/AppData";
 
 const Auth = ({isLogin=false})=>{
 
-    const [userName, setUserName] = useState("");
+    const [username, setUsername] = useState("");
     const [password,setPassword] = useState("");
     const [admin,setAdmin] = useState(false);
 
@@ -22,7 +22,7 @@ const Auth = ({isLogin=false})=>{
         try {
             if(isLogin){
                 const response = await axios.post(AppUrl.Users+'login',{
-                    userName,
+                    username,
                     password,
                     admin
                 })
@@ -30,7 +30,7 @@ const Auth = ({isLogin=false})=>{
                 navigate("../");
             }else{
                 const response = await axios.post(AppUrl.Users+'signup',{
-                    userName,
+                    setUsername,
                     password,
                     admin
                 })
@@ -38,7 +38,7 @@ const Auth = ({isLogin=false})=>{
                 dispatch(signupUser(response.data));
                 navigate("../");
             }
-            setUserName("");
+            setUsername("");
             setPassword("");
         } catch (err) {
             dispatch(loginUser(err.response.data.error));
@@ -55,8 +55,8 @@ const Auth = ({isLogin=false})=>{
                 <label>Username:</label>
                 <input
                     type="text"
-                    onChange={(e)=>setUserName(e.target.value)}
-                    value={userName}
+                    onChange={(e)=>setUsername(e.target.value)}
+                    value={username}
                 />
                 <label>Password:</label>
                 <input

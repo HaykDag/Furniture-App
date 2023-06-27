@@ -1,13 +1,11 @@
-const User = require("../models/userModel");
+const {pool} = require('../Database/database')
 
-const authCheck = (userName)=>{
-    
-    const user = User.find({userName});
-    
-    if(!user || user.isAdmin===false) {
-        return false;
-    }
-    return true;
+const authCheck = async (username)=>{
+    const [row] = await pool.query(`SELECT isAdmin 
+                                    FROM users 
+                                    WHERE username = ?`,[username]);
+
+    return row[0]?.isAdmin;
 }
 
 module.exports = authCheck;

@@ -4,7 +4,7 @@ import axios from "axios";
 const initialState = {
     allUsers:[],
     user:{
-        userName: "",
+        username: "",
         isAdmin: false,
         basket: []
     },
@@ -24,7 +24,7 @@ export const fetchUsers = createAsyncThunk('user/fetchUsers', async ()=>{
 
 export const fetchUser = createAsyncThunk('user/fetchUser', async ()=>{
     try{
-        const response = await axios.get(`${USER_URL}/verify`)
+        const response = await axios.get(`${USER_URL}/verify`);
         return response.data
     } catch(err){
         return err.response.data.errorMessage
@@ -40,9 +40,9 @@ export const logoutUser = createAsyncThunk('user/logoutUser', async ()=>{
     }
 })
 
-export const updateUser = createAsyncThunk('user/updateUser', async ({userName,basket})=>{
+export const updateUser = createAsyncThunk('user/updateUser', async ({username,basket})=>{
     try {
-        const response = await axios.post(`${USER_URL}/update`,{userName,basket})
+        const response = await axios.post(`${USER_URL}/update`,{username,basket})
         return response.data
     } catch (err) {
         return err.message
@@ -57,8 +57,8 @@ const usersSlice = createSlice({
             return state
         },
         loginUser:(state,action)=>{
-            if(action.payload?.userName){
-                state.user.userName = action.payload.userName
+            if(action.payload?.username){
+                state.user.username = action.payload.username
                 state.user.isAdmin = action.payload.isAdmin
                 state.user.basket = action.payload.basket
                 state.error = null;
@@ -67,8 +67,8 @@ const usersSlice = createSlice({
             }
         },
         signupUser:(state,action)=>{
-            if(action.payload?.userName){
-                state.user.userName = action.payload.userName
+            if(action.payload?.username){
+                state.user.username = action.payload.username
                 state.user.isAdmin = action.payload.isAdmin
                 state.user.basket = action.payload.basket
                 state.error = null;
@@ -97,7 +97,7 @@ const usersSlice = createSlice({
         .addCase(fetchUser.fulfilled,(state,action)=>{
             state.status = 'idle'
             if(action.payload){
-                state.user.userName = action.payload?.userName
+                state.user.username = action.payload?.username
                 state.user.isAdmin = action.payload?.isAdmin
                 state.user.basket = action.payload?.basket
             }
@@ -106,7 +106,7 @@ const usersSlice = createSlice({
             state.error = action.payload
         })
         .addCase(logoutUser.fulfilled,(state)=>{
-            state.user.userName = ""
+            state.user.username = ""
             state.user.isAdmin = false
         })
         .addCase(updateUser.fulfilled,(state,action)=>{

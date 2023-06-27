@@ -1,37 +1,39 @@
 const express = require('express');
 //controller functions 
-const { loginUser, 
-        signupUser, 
-        logoutUser, 
-        verifyUser, 
-        updateUser, 
-        getAllUsers, 
-        deleteUser ,
+const { signup,
+        login,
+        verifyUser,
+        getUsers,
+        deleteUser,
+        getUsersWithBasket
     } = require("../controllers/userController");
 const verifyToken = require('../utils/verifyToken');
 
 
 const router = express.Router();
 
-//verify
+// //verify
 router.get('/verify',verifyToken, verifyUser)
 
 //get all users
-router.get('/', verifyToken, getAllUsers)
+router.get('/', verifyToken, getUsers)
 
-//login
-router.post('/login',loginUser)
+//get all users basket joined to them
+router.get('/getUsersWithBasket',verifyToken, getUsersWithBasket);
 
-//update
-router.post('/update', verifyToken, updateUser)
+// //login
+router.post('/login',login)
 
-//singup
-router.post('/signup',signupUser)
+// //update
+// router.post('/update', verifyToken, updateUser)
 
-//logout
-router.get('/logout',logoutUser)
+// //singup
+router.post('/signup',signup)
 
-//delete user
+// //logout 
+// router.get('/logout',logoutUser)
+
+// //delete user
 router.delete('/:id', verifyToken, deleteUser);
 
 module.exports = router;

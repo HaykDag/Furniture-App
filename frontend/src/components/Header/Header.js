@@ -54,7 +54,7 @@ const Header = ()=>{
                             <Link to='/admin/Add'>ADD</Link>
                         </li>
                         </>}
-                        {!user.userName && <>
+                        {!user.username && <>
                         <li>
                             <Link to='/login'>Login</Link>
                         </li>
@@ -64,7 +64,7 @@ const Header = ()=>{
                         </>}
                     </ul>
                 </div>
-                {user.userName && <div className='cart-logout'>
+                {user.username && <div className='cart-logout'>
                     <ShoppingCart user={user} items={items}/>
                     <div className='logout'>
                     <span>{user.userName}</span>
