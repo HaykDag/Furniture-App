@@ -3,6 +3,7 @@ const createError   = require('../utils/error');
 const authCheck = require('../utils/authCheck');
 const { GET_ITEMS,
         GET_SINGLE_ITEM,
+        UPDATE_ITEM,
         GET_ITEMS_WITH_CATEGORIES,
         GET_ITEMS_WITH_CATEGORIES_AND_IMAGES,
     } = require('../Database/query/Items')
@@ -12,11 +13,11 @@ const getItems = async (req,res)=>{
     const [rows] = await pool.query(GET_ITEMS_WITH_CATEGORIES_AND_IMAGES,);
 
     for(let row of rows){
-        if(row.Tags){
-            const tags = row.Tags.split(',');
-            row.Tags = tags;
+        if(row.tags){
+            const tags = row.tags.split(',');
+            row.tags = tags;
         }else{
-            row.Tags = [];
+            row.tags = [];
         }
         if(row.images){
             const images = row.images.split(',');
@@ -25,9 +26,7 @@ const getItems = async (req,res)=>{
             row.images = [];
         }
     }
-    res.status(200).json(rows)
-    // const [items] = await pool.query(GET_ITEMS);
-    // res.status(200).json(items)
+    res.status(200).json(rows);
 }
 
 //get a single item by id or title
@@ -39,25 +38,26 @@ const getItem = async (req,res,next)=>{
     if(!items[0]){
         next(createError(404,"no such item"))
     }
-
+   
     res.status(200).json(items[0]);
 }
 
-//create an item
+//create an item and then selecting categoty_id using category_title 
+//then inserting item_id and category_id into has_category
 const addItem = async(req,res,next)=>{
     
-    const {title, description, price} = req.body;
+    const {title, description, price, tagIds} = req.body;
     
     const isAdmin = await authCheck(req.username);
     if(!isAdmin){
         next(createError(401,'You are not authenticated!'))
     }else{
         try{
-            const result =  await pool.query(`
-                INSERT INTO items(title,description,price)
-                VALUES (? , ?, ?)
-                `,[title,description,price]);
+            const result =  await pool.query(`INSERT INTO items(title,description,price)VALUES (? , ?, ?)`,[title,description,price]);
             const id = result[0].insertId;
+            for(let category_id of tagIds){
+                await pool.query(`INSERT INTO has_category VALUES (?,?)`,[id,category_id]);
+            }
             res.status(200).json(id)
         }catch(error){
             next(error)
@@ -65,6 +65,31 @@ const addItem = async(req,res,next)=>{
     }
 }
 
+//update an item
+const EditItem = async (req,res,next)=>{
+    const { id } = req.params;
+    const {title,description,price,tagIds} = req.body;
+ 
+    const isAdmin = await authCheck(req.username);
+
+    if(!isAdmin){
+        next(createError(401,'You are not authenticated!'))
+    }else{
+        const result = await pool.query(UPDATE_ITEM,[title, description,price,id]);
+        if(!result[0].affectedRows){
+            next(createError(404,"no such item"))
+        }else{
+            //I think to update the categories of the item in the has_category table 
+            //I need to delete all the categories of the item in the has_category table and
+            //insert new categories
+            await pool.query(`DELETE FROM has_category WHERE item_id = ?`,[id]);
+            for(let category_id of tagIds){
+                await pool.query(`INSERT INTO has_category VALUES (?,?)`,[id,category_id]);
+            }
+            res.status(200).json("done ")
+        }
+    }
+}
 //delete an item
 const deleteItem = async (req,res,next)=>{
     const { id } = req.params;
@@ -73,34 +98,9 @@ const deleteItem = async (req,res,next)=>{
     if(!isAdmin){
         next(createError(401,'You are not authenticated!'))
     }else{
-        await pool.query(`DELETE FROM items WHERE item_id = ?`,[id]);
+        await pool.query(`DELETE FROM items WHERE id = ?`,[id]);
     
         res.status(200).json(`Item with id: ${id} is deleted.`)
-    }
-}
-
-//update an item
-const EditItem = async (req,res,next)=>{
-    const { id } = req.params;
-    const {title,description,price} = req.body;
-
-    const isAdmin = await authCheck(req.username);
-
-    if(!isAdmin){
-        next(createError(401,'You are not authenticated!'))
-    }else{
-        const result = await pool.query(`UPDATE items
-                      SET title = ?, 
-                          description = ?, 
-                          price = ?
-                      WHERE item_id = ?
-        `,[title, description, price,id]);
-    
-        if(!result[0].affectedRows){
-            next(createError(404,"no such item"))
-        }else{
-            res.status(200).json(id)
-        }
     }
 }
 
@@ -109,8 +109,8 @@ const getItemsWithTags = async (req,res,next)=>{
     const [rows] = await pool.query(GET_ITEMS_WITH_CATEGORIES,);
 
     for(let row of rows){
-        const tags = row.Tags.split(',');
-        row.Tags = tags;
+        const tags = row.tags.split(',');
+        row.tags = tags;
     }
     res.status(200).json(rows)
 }
@@ -121,11 +121,11 @@ const getItemsWithTagsAndImages = async (req,res,next)=>{
     const [rows] = await pool.query(GET_ITEMS_WITH_CATEGORIES_AND_IMAGES,);
 
     for(let row of rows){
-        if(row.Tags){
-            const tags = row.Tags.split(',');
-            row.Tags = tags;
+        if(row.tags){
+            const tags = row.tags.split(',');
+            row.tags = tags;
         }else{
-            row.Tags = [];
+            row.tags = [];
         }
         if(row.images){
             const images = row.images.split(',');

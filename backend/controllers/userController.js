@@ -1,6 +1,7 @@
 const {pool} = require('../Database/database');
 const createError   = require('../utils/error');
 const generateToken = require('../utils/generateToken');
+const getSingleUserWithBasket = require('../utils/getSingleUserWithBasket')
 const authCheck = require('../utils/authCheck');
 const bcrypt = require('bcrypt');
 const { GET_USERS,
@@ -20,13 +21,22 @@ const signup = async (req,res,next)=>{
     try{
         const result = await pool.query(CREATE_USER,[username,hash,isAdmin ? true : false]);
 
-        const user_id = result[0].insertId;
+        const id = result[0].insertId;
         generateToken(res,username);
-        res.status(201).json({username, user_id});
+        res.status(201).json({username, id});
     }catch(err){
         next(err)
     }
 }
+
+// logout
+const logoutUser = async (req, res, next) => {
+    res.cookie("access_token", "", {
+        httpOnly: true,
+        expires: new Date(0),
+    });
+    res.status(200).json({ message: "logged out" });
+};
 
 const login = async(req,res,next)=>{
     const {username,password} = req.body;
@@ -37,43 +47,24 @@ const login = async(req,res,next)=>{
         next(createError(401,"Wrong username"));
     }
     
-    const user_password = row[0]?.user_password;
+    const user_password = row[0]?.password;
     if(user_password){
         const match = await bcrypt.compare(password,user_password);
 
         if(!match){
             next(createError(401,"Wrong password"));
         }else{
-            generateToken(res,username)
-            res.status(200).json({username});
+            generateToken(res,username);
+            const user = await getSingleUserWithBasket(username);
+            res.status(200).json(user)
         }
     }
 }
 const verifyUser = async (req,res,next)=>{
     const username = req.username;
-    const [row] = await pool.query(GET_SINGLE_USER_WITH_BASKET,[username,username]);
-    const user = row[0];
-    if(user.basket){
-        const basket = user.basket.split(',');
-        const itemPrice = user.basket_price.split(',');
-        const itemID = user.basket_item_id.split(',');
-        user.basket = [];
-        for(let i = 0;i<basket.length;i++){
-            user.basket.push(
-                {
-                    id:itemID[i],
-                    price:itemPrice[i],
-                    title:basket[i]
-                }
-            )
-        }
-        
-    }else{
-        user.basket = [];
-    }
-
+    const user = await getSingleUserWithBasket(username);
+    
     res.status(200).json(user);
-
 }
 
 const getUsers = async(req,res,next)=>{
@@ -104,20 +95,17 @@ const deleteUser = async(req,res,next)=>{
 //get users with basket joined
 const getUsersWithBasket = async(req,res,next)=>{
     const isAdmin = await authCheck(req.username);
-
+   
     if(!isAdmin){
         next(createError(401,'You are not authenticated!'));
     }else{
         const [users] = await pool.query(GET_USERS_WITH_BASKET);
-        for(let user of users){
-            if(user.basket){
-                const basket = user.basket.split(',');
-                user.basket = basket;
-            }else{
-                user.basket = [];
-            }
+        const result = [];
+        for(let u of users){
+            const user = await getSingleUserWithBasket(u.id);
+            result.push(user);
         }
-        res.status(200).json(users)
+        res.status(200).json(result)
     }
 }
-module.exports = { signup, login, verifyUser, getUsers,deleteUser, getUsersWithBasket }
+module.exports = { signup, login, logoutUser, verifyUser, getUsers,deleteUser, getUsersWithBasket }

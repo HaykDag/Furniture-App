@@ -21,7 +21,7 @@ const Auth = ({isLogin=false})=>{
         e.preventDefault();
         try {
             if(isLogin){
-                const response = await axios.post(AppUrl.Users+'login',{
+                const response = await axios.post(AppUrl.Users.loginUser,{
                     username,
                     password,
                     admin
@@ -29,12 +29,12 @@ const Auth = ({isLogin=false})=>{
                 dispatch(loginUser(response.data));
                 navigate("../");
             }else{
-                const response = await axios.post(AppUrl.Users+'signup',{
-                    setUsername,
+                const response = await axios.post(AppUrl.Users.signupUser,{
+                    username,
                     password,
                     admin
                 })
-                console.log(response.data)
+                
                 dispatch(signupUser(response.data));
                 navigate("../");
             }

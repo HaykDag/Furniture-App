@@ -1,10 +1,14 @@
 .table-cnt{
+    user-select: none;
     margin: 0px 50px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-
+}
+.ant-table-thead,
+.ant-table-tbody{
+    user-select: text;
 }
 .table-header{
     display: flex;

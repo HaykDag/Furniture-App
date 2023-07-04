@@ -5,7 +5,7 @@ import TextArea from "antd/es/input/TextArea";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useDispatch } from 'react-redux';
-import { addItems, updateItems } from "../../features/items/itemsSlice";
+import { addItem, updateItem, } from "../../features/items/itemsSlice";
 import { useNavigate } from "react-router-dom";
 import { AppUrl } from "../../components/AppData";
 
@@ -25,6 +25,7 @@ const ItemForm = (props) => {
      const getCategories = () => {
         axios.get(AppUrl.Categories)
         .then((res) => {
+           
             setTagOptions(res.data);
         });
     };
@@ -33,7 +34,18 @@ const ItemForm = (props) => {
     }, []);
     
     const handleAdd = async()=>{
-        dispatch(addItems({title,description,price,tags}))
+        let tagIds = [];
+        for(let t of tags){
+            for(let opt of tagOptions){
+                if(t===opt.title){
+                    tagIds.push(opt.id)
+                }
+            }
+        }
+        const newItem = {title,description,price,tagIds}
+        const res = await axios.post(AppUrl.Items,newItem);
+
+        dispatch(addItem({id:res.data.id,title,description,price,tags}))
         setTitle("");
         setDescription("");
         setPrice("");
@@ -42,10 +54,21 @@ const ItemForm = (props) => {
         navigate('../store') 
     }
     const handleUpdate = async()=>{
-        const id = data._id;
-        dispatch(updateItems({id,title,description,price,tags}))
+        let tagIds = [];
+        for(let t of tags){
+            for(let opt of tagOptions){
+                if(t===opt.title){
+                    tagIds.push(opt.id)
+                }
+            }
+        }
+        const newItem = {title,description,price,tagIds}
+        await axios.put(AppUrl.Items+data.id,newItem);
+        
+        dispatch(updateItem({id:data.id,title,description,price,tags}))
         navigate('../store') 
     }
+
     return (
         <div className="details-cnt">
             <Form 
@@ -73,7 +96,11 @@ const ItemForm = (props) => {
                         onChange={(e)=>setTags(e)}
                     >
                         {tagOptions.map(tag=>(
-                            <Select.Option key={tag._id} value={tag.title}>{tag.title}</Select.Option>
+                            <Select.Option 
+                                key={tag.id} 
+                                value={tag.title}>
+                                    {tag.title}
+                            </Select.Option>
                         ))}
                     </Select>
                 </Form.Item>

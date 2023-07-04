@@ -1,15 +1,18 @@
 import defaultImage from'./chair.png'
 import './card.css'
 import { Button } from 'antd';
-import { updateUser , selectUser} from '../../features/users/usersSlice';
+import {  selectUser, removeItemFromBasket, addItemIntoBasket} from '../../features/users/usersSlice';
 import { useDispatch , useSelector} from 'react-redux';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
-const Card = ({ item })=>{
+const Card = ({id})=>{
     
-    //const item = useSelector((state)=>state.items.items.find(i=>i._id===id));
+    const [item] = useSelector((state)=>state.items.items.filter(i=>i.id===+id));
     const {user} = useSelector(selectUser);
-    const {username} = user;
+  
+    let userBasketIds = '';
+    user?.basket.forEach(item=>userBasketIds+=(","+item.id))
     const formattedNumber = (Number(item?.price)).toLocaleString("en-US");
     
     const dispatch = useDispatch();
@@ -18,13 +21,20 @@ const Card = ({ item })=>{
         //write logic about orderiing items
         console.log(`order - ${item.id} item`)
     }
-    const handleRemove = ()=>{
-        const basket = user.basket.filter(el=>el.id!==item.id)
-        dispatch(updateUser({username,basket}))
+    const handleRemove = async() =>{
+        const res = await axios.delete(`/basket/${item.id}`);
+        console.log(res.data);
+        dispatch(removeItemFromBasket(item.id));
     }
-    const handleAddItem = ()=>{
-        const basket = [item.id,...user.basket]
-        dispatch(updateUser({username,basket}))
+    const handleAddItem = async ()=>{
+        const res = await axios.post(`/basket/`,{id:item.id});
+        const basketItem = {
+            id:item.id,
+            title:item.title,
+            price:item.price
+        }
+        dispatch(addItemIntoBasket(basketItem));
+        console.log(res.data);
     }
     return(
         <div className='card-cnt'>
@@ -41,7 +51,7 @@ const Card = ({ item })=>{
                 <h3 className='title'>{item?.title}</h3>
                 <p className='description'>{item?.description}</p>
                 <p className='Price'>{formattedNumber} &#1423;</p>
-                {user.basket?.includes(item.id) ?
+                {userBasketIds.includes(id) ?
                         <div className='btn-cnt'>
                                 <Button 
                                     type='primary'

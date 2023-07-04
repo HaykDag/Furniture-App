@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { AppUrl } from "../../components/AppData";
 
 const initialState = {
     allUsers:[],
@@ -8,14 +9,12 @@ const initialState = {
         isAdmin: false,
         basket: []
     },
-    status:"idle",
     error:null,
 }
-const USER_URL = '/user'
 
 export const fetchUsers = createAsyncThunk('user/fetchUsers', async ()=>{
     try{
-        const response = await axios.get(USER_URL)
+        const response = await axios.get(AppUrl.Users.getUsersWithBasket);
         return response.data.users
     } catch(err){
         return err.response.data.errorMessage
@@ -24,7 +23,7 @@ export const fetchUsers = createAsyncThunk('user/fetchUsers', async ()=>{
 
 export const fetchUser = createAsyncThunk('user/fetchUser', async ()=>{
     try{
-        const response = await axios.get(`${USER_URL}/verify`);
+        const response = await axios.get(AppUrl.Users.verifyUser);
         return response.data
     } catch(err){
         return err.response.data.errorMessage
@@ -33,16 +32,7 @@ export const fetchUser = createAsyncThunk('user/fetchUser', async ()=>{
 
 export const logoutUser = createAsyncThunk('user/logoutUser', async ()=>{
     try {
-        const response = await axios.get(`${USER_URL}/logout`)
-        return response.data
-    } catch (err) {
-        return err.message
-    }
-})
-
-export const updateUser = createAsyncThunk('user/updateUser', async ({username,basket})=>{
-    try {
-        const response = await axios.post(`${USER_URL}/update`,{username,basket})
+        const response = await axios.get(AppUrl.Users.logoutUser)
         return response.data
     } catch (err) {
         return err.message
@@ -58,9 +48,7 @@ const usersSlice = createSlice({
         },
         loginUser:(state,action)=>{
             if(action.payload?.username){
-                state.user.username = action.payload.username
-                state.user.isAdmin = action.payload.isAdmin
-                state.user.basket = action.payload.basket
+                state.user = action.payload
                 state.error = null;
             }else{
                 state.error = action.payload
@@ -68,22 +56,22 @@ const usersSlice = createSlice({
         },
         signupUser:(state,action)=>{
             if(action.payload?.username){
-                state.user.username = action.payload.username
-                state.user.isAdmin = action.payload.isAdmin
-                state.user.basket = action.payload.basket
+                state.user = action.payload
                 state.error = null;
             }else{
                 state.error = action.payload
             }
+        },
+        removeItemFromBasket:(state,action)=>{
+            state.user.basket = state.user.basket.filter(item=>item.id!==action.payload);
+        },
+        addItemIntoBasket:(state,action)=>{
+            state.user.basket.push(action.payload);
         }
     },
     extraReducers(builder) {
         builder
-        .addCase(fetchUsers.pending,(state)=>{
-            state.status = "loading"
-        })
         .addCase(fetchUsers.fulfilled,(state,action)=>{
-            state.status = 'idle'
             if(action.payload){
                 state.allUsers = action.payload
             }
@@ -91,15 +79,9 @@ const usersSlice = createSlice({
         .addCase(fetchUsers.rejected,(state,action)=>{
             state.error = action.payload
         })
-        .addCase(fetchUser.pending,(state)=>{
-            state.status = "loading"
-        })
         .addCase(fetchUser.fulfilled,(state,action)=>{
-            state.status = 'idle'
             if(action.payload){
-                state.user.username = action.payload?.username
-                state.user.isAdmin = action.payload?.isAdmin
-                state.user.basket = action.payload?.basket
+                state.user = action.payload
             }
         })
         .addCase(fetchUser.rejected,(state,action)=>{
@@ -109,14 +91,14 @@ const usersSlice = createSlice({
             state.user.username = ""
             state.user.isAdmin = false
         })
-        .addCase(updateUser.fulfilled,(state,action)=>{
-            state.user.basket = [...action.payload.basket];
-        })
-        
     }
 }) 
 
 export const selectAllUsers = (state=>state.users.allUsers);
 export const selectUser = (state=>state.users);
-export const { loginUser, signupUser } = usersSlice.actions
+export const { loginUser, 
+               signupUser, 
+               removeItemFromBasket,
+               addItemIntoBasket
+             } = usersSlice.actions
 export default usersSlice.reducer

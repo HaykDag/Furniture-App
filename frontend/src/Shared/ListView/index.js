@@ -1,6 +1,6 @@
 import './index.css'
 import { Table, Input } from "antd"
-import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -10,7 +10,8 @@ const ListView = (props) => {
     const [searchText,setSearchText] = useState('');
     const [addText,setAddText] = useState("")
     const [data, setData] = useState([]);
-    axios.defaults.withCredentials = true
+    axios.defaults.withCredentials = true;
+
     const cols = [
         ...columns,
         {
@@ -19,7 +20,7 @@ const ListView = (props) => {
               return (
                 record?.title?.toLowerCase().includes(value.toLowerCase()) ||
                 record?.tags?.join(",").toLowerCase().includes(value.toLowerCase())||
-                record?.userName?.toLowerCase().includes(value.toLowerCase())
+                record?.username?.toLowerCase().includes(value.toLowerCase())
               )
             },
         },
@@ -29,8 +30,8 @@ const ListView = (props) => {
             render:(_,record)=>{
                 return (
                         <DeleteOutlined 
-                        style={{fontSize:"20px"}}
-                            onClick={()=>handleDelete(record._id)}
+                            style={{fontSize:"20px"}}
+                            onClick={()=>handleDelete(record.key)}
                         />
                 )
             }
@@ -39,32 +40,27 @@ const ListView = (props) => {
     
 
 const getData = () => {
-        axios.get(getUrl)
-        .then((res) => {
-           setData(res.data.map(d => ({ ...d,key: d._id})));
-        });
+    axios.get(getUrl).then((res) => {
+        setData(res.data.map(d => ({ ...d,key: d.id})));
+    });
 };
 
 useEffect(() => {
-    getData();
+    getData();  
 }, []);
 
 const handleDelete = async (id)=>{
-    const response = await axios.delete(deleteUrl+id,{withCredentials:true});
-    if(response.status === 200){
-        const newData = data.filter(d=>d._id!==id);
-        setData(newData);
-    }
+    await axios.delete(deleteUrl+id,{withCredentials:true});
+    const newData = data.filter(d=>d.key!==id);
+    setData(newData);
 }
 const handleAdd = async (e)=>{
     e.preventDefault();
     const response = await axios.post(getUrl,{title:addText});
     
-    if(response.status === 200){
-        const newData = [...data,{key:Math.random(),title:addText}]
-        setData(newData);
-        setAddText("");
-    }
+    const newData = [...data,{key:response.data.id,title:addText}]
+    setData(newData);
+    setAddText("");
     
 }
     return (

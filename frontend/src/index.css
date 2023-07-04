@@ -6,7 +6,9 @@ body{
     margin: 0;
     padding: 0;
 }
-
+.app{
+    user-select: none;
+}
 .main{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;

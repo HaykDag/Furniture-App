@@ -19,7 +19,7 @@ const GetItems = () => {
                     <Avatar
                         src={images.length>0? images[0] : defaultImage}
                         style={{ width: "40px", height: "40px" }}
-                        onClick={()=>navigate(record._id)}
+                        onClick={()=>navigate(`./${record.id}`)}
                     />
                 );
             },
@@ -55,8 +55,8 @@ const GetItems = () => {
         },
         {
             title: "Created",
-            dataIndex: "createdAt",
-            sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
+            dataIndex: "created",
+            sorter: (a, b) => new Date(a.created) - new Date(b.created),
             render: (text, record) => {
                 return (
                     <p>

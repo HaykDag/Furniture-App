@@ -1,4 +1,3 @@
-
 import Card from "../components/Card/Card";
 import { useSelector } from "react-redux";
 import { selectAllItems } from "../features/items/itemsSlice";
@@ -12,9 +11,7 @@ const Home = ()=>{
         <div className="home">
             <h1>Home sweet Home</h1>
             <div className="main">
-                {items?.map(((item,i)=>(
-                    <Card key={i} item={item}  />
-                )))}
+                {items?.map((item,i)=> <Card key={i} id={item.id} />)}
             </div>
         </div>
     )

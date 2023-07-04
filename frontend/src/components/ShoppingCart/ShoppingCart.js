@@ -4,29 +4,30 @@ import {
     ShoppingCartOutlined,
 } from "@ant-design/icons";
 import { Badge, Dropdown } from "antd";
-import { updateUser } from "../../features/users/usersSlice";
+import { removeItemFromBasket } from "../../features/users/usersSlice";
+import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { useEffect } from "react";
 import './shoppingCart.css'
 import { Link } from "react-router-dom";
 
 
-const ShoppingCart = ({user,items}) => {
+const ShoppingCart = ({ user }) => {
 
     useEffect(() => {
-        window.addEventListener('error', e => {
-            if (e.message === 'ResizeObserver loop limit exceeded') {
+        window.addEventListener("error", (e) => {
+            if (e.message === "ResizeObserver loop limit exceeded") {
                 const resizeObserverErrDiv = document.getElementById(
-                    'webpack-dev-server-client-overlay-div'
+                    "webpack-dev-server-client-overlay-div"
                 );
                 const resizeObserverErr = document.getElementById(
-                    'webpack-dev-server-client-overlay'
+                    "webpack-dev-server-client-overlay"
                 );
                 if (resizeObserverErr) {
-                    resizeObserverErr.setAttribute('style', 'display: none');
+                    resizeObserverErr.setAttribute("style", "display: none");
                 }
                 if (resizeObserverErrDiv) {
-                    resizeObserverErrDiv.setAttribute('style', 'display: none');
+                    resizeObserverErrDiv.setAttribute("style", "display: none");
                 }
             }
         });
@@ -38,13 +39,14 @@ const ShoppingCart = ({user,items}) => {
         //write the logic for ordering items
         console.log('order',id)
     }
-    const handleRemove = (id)=>{
-        const basket = user.basket.filter(el=>el!==id)
-        const {userName} = user;
-        dispatch(updateUser({userName,basket}))
+    const handleRemove = async (id)=>{
+        const res = await axios.delete(`/basket/${id}`);
+        console.log(res.data);
+        dispatch(removeItemFromBasket(id));
+        
     }
     
-    const basketItems = user.basket.map((item) => {
+    const basketItems = user.basket?.map((item) => {
         return {
             key: item.id,
             label: (
@@ -72,7 +74,7 @@ const ShoppingCart = ({user,items}) => {
             <Dropdown 
                 menu={{ items: basketItems}} 
                 placement="bottom">
-                <Badge count={user.basket.length} size="small">
+                <Badge count={user.basket?.length} size="small">
                     <ShoppingCartOutlined className="cart-icon" />
                 </Badge>
             </Dropdown>

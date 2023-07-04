@@ -2,6 +2,7 @@ const express = require('express');
 //controller functions 
 const { signup,
         login,
+        logoutUser,
         verifyUser,
         getUsers,
         deleteUser,
@@ -30,8 +31,8 @@ router.post('/login',login)
 // //singup
 router.post('/signup',signup)
 
-// //logout 
-// router.get('/logout',logoutUser)
+//logout 
+router.get('/logout',logoutUser);
 
 // //delete user
 router.delete('/:id', verifyToken, deleteUser);

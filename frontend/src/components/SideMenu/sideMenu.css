@@ -1,7 +1,6 @@
 .sideMenu{
     width: 180px;
-    border: 1px solid #555;
     padding: 4px;
-    border-top: 5px solid #333;
-    border-left: 5px solid #333;
+    border-top: 3px solid #333;
+    border-left: 3px solid #333;
 }

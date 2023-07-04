@@ -24,7 +24,7 @@ const GetUsers = () => {
         },
         {
             title: "Name",
-            dataIndex: "userName",
+            dataIndex: "username",
         },
         {
             title: "Shopping Cart",
@@ -32,17 +32,17 @@ const GetUsers = () => {
             render: (items) => {
                 return (
                     <>
-                        {items?.map((id, index) => {
+                        {items?.map((item) => {
                             return (
                                 <Tag
                                     className="tags"
-                                    key={index}
+                                    key={item.id}
                                     style={{
                                         userSelect: "none",
                                         cursor: "pointer",
                                     }}
-                                    onClick={()=>navigate(`../../items/${id}`)}
-                                >{id}</Tag>
+                                    onClick={()=>navigate(`../../items/${item.id}`)}
+                                >{item.title}{item.id}</Tag>
                             );
                         })}
                     </>
@@ -62,8 +62,8 @@ const GetUsers = () => {
     return (
 
         <ListView
-            getUrl = {AppUrl.Users}
-            deleteUrl={AppUrl.Users} 
+            getUrl = {AppUrl.Users.getUsersWithBasket}
+            deleteUrl={AppUrl.Users.base}
             columns={columns}
         />
     );
