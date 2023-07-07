@@ -5,7 +5,7 @@ const { GET_ITEMS,
         GET_SINGLE_ITEM,
         UPDATE_ITEM,
         GET_ITEMS_WITH_CATEGORIES,
-        GET_ITEMS_WITH_CATEGORIES_AND_IMAGES,
+        GET_ITEMS_WITH_CATEGORIES_AND_IMAGES
     } = require('../Database/query/Items')
 
 //get all items
@@ -46,18 +46,21 @@ const getItem = async (req,res,next)=>{
 //then inserting item_id and category_id into has_category
 const addItem = async(req,res,next)=>{
     
-    const {title, description, price, tagIds} = req.body;
+    const {title, description, price, tagIds, imgUrl} = req.body;
     
-    const isAdmin = await authCheck(req.username);
-    if(!isAdmin){
+   const isAdmin = await authCheck(req.username);
+   if(!isAdmin){
         next(createError(401,'You are not authenticated!'))
-    }else{
+   }else{
         try{
             const result =  await pool.query(`INSERT INTO items(title,description,price)VALUES (? , ?, ?)`,[title,description,price]);
             const id = result[0].insertId;
             for(let category_id of tagIds){
-                await pool.query(`INSERT INTO has_category VALUES (?,?)`,[id,category_id]);
+                await pool.query(`INSERT INTO has_category VALUES (?,?)`,[id,+category_id]);
             }
+            const imgRes = await pool.query(`
+                    INSERT INTO images VALUES (?,?)
+                `,[id,imgUrl]);
             res.status(200).json(id)
         }catch(error){
             next(error)
@@ -90,6 +93,13 @@ const EditItem = async (req,res,next)=>{
         }
     }
 }
+
+//upload
+const uploadItem = async(req,res,next)=>{
+    const path = req.file.path;
+    res.json({path})
+}
+
 //delete an item
 const deleteItem = async (req,res,next)=>{
     const { id } = req.params;
@@ -143,5 +153,6 @@ module.exports = { addItem,
                    deleteItem, 
                    EditItem, 
                    getItemsWithTags,
-                   getItemsWithTagsAndImages
+                   getItemsWithTagsAndImages,
+                   uploadItem
                 }

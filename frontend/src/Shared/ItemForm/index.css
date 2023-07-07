@@ -18,6 +18,15 @@
   .form div{
     margin: 1px;
   }
+  .upload-cnt{
+    display: flex;
+    flex-direction: column;
+    border: 1px dotted #333;
+    border-radius: 5px;
+    padding: 14px;
+    justify-content: center;
+    align-items: center;
+  }
   .images{
     display: flex;
     gap: 15px;
