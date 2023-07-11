@@ -41,7 +41,7 @@ const GetUsers = () => {
                                         userSelect: "none",
                                         cursor: "pointer",
                                     }}
-                                    onClick={()=>navigate(`../../items/${item.id}`)}
+                                    onClick={()=>navigate(`../store/${item.id}`)}
                                 >{item.title}{item.id}</Tag>
                             );
                         })}

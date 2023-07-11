@@ -58,9 +58,10 @@ const addItem = async(req,res,next)=>{
             for(let category_id of tagIds){
                 await pool.query(`INSERT INTO has_category VALUES (?,?)`,[id,+category_id]);
             }
-            const imgRes = await pool.query(`
-                    INSERT INTO images VALUES (?,?)
-                `,[id,imgUrl]);
+            if(imgUrl){
+                await pool.query(`INSERT INTO images VALUES (?,?)`,[id,imgUrl]);
+            }
+            
             res.status(200).json(id)
         }catch(error){
             next(error)
@@ -71,8 +72,7 @@ const addItem = async(req,res,next)=>{
 //update an item
 const EditItem = async (req,res,next)=>{
     const { id } = req.params;
-    const {title,description,price,tagIds} = req.body;
- 
+    const {title,description,price,tagIds,imgUrl} = req.body;
     const isAdmin = await authCheck(req.username);
 
     if(!isAdmin){
@@ -88,6 +88,9 @@ const EditItem = async (req,res,next)=>{
             await pool.query(`DELETE FROM has_category WHERE item_id = ?`,[id]);
             for(let category_id of tagIds){
                 await pool.query(`INSERT INTO has_category VALUES (?,?)`,[id,category_id]);
+            }
+            if(imgUrl){
+                await pool.query(`INSERT INTO images VALUES (?,?)`,[id,imgUrl]);
             }
             res.status(200).json("done ")
         }

@@ -1,18 +1,21 @@
 import defaultImage from'./chair.png'
 import './card.css'
-import { Button } from 'antd';
+import { Button, Carousel, Image } from 'antd';
 import {  selectUser, removeItemFromBasket, addItemIntoBasket} from '../../features/users/usersSlice';
 import { useDispatch , useSelector} from 'react-redux';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useState } from 'react';
 
 const Card = ({id})=>{
     
     const [item] = useSelector((state)=>state.items.items.filter(i=>i.id===+id));
     const {user} = useSelector(selectUser);
-  
+
+    const [visible, setVisible] = useState(false);
+
     let userBasketIds = '';
-    user?.basket.forEach(item=>userBasketIds+=(","+item.id))
+    user?.basket.forEach(item=>userBasketIds+=("," + item.id))
     const formattedNumber = (Number(item?.price)).toLocaleString("en-US");
     
     const dispatch = useDispatch();
@@ -36,40 +39,54 @@ const Card = ({id})=>{
         dispatch(addItemIntoBasket(basketItem));
         console.log(res.data);
     }
-    return(
-        <div className='card-cnt'>
-            <Link to={`items/${item?.id}`}>
-                <div className='pic-cnt'>
-                    <img 
-                        className='pic' 
-                        alt='Furniture' 
-                        src={item?.images?.length>0?item.images[0]: defaultImage}
-                    />
+    return (
+        <div className="card-cnt">
+            <div className="pic-cnt">
+                <Image
+                    preview={{
+                        visible: false,
+                    }}
+                    className='single-img'
+                    src={item?.images ? item?.images[0] || defaultImage : defaultImage }
+                    onClick={() => setVisible(true)}
+                />
+                <div className='img-group-cnt'>
+                    <Image.PreviewGroup
+                            preview={{
+                                visible,
+                                onVisibleChange: (vis) => setVisible(vis),
+                              }}
+                        >
+                            {item?.images?.map((imgUrl,i)=>{
+                            return  <Image
+                                    key={i}
+                                    src={imgUrl}
+                                />
+                            })}
+                    </Image.PreviewGroup>
                 </div>
-            </Link>
-            <div className='info-cnt'>
-                <h3 className='title'>{item?.title}</h3>
-                <p className='description'>{item?.description}</p>
-                <p className='Price'>{formattedNumber} &#1423;</p>
-                {userBasketIds.includes(id) ?
-                        <div className='btn-cnt'>
-                                <Button 
-                                    type='primary'
-                                    onClick={handleOrder}
-                                >Order</Button>
-                                <Button
-                                    onClick={handleRemove}
-                                >Remove</Button>
-                        </div>
-                            : user.username && 
-                            <Button 
-                                type='primary'
-                                onClick={handleAddItem}
-                            >Add to the shopping cart
-                            </Button>}
+            </div>
+            <div className="info-cnt">
+                <h3 className="title">{item?.title}</h3>
+                <p className="description">{item?.description}</p>
+                <p className="Price">{formattedNumber} &#1423;</p>
+                {userBasketIds.includes(id) ? (
+                    <div className="btn-cnt">
+                        <Button type="primary" onClick={handleOrder}>
+                            Order
+                        </Button>
+                        <Button onClick={handleRemove}>Remove</Button>
+                    </div>
+                ) : (
+                    user.username && (
+                        <Button type="primary" onClick={handleAddItem}>
+                            Add to the shopping cart
+                        </Button>
+                    )
+                )}
             </div>
         </div>
-    )
+    );
 }
 
 export default Card;

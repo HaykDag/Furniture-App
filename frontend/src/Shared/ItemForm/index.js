@@ -1,6 +1,6 @@
 //use this form to add a new Item or edit an existing one.
 import './index.css'
-import { Button, Form, Input, InputNumber, Select, Upload} from "antd";
+import { Button, Form, Image, Input, InputNumber, Select, Upload} from "antd";
 import { PlusOutlined } from '@ant-design/icons';
 import TextArea from "antd/es/input/TextArea";
 import { useState, useEffect } from "react";
@@ -12,18 +12,18 @@ import { AppUrl } from "../../components/AppData";
 
 const ItemForm = (props) => {
 
-    const {data,isNew = false} = props;
+    const {data,isNew} = props;
 
-    const [imageData,setImageData] = useState();
-    const [title,setTitle] = useState(data?.title);
-    const [description,setDescription] = useState(data?.description);
-    const [price,setPrice] = useState(data?.price);
-    const [tags,setTags] = useState(data?.tags || []);
+    const [imageData,setImageData] = useState(null);
+    const title = data?.title;
+    const description = data?.description;
+    const price = data?.price;
+    const tags = data?.tags || [];
     
-    const [tagOptions,setTagOptions] = useState([])
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const [tagOptions,setTagOptions] = useState([]);
      const getCategories = () => {
         axios.get(AppUrl.Categories)
         .then((res) => {
@@ -39,66 +39,53 @@ const ItemForm = (props) => {
         setImageData(e.target.files[0]);
     }
     
-    const handleAdd = async(values)=>{
-        const formData = new FormData();
-        formData.append('upload_preset',"segebppr");
-        formData.append('file', imageData);
-        
-        const response = await axios.post("https://api.cloudinary.com/v1_1/furnitureappimages/image/upload",formData);
-        
-        const imgUrl = response.data.url;
-        // formData.append('image', imageData);
-        // formData.append('title', values.title);
-        // formData.append('price', values.price);
-        // formData.append('description', values.description);
-        
-        let tagIds = [];
-        for(let t of values.tags){
-            for(let opt of tagOptions){
-                if(t===opt.title){
-                    tagIds.push(opt.id)
+    const handleSubmit = async (values) =>{
+        let imgUrl = null;
+        if(imageData){
+            const formData = new FormData();
+            formData.append('upload_preset',"segebppr");
+            formData.append('file', imageData);
+            try{
+                const response = await axios.post(
+                    AppUrl.Cloudinary_upload,
+                    formData,
+                    {withCredentials:false});
+                imgUrl = response.data.url;
+            }catch(err){
+                console.log(err)
+            }      
+        }
+        if(imgUrl){
+            let tagIds = [];
+            for(let t of values.tags){
+                for(let opt of tagOptions){
+                    if(t===opt.title){
+                        tagIds.push(opt.id)
+                    }
                 }
             }
+            try{
+                if(isNew){
+                    const res = await axios.post(AppUrl.Items,{...values,tagIds,imgUrl},{withCredentials:true});
+                    dispatch(addItem({id:res.data,...values}));
+                }else{
+                    await axios.put(AppUrl.Items+data.id,{...values,tagIds,imgUrl});
+                    dispatch(updateItem({id:data.id,title,description,price,tags}));
+                }
+                setImageData(null);
+                navigate('../store'); 
+            }catch(err){
+                console.log(err);
+            }
         }
-        // formData.append('tagIds',tagIds)
         
-        const res = await axios.post("http://localhost:4000/items/",{...values,tagIds,imgUrl},{withCredentials:true});
-        console.log(res.data)
         
-        dispatch(addItem({id:res.data,...values}))
-        setTitle("");
-        setDescription("");
-        setPrice("");
-        setTags([]);
-        
-        navigate('../store') 
     }
-    const handleUpdate = async(values)=>{
-        // let tagIds = [];
-        // for(let t of tags){
-        //     for(let opt of tagOptions){
-        //         if(t===opt.title){
-        //             tagIds.push(opt.id)
-        //         }
-        //     }
-        // }
-        // const newItem = {title,description,price,tagIds}
-        // await axios.put(AppUrl.Items+data.id,newItem);
-        
-        // dispatch(updateItem({id:data.id,title,description,price,tags}))
-        // navigate('../store') 
-    }
-  
     return (
         <div className="details-cnt">
             <Form 
-                // encType='multipart/form-data'
-                // method='POST'
-                // action={AppUrl.Items+'upload'}
                 className="form"
-                onFinish={(values)=>{
-                    isNew ? handleAdd(values) : handleUpdate(values);
-                }}
+                onFinish={handleSubmit}
                 initialValues={{
                     'tags': tags,
                     'title':title,
@@ -108,9 +95,9 @@ const ItemForm = (props) => {
                 >
                 <Form.Item name='title'>
                     <Input
+                        name='title'
                         placeholder="Title"
                         value={title}
-                        onChange={(e) => setTitle(e.target.value)}
                     />
                 </Form.Item>
                 <Form.Item 
@@ -120,10 +107,10 @@ const ItemForm = (props) => {
                     rules={[{type: 'array' }]}
                     
                 >
-                    <Select 
+                    <Select
+                        name='tags' 
                         mode="multiple" 
                         placeholder="Select tags"
-                        onChange={(e)=>setTags(e)}
                     >
                         {tagOptions.map(tag=>(
                             <Select.Option 
@@ -136,28 +123,29 @@ const ItemForm = (props) => {
                 </Form.Item>
                 <Form.Item name='price'>
                     <InputNumber
+                        name='price'
                         placeholder="price"
                         value={price}
-                        onChange={(e) => setPrice(e)}
                     />
                 </Form.Item>
                 <Form.Item name='description'>
                     <TextArea
+                        name='description'
                         placeholder="description"
                         cols={30}
                         rows={6}
                         value={description}
-                        onChange={(e) => setDescription(e.target.value)}
                     />
                 </Form.Item>
                 <Form.Item valuePropName='image' onChange={handleChange}>
-                    <Upload 
-                        customRequest={(e)=>{
-                            console.log(e)
-                       }}
-                       showUploadList = {false}
-                        
+                    <Upload
+                        action={''}
+                        listType="picture-card" 
+                    //     customRequest={(e)=>{
+                    //         console.log(e)
+                    //    }}
                     >
+                        
                         <div className='upload-cnt'>
                             <PlusOutlined/>
                             <div>
@@ -166,6 +154,21 @@ const ItemForm = (props) => {
                         </div>
                     </Upload>
                 </Form.Item>
+                {!isNew && <div className='img-cnt'>
+                    <Image.PreviewGroup
+                        preview={{
+                            onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
+                          }}
+                    >
+                        {data?.images?.map((imgUrl,i)=>{
+                           return  <Image
+                                key={i}
+                                className='pic'
+                                src={imgUrl}
+                            />
+                        })}
+                    </Image.PreviewGroup>
+                </div>}
                 <Form.Item>
                     <Button htmlType="submit">Submit</Button>
                 </Form.Item>

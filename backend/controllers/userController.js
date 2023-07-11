@@ -63,7 +63,6 @@ const login = async(req,res,next)=>{
 const verifyUser = async (req,res,next)=>{
     const username = req.username;
     const user = await getSingleUserWithBasket(username);
-    
     res.status(200).json(user);
 }
 

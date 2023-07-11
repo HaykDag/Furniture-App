@@ -25,7 +25,7 @@ SELECT
 FROM users AS u
 LEFT JOIN basket AS b
     ON u.id = b.user_id
-JOIN items AS i
+LEFT JOIN items AS i
     ON i.id = b.item_id
 WHERE u.username = ? OR u.id = ?
 GROUP BY u.id;`;

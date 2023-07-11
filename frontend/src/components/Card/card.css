@@ -1,4 +1,5 @@
 .card-cnt{
+    user-select: none;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -8,14 +9,15 @@
     color: white;
     border: 6px solid rgb(187,178,180);
 }
-.pic-cnt{
-    user-select: none;
+.single-img{
+    max-height: 250px;
+    border-radius: 5px;
 }
-.pic{
-    width: 100%;
-    max-width: 640px;
+.img-group-cnt{
+    display: none;
 }
 .info-cnt{
+    margin-top: 5px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -48,10 +50,4 @@
 .btn-cnt button {
     max-width: 100px;
     padding: 5px;
-}
-.item-box{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 15px;
 }

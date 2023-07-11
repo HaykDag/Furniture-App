@@ -16,7 +16,6 @@ import Signup from "../pages/Signup/Signup";
 import AddItem from "../pages/AddItem/AddItem";
 import GetItems from "../pages/GetItems/GetItems";
 import Details from "../pages/Details/Details";
-import ItemDetails from "../pages/ItemDetails/ItemDetails";
 import GetUsers from "../pages/GetUsers/GetUsers";
 import NotFound from "../pages/NotFound/NotFound";
 
@@ -24,7 +23,7 @@ const MyRouter = () => {
 
     const { user } = useSelector(selectUser);
     const { userName, isAdmin } = user;
-    
+  
     //check if there is access-cookie as soon as loading
     const dispatch = useDispatch();
     useEffect(() => {
@@ -38,7 +37,6 @@ const MyRouter = () => {
                     <Route index element={<Home />} />
                     <Route path="login" element={<Login />} />
                     <Route path="register" element={userName? <Home /> : <Signup />} />
-                    <Route path="items/:id" element={<ItemDetails />} />
                 </Route>
                 
                 {/* if there is an Admin show the Dashboard, else if there is user show not found else show login page */}

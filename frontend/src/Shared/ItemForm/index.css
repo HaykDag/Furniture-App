@@ -27,52 +27,16 @@
     justify-content: center;
     align-items: center;
   }
-  .images{
-    display: flex;
-    gap: 15px;
-    padding: 10px;
-    align-items: center;
-  }
-  
-  .images-cnt{
-    display: flex;
-    align-items: center;
-    border: 1px solid #333;
-    border-radius: 5px;
-    padding: 8px;
-    user-select: none;
-    margin-top: 15px;
-  }
-  .image-card{
-    position: relative;
-    border: 1px solid #333;
-    border-radius: 5px;
+  .img-cnt{
     display: flex;
     justify-content: center;
     align-items: center;
-    contain: content;
-    user-select: none;
-    margin: 0 8px;
-    width: 150px;
-    height: 150px;
-    
+    gap: 7px;
   }
-  .image-card img{
-    width: 150px;
-  }
-  .del-img{
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background-color: rgba(216, 17, 17, 0.886);
-    border-radius: 50%;
-    padding: 4px;
-    color: white;
-  }
-  .detail-tag{
-    background-color: white;
-  }
-  .detail-tag-have{
-    background-color: #333;
-    color: white;
+  .pic{
+    min-height: 100px;
+    background-color: gray;
+    border: 1px dashed #333;
+    padding: 2px;
+    border-radius: 5px;
   }

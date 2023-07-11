@@ -8,11 +8,7 @@ const Details = ()=>{
   const data = useSelector(state=>state.items.items).filter(i=>i.id===+id);
   
   return(<>
-    {!data[0] ? <NotFound/> 
-    :<ItemForm 
-      data={data[0]}
-    />
-  }
+    { !data[0] ? <NotFound/> : <ItemForm isNew={false} data={data[0]} /> }
   </>)
   
 }
