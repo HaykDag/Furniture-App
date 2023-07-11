@@ -28,10 +28,14 @@
     align-items: center;
   }
   .img-cnt{
+    
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 7px;
+  }
+  .img-btn-cnt{
+    position: relative;
   }
   .pic{
     min-height: 100px;
@@ -40,3 +44,15 @@
     padding: 2px;
     border-radius: 5px;
   }
+.delete-btn{
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  padding: 5px;
+  border-radius: 50%;
+  background-color: rgb(199, 161, 161);
+  cursor: pointer;
+}
+.delete-btn:hover{
+  background-color: red;
+}

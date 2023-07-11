@@ -1,7 +1,7 @@
 //use this form to add a new Item or edit an existing one.
 import './index.css'
 import { Button, Form, Image, Input, InputNumber, Select, Upload} from "antd";
-import { PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import TextArea from "antd/es/input/TextArea";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -41,6 +41,7 @@ const ItemForm = (props) => {
     
     const handleSubmit = async (values) =>{
         let imgUrl = null;
+        let imgId = '';
         if(imageData){
             const formData = new FormData();
             formData.append('upload_preset',"segebppr");
@@ -50,6 +51,8 @@ const ItemForm = (props) => {
                     AppUrl.Cloudinary_upload,
                     formData,
                     {withCredentials:false});
+
+                imgId = response.data.public_id;
                 imgUrl = response.data.url;
             }catch(err){
                 console.log(err)
@@ -66,10 +69,10 @@ const ItemForm = (props) => {
             }
             try{
                 if(isNew){
-                    const res = await axios.post(AppUrl.Items,{...values,tagIds,imgUrl},{withCredentials:true});
+                    const res = await axios.post(AppUrl.Items,{...values,tagIds,imgUrl,imgId},{withCredentials:true});
                     dispatch(addItem({id:res.data,...values}));
                 }else{
-                    await axios.put(AppUrl.Items+data.id,{...values,tagIds,imgUrl});
+                    await axios.put(AppUrl.Items+data.id,{...values,tagIds,imgUrl,imgId});
                     dispatch(updateItem({id:data.id,title,description,price,tags}));
                 }
                 setImageData(null);
@@ -78,8 +81,14 @@ const ItemForm = (props) => {
                 console.log(err);
             }
         }
-        
-        
+    }
+    const handleDeleteImage = async (image_url)=>{
+        const item_id = data.id;
+        const res = await axios.post(AppUrl.Images+'delete',{item_id,image_url},{withCredentials:true});
+
+        const images = data.images.filter(img=>img!==image_url);
+        const newItem = {id:data.id,title,description,price,tags,images};
+        dispatch(updateItem(newItem))
     }
     return (
         <div className="details-cnt">
@@ -139,13 +148,9 @@ const ItemForm = (props) => {
                 </Form.Item>
                 <Form.Item valuePropName='image' onChange={handleChange}>
                     <Upload
-                        action={''}
-                        listType="picture-card" 
-                    //     customRequest={(e)=>{
-                    //         console.log(e)
-                    //    }}
+                        action={false}
+                        listType="picture-card"
                     >
-                        
                         <div className='upload-cnt'>
                             <PlusOutlined/>
                             <div>
@@ -160,13 +165,18 @@ const ItemForm = (props) => {
                             onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
                           }}
                     >
-                        {data?.images?.map((imgUrl,i)=>{
-                           return  <Image
-                                key={i}
-                                className='pic'
-                                src={imgUrl}
-                            />
-                        })}
+                        {data?.images?.map((imgUrl,i)=>(
+                            <div key={i} className='img-btn-cnt'>
+                                <Image
+                                    className='pic'
+                                    src={imgUrl}
+                                />
+                                <DeleteOutlined
+                                    className='delete-btn'
+                                    onClick={()=>handleDeleteImage(imgUrl)}
+                                />
+                            </div>
+                        ))}
                     </Image.PreviewGroup>
                 </div>}
                 <Form.Item>

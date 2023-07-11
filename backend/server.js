@@ -5,6 +5,7 @@ const itemRoutes = require('./routes/items');
 const userRoutes = require('./routes/user');
 const categoryRoutes = require('./routes/categories')
 const basketRoutes = require('./routes/basket');
+const ImagesRoutes = require('./routes/images');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
@@ -26,6 +27,7 @@ app.use('/items', itemRoutes);
 app.use('/categories', categoryRoutes);
 app.use('/user', userRoutes);
 app.use('/basket',basketRoutes);
+app.use('/images',ImagesRoutes);
 
 
 //error handling

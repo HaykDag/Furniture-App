@@ -46,7 +46,7 @@ const getItem = async (req,res,next)=>{
 //then inserting item_id and category_id into has_category
 const addItem = async(req,res,next)=>{
     
-    const {title, description, price, tagIds, imgUrl} = req.body;
+    const {title, description, price, tagIds, imgUrl, imgId} = req.body;
     
    const isAdmin = await authCheck(req.username);
    if(!isAdmin){
@@ -59,7 +59,7 @@ const addItem = async(req,res,next)=>{
                 await pool.query(`INSERT INTO has_category VALUES (?,?)`,[id,+category_id]);
             }
             if(imgUrl){
-                await pool.query(`INSERT INTO images VALUES (?,?)`,[id,imgUrl]);
+                await pool.query(`INSERT INTO images VALUES (?,?,?)`,[imgId,id,imgUrl]);
             }
             
             res.status(200).json(id)
@@ -72,7 +72,7 @@ const addItem = async(req,res,next)=>{
 //update an item
 const EditItem = async (req,res,next)=>{
     const { id } = req.params;
-    const {title,description,price,tagIds,imgUrl} = req.body;
+    const {title,description,price,tagIds,imgUrl,imgId} = req.body;
     const isAdmin = await authCheck(req.username);
 
     if(!isAdmin){
@@ -90,7 +90,7 @@ const EditItem = async (req,res,next)=>{
                 await pool.query(`INSERT INTO has_category VALUES (?,?)`,[id,category_id]);
             }
             if(imgUrl){
-                await pool.query(`INSERT INTO images VALUES (?,?)`,[id,imgUrl]);
+                await pool.query(`INSERT INTO images VALUES (?,?,?)`,[imgId,id,imgUrl]);
             }
             res.status(200).json("done ")
         }
