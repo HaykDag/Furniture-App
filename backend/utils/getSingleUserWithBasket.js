@@ -1,9 +1,9 @@
-const { GET_SINGLE_USER_WITH_BASKET } = require("../Database/query/users");
+const { GET_USER_WITH_BASKET_BY_USERNAME } = require("../Database/query/users");
 const {pool} = require('../Database/database');
 
 const getSingleUserWithBasket = async (username)=>{
 
-    const [row] = await pool.query(GET_SINGLE_USER_WITH_BASKET,[username,username]);
+    const [row] = await pool.query(GET_USER_WITH_BASKET_BY_USERNAME,[username]);
     const user = row[0];
     
     if(!user){

@@ -5,11 +5,9 @@ const getSingleUserWithBasket = require('../utils/getSingleUserWithBasket')
 const authCheck = require('../utils/authCheck');
 const bcrypt = require('bcrypt');
 const { GET_USERS,
-        GET_SINGLE_USER,
         GET_PASSWORD,
         CREATE_USER,
         DELETE_USER,
-        GET_SINGLE_USER_WITH_BASKET,
         GET_USERS_WITH_BASKET
  } = require('../Database/query/users');
 
@@ -20,8 +18,8 @@ const signup = async (req,res,next)=>{
     const hash = await bcrypt.hash(password,salt);
     try{
         const result = await pool.query(CREATE_USER,[username,hash,isAdmin ? true : false]);
-
         const id = result[0].insertId;
+
         generateToken(res,username);
         res.status(201).json({username, id});
     }catch(err){
@@ -98,13 +96,18 @@ const getUsersWithBasket = async(req,res,next)=>{
     if(!isAdmin){
         next(createError(401,'You are not authenticated!'));
     }else{
-        const [users] = await pool.query(GET_USERS_WITH_BASKET);
-        const result = [];
-        for(let u of users){
-            const user = await getSingleUserWithBasket(u.id);
-            result.push(user);
+        try{
+            const [users] = await pool.query(GET_USERS_WITH_BASKET);
+            const result = [];
+            for(let u of users){
+                const user = await getSingleUserWithBasket(u.id);
+                result.push(user);
+            }
+            res.status(200).json(result)
+        }catch(err){
+            next(err)
         }
-        res.status(200).json(result)
+        
     }
 }
 module.exports = { signup, login, logoutUser, verifyUser, getUsers,deleteUser, getUsersWithBasket }

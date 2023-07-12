@@ -6,10 +6,9 @@ const { addItem,
         EditItem,
         getItemsWithTags,
         getItemsWithTagsAndImages,
-        uploadItem
     } = require('../controllers/itemController')
 const verifyToken = require('../utils/verifyToken');
-const upload = require('../utils/multer');
+
 
 const router = express.Router();
 
@@ -27,7 +26,6 @@ router.get('/:id',getItem);
 //POST a new item
 router.post('/',verifyToken, addItem)
 
-//router.post('/upload',upload.single('image'),uploadItem)
 
 //DELETE an Item
 router.delete('/:id',verifyToken, deleteItem)

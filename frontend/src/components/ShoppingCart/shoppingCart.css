@@ -6,10 +6,8 @@
 .cart-icon{
     font-size: 2.5rem;
 }
-.cart:hover{
-    color: #66dd74;
-}
 .cart-list{
+   width:max-content;
    display: flex;
    align-items: center;
    justify-content: center;

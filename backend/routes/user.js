@@ -1,4 +1,5 @@
 const express = require('express');
+const verifyToken = require('../utils/verifyToken');
 //controller functions 
 const { signup,
         login,
@@ -8,8 +9,6 @@ const { signup,
         deleteUser,
         getUsersWithBasket
     } = require("../controllers/userController");
-const verifyToken = require('../utils/verifyToken');
-
 
 const router = express.Router();
 

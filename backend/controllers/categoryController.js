@@ -11,10 +11,8 @@ const getCategories = async(req,res,next)=>{
     }catch(err){
         next(err)
     }
-    
 }
 const getOneCategoryById = async(req,res,next)=>{
-
     const {id} = req.params;
     try{
         const result = await pool.query(`SELECT * FROM categories WHERE id = ${id}`);
@@ -52,13 +50,18 @@ const updateCategory = async (req,res,next)=>{
     if(!isAdmin){
         next(createError(401,'You are not authenticated!'))
     }else{
-        const result = await pool.query(`UPDATE categories SET title = ? WHERE id = ?`,[category_title,id]);
+        try{
+            const result = await pool.query(`UPDATE categories SET title = ? WHERE id = ?`,[category_title,id]);
 
-    if(!result[0].affectedRows){
-            next(createError(404,"no such category"))
-        }else{
-            res.status(200).json({id,category_title})
+            if(!result[0].affectedRows){
+                next(createError(404,"no such category"))
+            }else{
+                res.status(200).json({id,category_title})
+            }
+        }catch(err){
+            next(err)
         }
+        
     }
 }
 
@@ -70,8 +73,12 @@ const deleteCategory = async (req,res,next)=>{
     if(!isAdmin){
         next(createError(401,'You are not authenticated!'))
     }else{
-        await pool.query(`DELETE FROM categories WHERE id = ?`,[id]);
-        res.status(200).json(`category with id: ${id} is deleted.`)
+        try{
+            await pool.query(`DELETE FROM categories WHERE id = ?`,[id]);
+            res.status(200).json(`category with id: ${id} is deleted.`)
+        }catch(err){
+            next(err)
+        }
     }
 }
 

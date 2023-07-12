@@ -84,23 +84,23 @@ const EditItem = async (req,res,next)=>{
             //I think to update the categories of the item in the has_category table 
             //I need to delete all the categories of the item in the has_category table and
             //insert new categories
-            await pool.query(`DELETE FROM has_category WHERE item_id = ?`,[id]);
-            for(let category_id of tagIds){
-                await pool.query(`INSERT INTO has_category VALUES (?,?)`,[id,category_id]);
+            try{
+                await pool.query(`DELETE FROM has_category WHERE item_id = ?`,[id]);
+                for(let category_id of tagIds){
+                    await pool.query(`INSERT INTO has_category VALUES (?,?)`,[id,category_id]);
+                }
+                if(imgUrl){
+                    await pool.query(`INSERT INTO images VALUES (?,?,?)`,[imgId,id,imgUrl]);
+                }
+                res.status(200).json("done ")
+            }catch(err){
+                next(err)
             }
-            if(imgUrl){
-                await pool.query(`INSERT INTO images VALUES (?,?,?)`,[imgId,id,imgUrl]);
-            }
-            res.status(200).json("done ")
+            
         }
     }
 }
 
-//upload
-const uploadItem = async(req,res,next)=>{
-    const path = req.file.path;
-    res.json({path})
-}
 
 //delete an item
 const deleteItem = async (req,res,next)=>{
@@ -136,7 +136,7 @@ const getItemsWithTags = async (req,res,next)=>{
     res.status(200).json(rows)
 }
 
-//get items with tags joined
+//get items with tags and images joined
 const getItemsWithTagsAndImages = async (req,res,next)=>{
     
     const [rows] = await pool.query(GET_ITEMS_WITH_CATEGORIES_AND_IMAGES,);
@@ -148,6 +148,7 @@ const getItemsWithTagsAndImages = async (req,res,next)=>{
         }else{
             row.tags = [];
         }
+        
         if(row.images){
             const images = row.images.split(',');
             row.images = images;
@@ -165,5 +166,4 @@ module.exports = { addItem,
                    EditItem, 
                    getItemsWithTags,
                    getItemsWithTagsAndImages,
-                   uploadItem
                 }
