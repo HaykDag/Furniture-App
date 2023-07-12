@@ -18,7 +18,7 @@ const Home = ()=>{
     return(
         <div className="home">
             <div className="main">
-                {items?.map((item,i)=> <Card key={i} id={item.id}/>)}
+                {items && items.map((item,i)=> <Card key={i} id={item.id}/>)}
             </div>
         </div>
     )

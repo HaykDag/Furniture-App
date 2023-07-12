@@ -11,8 +11,12 @@ cloudinary.config({
 
 const deleteFromImages = async (req,res,next)=>{
     const {item_id,image_url} = req.body;
+    const isAdmin = await authCheck(req.username);
     let image_id = '';
-   
+    
+    if(!isAdmin){
+        next(createError(401,'You are not authenticated!'))
+    }else{
         pool.query(`SELECT image_id FROM images WHERE item_id = ? AND image_url = ? `,[item_id,image_url])
         .then((result)=>{
             image_id = result[0][0].image_id;
@@ -22,8 +26,13 @@ const deleteFromImages = async (req,res,next)=>{
             pool.query(`DELETE FROM images WHERE image_id = ?`,[image_id]);
             res.status(200).json(`image with url: ${image_url} is deleted from ${item_id} item's images`)
         })
-        .catch(err=>console.log(err))  
+        .catch(err=>next(err))  
+    }
 }
 
+const deleteImageFromCloudinary = async(image_id)=>{
+    const result = await cloudinary.uploader.destroy(image_id);
+    return result;
+}
 
-module.exports = { deleteFromImages };
+module.exports = { deleteFromImages, deleteImageFromCloudinary };

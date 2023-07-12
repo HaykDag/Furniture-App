@@ -67,7 +67,7 @@ const Header = ()=>{
                 {user.username && <div className='cart-logout'>
                     <ShoppingCart user={user} items={items}/>
                     <div className='logout'>
-                    <span>{user.userName}</span>
+                    <span>{user.username}</span>
                      <span
                         onClick={handlLogout}
                      >logout</span>

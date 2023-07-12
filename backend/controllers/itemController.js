@@ -1,13 +1,12 @@
 const {pool} = require('../Database/database');
 const createError   = require('../utils/error');
 const authCheck = require('../utils/authCheck');
-const { GET_ITEMS,
-        GET_SINGLE_ITEM,
+const { GET_SINGLE_ITEM,
         UPDATE_ITEM,
         GET_ITEMS_WITH_CATEGORIES,
         GET_ITEMS_WITH_CATEGORIES_AND_IMAGES
     } = require('../Database/query/Items')
-
+const {deleteImageFromCloudinary} = require('./imageController');
 //get all items
 const getItems = async (req,res)=>{
     const [rows] = await pool.query(GET_ITEMS_WITH_CATEGORIES_AND_IMAGES,);
@@ -111,9 +110,18 @@ const deleteItem = async (req,res,next)=>{
     if(!isAdmin){
         next(createError(401,'You are not authenticated!'))
     }else{
-        await pool.query(`DELETE FROM items WHERE id = ?`,[id]);
+        try{
+            const [images] = await pool.query(`SELECT image_id FROM images WHERE item_id = ?`,[id]);
     
-        res.status(200).json(`Item with id: ${id} is deleted.`)
+            for(let {image_id} of images){
+                await deleteImageFromCloudinary(image_id);
+            }
+            await pool.query(`DELETE FROM items WHERE id = ?`,[id]);
+    
+            res.status(200).json(`Item with id: ${id} is deleted.`)
+        }catch(err){
+            next(err)
+        }
     }
 }
 
