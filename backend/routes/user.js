@@ -24,9 +24,6 @@ router.get('/getUsersWithBasket',verifyToken, getUsersWithBasket);
 // //login
 router.post('/login',login)
 
-// //update
-// router.post('/update', verifyToken, updateUser)
-
 // //singup
 router.post('/signup',signup)
 
