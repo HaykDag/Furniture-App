@@ -6,7 +6,7 @@ const { addItem,
         EditItem,
         getItemsWithTags,
         getItemsWithTagsAndImages,
-    } = require('../controllers/itemController')
+    } = require('../controllers/itemController');
 const verifyToken = require('../utils/verifyToken');
 
 
@@ -17,6 +17,7 @@ router.get('/', getItems)
 
 //test
 router.get('/getItemsWithTags', getItemsWithTags)
+
 //test 2
 router.get('/getItemsWithTagsAndImages', getItemsWithTagsAndImages)
 
