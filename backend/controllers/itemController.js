@@ -7,9 +7,17 @@ const { GET_SINGLE_ITEM,
         GET_ITEMS_WITH_CATEGORIES_AND_IMAGES
     } = require('../Database/query/Items')
 const {deleteImageFromCloudinary} = require('./imageController');
+
 //get all items
 const getItems = async (req,res)=>{
-    const [rows] = await pool.query(GET_ITEMS_WITH_CATEGORIES_AND_IMAGES,);
+
+    const {first,pageSize} = req.query;
+    const sqlQuery = GET_ITEMS_WITH_CATEGORIES_AND_IMAGES(first,pageSize);
+
+    const [total] = await pool.query(`SELECT COUNT(*) as totalItems FROM items`);
+    const {totalItems} = total[0];
+    const totalPages = Math.ceil(totalItems/pageSize);
+    const [rows] = await pool.query(sqlQuery);
 
     for(let row of rows){
         if(row.tags){
@@ -25,7 +33,7 @@ const getItems = async (req,res)=>{
             row.images = [];
         }
     }
-    res.status(200).json(rows);
+    res.status(200).json({result:rows,totalPages});
 }
 
 //get a single item by id or title
@@ -125,45 +133,10 @@ const deleteItem = async (req,res,next)=>{
     }
 }
 
-//get items with tags joined
-const getItemsWithTags = async (req,res,next)=>{
-    const [rows] = await pool.query(GET_ITEMS_WITH_CATEGORIES,);
-
-    for(let row of rows){
-        const tags = row.tags.split(',');
-        row.tags = tags;
-    }
-    res.status(200).json(rows)
-}
-
-//get items with tags and images joined
-const getItemsWithTagsAndImages = async (req,res,next)=>{
-    
-    const [rows] = await pool.query(GET_ITEMS_WITH_CATEGORIES_AND_IMAGES,);
-
-    for(let row of rows){
-        if(row.tags){
-            const tags = row.tags.split(',');
-            row.tags = tags;
-        }else{
-            row.tags = [];
-        }
-        
-        if(row.images){
-            const images = row.images.split(',');
-            row.images = images;
-        }else{
-            row.images = [];
-        }
-    }
-    res.status(200).json(rows)
-}
 
 module.exports = { addItem,
                    getItems, 
                    getItem, 
                    deleteItem, 
-                   EditItem, 
-                   getItemsWithTags,
-                   getItemsWithTagsAndImages,
+                   EditItem
                 }

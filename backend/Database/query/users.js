@@ -54,17 +54,21 @@ WHERE u.id = ?
 GROUP BY u.id;`;
 
 //get users with their basket
-const GET_USERS_WITH_BASKET = `
-    SELECT u.id, 
-           username, 
-           isAdmin, 
-           GROUP_CONCAT (DISTINCT i.title) as basket
-    FROM users u
-    LEFT JOIN basket b
-    ON b.user_id=u.id
-    LEFT JOIN items i
-    ON b.item_id = i.id
-    GROUP BY u.id`;
+const GET_USERS_WITH_BASKET = (first=0,pageSize=50)=>{
+    const query = `
+        SELECT u.id, 
+            username, 
+            isAdmin, 
+            GROUP_CONCAT (DISTINCT i.title) as basket
+        FROM users u
+        LEFT JOIN basket b
+        ON b.user_id=u.id
+        LEFT JOIN items i
+        ON b.item_id = i.id
+        GROUP BY u.id
+        LIMIT ${first} , ${pageSize}`;
+    return query;
+}
 
 module.exports = { GET_USERS,
                    GET_SINGLE_USER,

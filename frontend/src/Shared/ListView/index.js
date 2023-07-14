@@ -7,9 +7,13 @@ import { useEffect, useState } from "react";
 const ListView = (props) => {
     const { columns, getUrl, deleteUrl, isCategory = false} = props;
 
+    const pageSize = 50;
+
     const [searchText,setSearchText] = useState('');
     const [addText,setAddText] = useState("")
     const [data, setData] = useState([]);
+    const [currentPage,setCurrentPage] = useState(1);
+    const [totalPages,setTotalPages] = useState(1)
     axios.defaults.withCredentials = true;
 
     const cols = [
@@ -38,16 +42,17 @@ const ListView = (props) => {
         }
     ] 
     
-
+console.log(totalPages)
 const getData = () => {
-    axios.get(getUrl).then((res) => {
-        setData(res.data.map(d => ({ ...d,key: d.id})));
+    axios.get(`${getUrl}?first=${currentPage}&pageSize=${pageSize}`).then((res) => {
+        setTotalPages(res.data.totalPages);
+        setData(res.data.result.map(d => ({ ...d,key: d.id})));
     });
 };
 
 useEffect(() => {
     getData();  
-}, []);
+}, [currentPage]);
 
 const handleDelete = async (id)=>{
     await axios.delete(deleteUrl+id,{withCredentials:true});
@@ -85,6 +90,13 @@ const handleAdd = async (e)=>{
         <Table
             columns={cols}
             dataSource={data}
+            pagination={{
+                pageSize,
+                total:totalPages,
+                onChange:(page)=>{
+                    setCurrentPage(page);
+                }
+            }}
         ></Table>
     </div>
     )

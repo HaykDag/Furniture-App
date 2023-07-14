@@ -34,9 +34,9 @@ const Auth = ({isLogin=false})=>{
                     password,
                     admin
                 })
-                
+                console.log(response.data)
                 dispatch(signupUser(response.data));
-                navigate("../");
+                navigate("../../");
             }
             setUsername("");
             setPassword("");

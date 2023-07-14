@@ -15,10 +15,9 @@ const Header = ()=>{
 
     const {user}  = useSelector(selectUser);
     const items = useSelector(selectAllItems);
-    
+   
     const handlLogout = ()=>{
         dispatch(logoutUser())
-
         navigate('/login')
     }
     
@@ -40,7 +39,7 @@ const Header = ()=>{
                         <li>
                             <Link to='/'>HOME</Link>
                         </li>
-                        {user.isAdmin && <>
+                        {user.isAdmin ? <>
                         <li>
                             <Link to='/admin'>DASHBOARD</Link>
                         </li>
@@ -53,7 +52,7 @@ const Header = ()=>{
                         <li>
                             <Link to='/admin/Add'>ADD</Link>
                         </li>
-                        </>}
+                        </>:""}
                         {!user.username && <>
                         <li>
                             <Link to='/login'>Login</Link>

@@ -4,8 +4,6 @@ const { addItem,
         getItem,
         deleteItem,
         EditItem,
-        getItemsWithTags,
-        getItemsWithTagsAndImages,
     } = require('../controllers/itemController');
 const verifyToken = require('../utils/verifyToken');
 
@@ -15,11 +13,6 @@ const router = express.Router();
 //Get all the items
 router.get('/', getItems)
 
-//test
-router.get('/getItemsWithTags', getItemsWithTags)
-
-//test 2
-router.get('/getItemsWithTagsAndImages', getItemsWithTagsAndImages)
 
 //Get a single item
 router.get('/:id',getItem);

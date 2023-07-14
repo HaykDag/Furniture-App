@@ -12,7 +12,7 @@ const { GET_USERS,
  } = require('../Database/query/users');
 
 const signup = async (req,res,next)=>{
-    const {username,password,isAdmin} = req.body;
+    const {username,password,admin:isAdmin} = req.body;
     
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password,salt);
@@ -21,7 +21,7 @@ const signup = async (req,res,next)=>{
         const id = result[0].insertId;
 
         generateToken(res,username);
-        res.status(201).json({username, id});
+        res.status(201).json({username, id, isAdmin});
     }catch(err){
         next(err)
     }
@@ -53,14 +53,16 @@ const login = async(req,res,next)=>{
             next(createError(401,"Wrong password"));
         }else{
             generateToken(res,username);
-            const user = await getSingleUserWithBasket(username);
+            const user = await getSingleUserWithBasket({username});
             res.status(200).json(user)
         }
     }
 }
 const verifyUser = async (req,res,next)=>{
     const username = req.username;
-    const user = await getSingleUserWithBasket(username);
+    
+    const user = await getSingleUserWithBasket({username});
+   
     res.status(200).json(user);
 }
 
@@ -92,18 +94,23 @@ const deleteUser = async(req,res,next)=>{
 //get users with basket joined
 const getUsersWithBasket = async(req,res,next)=>{
     const isAdmin = await authCheck(req.username);
-   
+    const {first,pageSize} = req.query;
+    const sqlQuery = GET_USERS_WITH_BASKET((first-1)*pageSize,pageSize);
     if(!isAdmin){
         next(createError(401,'You are not authenticated!'));
     }else{
         try{
-            const [users] = await pool.query(GET_USERS_WITH_BASKET);
+            const [total] = await pool.query(`SELECT COUNT(*) as totalUsers FROM users`);
+            const {totalUsers} = total[0];
+            const totalPages = Math.ceil(totalUsers/pageSize);
+            
+            const [users] = await pool.query(sqlQuery);
             const result = [];
             for(let u of users){
-                const user = await getSingleUserWithBasket(u.id);
+                const user = await getSingleUserWithBasket({id:u.id});
                 result.push(user);
             }
-            res.status(200).json(result)
+            res.status(200).json({result,totalPages})
         }catch(err){
             next(err)
         }

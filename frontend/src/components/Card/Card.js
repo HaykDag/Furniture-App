@@ -16,7 +16,7 @@ const Card = ({id})=>{
 
     let userBasketIds = '';
   
-    user?.basket.forEach(item=>userBasketIds+=("," + item.id));
+    user?.basket?.forEach(item=>userBasketIds+=("," + item.id));
     const formattedNumber = (Number(item?.price)).toLocaleString("en-US");
     
     const dispatch = useDispatch();

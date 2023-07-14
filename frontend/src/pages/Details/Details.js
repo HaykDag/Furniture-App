@@ -5,6 +5,7 @@ import NotFound from '../NotFound/NotFound';
 
 const Details = ()=>{
   const {id}  = useParams();
+  
   const data = useSelector(state=>state.items.items).filter(i=>i.id===+id);
   
   return(<>
