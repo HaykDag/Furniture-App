@@ -5,15 +5,13 @@ import {
 } from "@ant-design/icons";
 import { Badge, Dropdown } from "antd";
 import { removeItemFromBasket } from "../../features/users/usersSlice";
-import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import axios from "axios";
+import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import './shoppingCart.css'
+import "./shoppingCart.css";
 import { Link } from "react-router-dom";
 
-
 const ShoppingCart = ({ user }) => {
-
     useEffect(() => {
         window.addEventListener("error", (e) => {
             if (e.message === "ResizeObserver loop limit exceeded") {
@@ -32,20 +30,19 @@ const ShoppingCart = ({ user }) => {
             }
         });
     }, []);
-    
+
     const dispatch = useDispatch();
-    
-    const handleOrder = (id)=>{
+
+    const handleOrder = (id) => {
         //write the logic for ordering items
-        console.log('order',id)
-    }
-    const handleRemove = async (id)=>{
+        console.log("order", id);
+    };
+    const handleRemove = async (id) => {
         const res = await axios.delete(`/basket/${id}`);
         console.log(res.data);
         dispatch(removeItemFromBasket(id));
-        
-    }
-    
+    };
+
     const basketItems = user.basket?.map((item) => {
         return {
             key: item.id,
@@ -56,25 +53,23 @@ const ShoppingCart = ({ user }) => {
                             {item?.title} - {item?.price}&#1423;
                         </span>
                     </Link>
-                    <PlusOutlined 
+                    <PlusOutlined
                         style={{ backgroundColor: "lightgreen" }}
-                        onClick={()=>handleOrder(item.id)}
+                        onClick={() => handleOrder(item.id)}
                     />
-                    <MinusCircleOutlined 
+                    <MinusCircleOutlined
                         style={{ backgroundColor: "red" }}
-                        onClick={()=>handleRemove(item.id)} 
+                        onClick={() => handleRemove(item.id)}
                     />
                 </div>
             ),
         };
     });
- 
+
     return (
         <div className="cart">
-            <Dropdown 
-                menu={{ items: basketItems}} 
-                placement="bottom">
-                <Badge count={user.basket?.length} size="small">
+            <Dropdown menu={{ items: basketItems }} placement="bottom">
+                <Badge count={user.basket.length} size="small">
                     <ShoppingCartOutlined className="cart-icon" />
                 </Badge>
             </Dropdown>

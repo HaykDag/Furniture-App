@@ -3,102 +3,107 @@ import axios from "axios";
 import { AppUrl } from "../../components/AppData";
 
 const initialState = {
-    allUsers:[],
-    user:{
+    allUsers: [],
+    totalUsers: 0,
+    user: {
         username: "",
         isAdmin: false,
-        basket: []
+        basket: [],
     },
-    error:null,
-}
+    error: null,
+};
 
-export const fetchUsers = createAsyncThunk('user/fetchUsers', async ()=>{
-    try{
-        const response = await axios.get(AppUrl.Users.getUsersWithBasket);
-        return response.data.users
-    } catch(err){
-        return err.response.data.errorMessage
-    }
-})
-
-export const fetchUser = createAsyncThunk('user/fetchUser', async ()=>{
-    try{
-        const response = await axios.get(AppUrl.Users.verifyUser);
-        return response.data
-    } catch(err){
-        return err.response.data.errorMessage
-    }
-})
-
-export const logoutUser = createAsyncThunk('user/logoutUser', async ()=>{
+export const fetchUsers = createAsyncThunk("user/fetchUsers", async () => {
     try {
-        const response = await axios.get(AppUrl.Users.logoutUser)
-        return response.data
+        const response = await axios.get(AppUrl.Users.getUsersWithBasket);
+        return response.data.users;
     } catch (err) {
-        return err.message
+        return err.response.data.errorMessage;
     }
-})
+});
+
+export const fetchUser = createAsyncThunk("user/fetchUser", async () => {
+    try {
+        const response = await axios.get(AppUrl.Users.verifyUser);
+        return response.data;
+    } catch (err) {
+        return err.response.data.errorMessage;
+    }
+});
+
+export const logoutUser = createAsyncThunk("user/logoutUser", async () => {
+    try {
+        const response = await axios.get(AppUrl.Users.logoutUser);
+        return response.data;
+    } catch (err) {
+        return err.message;
+    }
+});
 
 const usersSlice = createSlice({
     name: "users",
     initialState,
-    reducers:{
-        getUser:(state)=>{
-            return state
+    reducers: {
+        getUser: (state) => {
+            return state;
         },
-        loginUser:(state,action)=>{
-            if(action.payload?.username){
-                state.user = action.payload
+        loginUser: (state, action) => {
+            if (action.payload?.username) {
+                state.user = action.payload;
                 state.error = null;
-            }else{
-                state.error = action.payload
+            } else {
+                state.error = action.payload;
             }
         },
-        signupUser:(state,action)=>{
-            if(action.payload?.username){
-                state.user = action.payload
+        signupUser: (state, action) => {
+            if (action.payload?.username) {
+                state.user = action.payload;
                 state.error = null;
-            }else{
-                state.error = action.payload
+            } else {
+                state.error = action.payload;
             }
         },
-        removeItemFromBasket:(state,action)=>{
-            state.user.basket = state.user.basket.filter(item=>item.id!==action.payload);
+        removeItemFromBasket: (state, action) => {
+            state.user.basket = state.user.basket.filter(
+                (item) => item.id !== action.payload
+            );
         },
-        addItemIntoBasket:(state,action)=>{
+        addItemIntoBasket: (state, action) => {
             state.user.basket.push(action.payload);
-        }
+        },
     },
     extraReducers(builder) {
         builder
-        .addCase(fetchUsers.fulfilled,(state,action)=>{
-            if(action.payload){
-                state.allUsers = action.payload
-            }
-        })
-        .addCase(fetchUsers.rejected,(state,action)=>{
-            state.error = action.payload
-        })
-        .addCase(fetchUser.fulfilled,(state,action)=>{
-            if(action.payload){
-                state.user = action.payload
-            }
-        })
-        .addCase(fetchUser.rejected,(state,action)=>{
-            state.error = action.payload
-        })
-        .addCase(logoutUser.fulfilled,(state)=>{
-            state.user.username = ""
-            state.user.isAdmin = false
-        })
-    }
-}) 
+            .addCase(fetchUsers.fulfilled, (state, action) => {
+                if (action.payload) {
+                    state.totalUsers = action.payload.total;
+                    state.allUsers = action.payload.result;
+                }
+            })
+            .addCase(fetchUsers.rejected, (state, action) => {
+                state.error = action.payload;
+            })
+            .addCase(fetchUser.fulfilled, (state, action) => {
+                if (action.payload) {
+                    state.user = action.payload;
+                }
+            })
+            .addCase(fetchUser.rejected, (state, action) => {
+                state.error = action.payload;
+            })
+            .addCase(logoutUser.fulfilled, (state) => {
+                state.user.username = "";
+                state.user.isAdmin = false;
+            });
+    },
+});
 
-export const selectAllUsers = (state=>state.users.allUsers);
-export const selectUser = (state=>state.users);
-export const { loginUser, 
-               signupUser, 
-               removeItemFromBasket,
-               addItemIntoBasket
-             } = usersSlice.actions
-export default usersSlice.reducer
+export const selectAllUsers = (state) => state.users.allUsers;
+export const selectUser = (state) => state.users;
+export const {
+    loginUser,
+    signupUser,
+    removeItemFromBasket,
+    addItemIntoBasket,
+} = usersSlice.actions;
+export default usersSlice.reducer;

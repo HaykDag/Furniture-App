@@ -3,12 +3,15 @@ export const AppUrl = {
     Items: "http://localhost:3000/items/",
     Images: "http://localhost:3000/images/",
     Users: {
-        base:"http://localhost:3000/user/",
-        verifyUser:"http://localhost:3000/user/verify/",
+        base: "http://localhost:3000/user/",
+        verifyUser: "http://localhost:3000/user/verify/",
         loginUser: "http://localhost:3000/user/login/",
         logoutUser: "http://localhost:3000/user/logout/",
         signupUser: "http://localhost:3000/user/signup/",
-        getUsersWithBasket: "http://localhost:3000/user/getUsersWithBasket/"
+        getUsersWithBasket: "http://localhost:3000/user/getUsersWithBasket/",
     },
-    Cloudinary_upload: "https://api.cloudinary.com/v1_1/furnitureappimages/image/upload",
+    Cloudinary_upload:
+        "https://api.cloudinary.com/v1_1/furnitureappimages/image/upload",
 };
+
+export const pageSize = 3;

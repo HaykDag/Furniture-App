@@ -1,8 +1,8 @@
-//get items 
+//get items
 const GET_ITEMS = `SELECT * FROM items`;
 
 //get one Item by id or title
-const GET_SINGLE_ITEM = `SELECT * FROM items WHERE id = ? OR title = ?`
+const GET_SINGLE_ITEM = `SELECT * FROM items WHERE id = ? OR title = ?`;
 
 //update an item
 const UPDATE_ITEM = `
@@ -28,7 +28,11 @@ ON c.id = hc.category_id
 GROUP BY i.id`;
 
 //get items with their categories and images
-const GET_ITEMS_WITH_CATEGORIES_AND_IMAGES = (first = 1,pageSize = 50)=>{
+const GET_ITEMS_WITH_CATEGORIES_AND_IMAGES = (
+    page = 1,
+    pageSize = 50,
+    value = ""
+) => {
     const query = `
         SELECT  
             i.id, 
@@ -45,14 +49,16 @@ const GET_ITEMS_WITH_CATEGORIES_AND_IMAGES = (first = 1,pageSize = 50)=>{
             ON c.id = hc.category_id
         LEFT JOIN images img
             ON img.item_id = i.id
+        WHERE (i.title LIKE "%${value}%" OR i.description LIKE "%${value}%")
         GROUP BY i.id
-        LIMIT ${first} , ${pageSize}`;
+        LIMIT ${(page - 1) * pageSize} , ${pageSize}`;
     return query;
-}
+};
 
-module.exports = { GET_ITEMS,
-                   GET_SINGLE_ITEM,
-                   UPDATE_ITEM,
-                   GET_ITEMS_WITH_CATEGORIES,
-                   GET_ITEMS_WITH_CATEGORIES_AND_IMAGES
-                }
+module.exports = {
+    GET_ITEMS,
+    GET_SINGLE_ITEM,
+    UPDATE_ITEM,
+    GET_ITEMS_WITH_CATEGORIES,
+    GET_ITEMS_WITH_CATEGORIES_AND_IMAGES,
+};

@@ -6,27 +6,26 @@ import { AppUrl } from "../../components/AppData";
 import ListView from "../../Shared/ListView";
 
 const GetItems = () => {
-    
     const navigate = useNavigate();
-    
+
     const columns = [
         {
             title: "Thumbnail",
             dataIndex: "images",
             align: "center",
-            render: (images,record) => {
+            render: (images, record) => {
                 return (
                     <Avatar
-                        src={images.length>0? images[0] : defaultImage}
+                        src={images.length > 0 ? images[0] : defaultImage}
                         style={{ width: "40px", height: "40px" }}
-                        onClick={()=>navigate(`./${record.id}`)}
+                        onClick={() => navigate(`./${record.id}`)}
                     />
                 );
             },
         },
         {
             title: "Title",
-            dataIndex: "title",  
+            dataIndex: "title",
         },
         {
             title: "Description",
@@ -38,20 +37,28 @@ const GetItems = () => {
             sorter: (a, b) => a.price - b.price,
         },
         {
-          title:"Tags",
-          dataIndex:"tags",
-          render:(tags)=>{
-              return <>
-                {tags?.map((tag,index)=>{
-                  return <Tag 
-                            className="tags"
-                            key={index} 
-                            style={{userSelect: "none", cursor:"pointer"}}
-                        >{tag}</Tag>
-                })}
-             
-             </>
-          }
+            title: "Tags",
+            dataIndex: "tags",
+            render: (tags) => {
+                return (
+                    <>
+                        {tags?.map((tag, index) => {
+                            return (
+                                <Tag
+                                    className="tags"
+                                    key={index}
+                                    style={{
+                                        userSelect: "none",
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    {tag}
+                                </Tag>
+                            );
+                        })}
+                    </>
+                );
+            },
         },
         {
             title: "Created",
@@ -73,7 +80,7 @@ const GetItems = () => {
         <ListView
             columns={columns}
             getUrl={AppUrl.Items}
-            deleteUrl = {AppUrl.Items}
+            deleteUrl={AppUrl.Items}
         />
     );
 };

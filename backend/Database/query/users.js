@@ -4,7 +4,7 @@ const GET_USERS = `SELECT id, username, isAdmin, created FROM users`;
 //get single user by id or username
 const GET_SINGLE_USER = `SELECT * FROM users WHERE username = ? OR id = ?`;
 
-//get single user by id 
+//get single user by id
 const GET_SINGLE_USER_BY_ID = `SELECT * FROM users WHERE id = ?`;
 
 //get single user by username
@@ -54,7 +54,7 @@ WHERE u.id = ?
 GROUP BY u.id;`;
 
 //get users with their basket
-const GET_USERS_WITH_BASKET = (first=0,pageSize=50)=>{
+const GET_USERS_WITH_BASKET = (page = 1, pageSize = 50, value = "") => {
     const query = `
         SELECT u.id, 
             username, 
@@ -65,18 +65,21 @@ const GET_USERS_WITH_BASKET = (first=0,pageSize=50)=>{
         ON b.user_id=u.id
         LEFT JOIN items i
         ON b.item_id = i.id
+        WHERE u.username LIKE "%${value}%"
         GROUP BY u.id
-        LIMIT ${first} , ${pageSize}`;
+        LIMIT ${(page - 1) * pageSize} , ${pageSize}`;
     return query;
-}
+};
 
-module.exports = { GET_USERS,
-                   GET_SINGLE_USER,
-                   GET_SINGLE_USER_BY_ID,
-                   GET_SINGLE_USER_BY_USERNAME,
-                   GET_PASSWORD,
-                   CREATE_USER,
-                   DELETE_USER,
-                   GET_USER_WITH_BASKET_BY_ID, 
-                   GET_USER_WITH_BASKET_BY_USERNAME, 
-                   GET_USERS_WITH_BASKET }
+module.exports = {
+    GET_USERS,
+    GET_SINGLE_USER,
+    GET_SINGLE_USER_BY_ID,
+    GET_SINGLE_USER_BY_USERNAME,
+    GET_PASSWORD,
+    CREATE_USER,
+    DELETE_USER,
+    GET_USER_WITH_BASKET_BY_ID,
+    GET_USER_WITH_BASKET_BY_USERNAME,
+    GET_USERS_WITH_BASKET,
+};
