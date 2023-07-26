@@ -7,7 +7,7 @@ import {
     selectTotalItems,
 } from "../../features/items/itemsSlice";
 import { useEffect, useState } from "react";
-import { Input, Select } from "antd";
+import { Button, Input, Select } from "antd";
 import { Footer } from "antd/es/layout/layout";
 import { StepBackwardOutlined, StepForwardOutlined } from "@ant-design/icons";
 import { AppUrl, pageSize } from "../../components/AppData";
@@ -16,7 +16,7 @@ import axios from "axios";
 const Home = () => {
     const [searchText, setSearchText] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const [searchTag, setSearchTag] = useState([]);
+    const [searchTag, setSearchTag] = useState("");
     const items = useSelector(selectAllItems);
     const totalItems = useSelector(selectTotalItems);
 
@@ -37,6 +37,7 @@ const Home = () => {
     }, [dispatch, searchText, currentPage, searchTag]);
 
     const handleSeach = (value) => {
+        setCurrentPage(1);
         setSearchText(value);
     };
 
@@ -64,7 +65,7 @@ const Home = () => {
             </div>
         );
     }
-    console.log(searchTag);
+
     return (
         <div className="home-cnt">
             <div className="search-input-tag-cnt">
@@ -76,11 +77,9 @@ const Home = () => {
                 </div>
                 <div className="CategoryFilter-cnt">
                     <Select
-                        mode="tags"
                         className="CategoryFilter"
-                        onChange={(value) =>
-                            setTimeout(() => setSearchTag(value), 1500)
-                        }
+                        onChange={(value) => setSearchTag(value)}
+                        value={searchTag}
                         placeholder="Filter"
                     >
                         {tagOptions.map((tag) => {
@@ -91,6 +90,16 @@ const Home = () => {
                             );
                         })}
                     </Select>
+                    <Button
+                        className="reset-btn"
+                        onClick={() => {
+                            setCurrentPage(1);
+                            setSearchText("");
+                            setSearchTag("");
+                        }}
+                    >
+                        Reset
+                    </Button>
                 </div>
             </div>
             <div className="home">

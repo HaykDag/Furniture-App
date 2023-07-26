@@ -51,6 +51,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 5px
 }
 .CategoryFilter{
     width: 100px

@@ -5,25 +5,29 @@ const {
     GET_SINGLE_ITEM,
     UPDATE_ITEM,
     GET_ITEMS_WITH_CATEGORIES,
+    GET_COUNT_OF_TOTAL_ITEMS,
     GET_ITEMS_WITH_CATEGORIES_AND_IMAGES,
 } = require("../Database/query/Items");
 const { deleteImageFromCloudinary } = require("./imageController");
 
 //get all items
 const getItems = async (req, res) => {
-    const { page, pageSize, value = "" } = req.query;
+    const { page, pageSize, value = "", searchTag } = req.query;
     const sqlQuery = GET_ITEMS_WITH_CATEGORIES_AND_IMAGES(
         page,
         pageSize,
         value,
         searchTag
     );
-    const [totalItems] = await pool.query(
-        `SELECT COUNT(*) as total FROM items WHERE (title LIKE "%${value}%" OR description LIKE "%${value}%")`
-    );
+
+    const query = GET_COUNT_OF_TOTAL_ITEMS(value, searchTag);
+
+    const [totalItems] = await pool.query(query);
+
     const { total } = totalItems[0];
 
     const [rows] = await pool.query(sqlQuery);
+    console.log(sqlQuery);
     for (let row of rows) {
         if (row.tags) {
             const tags = row.tags.split(",");

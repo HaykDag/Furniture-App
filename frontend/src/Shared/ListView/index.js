@@ -95,7 +95,10 @@ const ListView = (props) => {
                 )}
                 <Input
                     onChange={(e) =>
-                        setTimeout(() => setSearchText(e.target.value), 1500)
+                        setTimeout(() => {
+                            setCurrentPage(1);
+                            setSearchText(e.target.value);
+                        }, 1500)
                     }
                     placeholder="search..."
                 />

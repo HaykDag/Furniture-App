@@ -27,11 +27,25 @@ JOIN categories as c
 ON c.id = hc.category_id
 GROUP BY i.id`;
 
+//get count of the totalItems for pagination
+const GET_COUNT_OF_TOTAL_ITEMS = (value = "", tag = "") => {
+    const query = `
+        SELECT COUNT(DISTINCT i.id) as total FROM items i
+        LEFT JOIN has_category hc
+            ON i.id = hc.item_id
+        LEFT JOIN categories c
+            ON c.id = hc.category_id
+        WHERE (i.title LIKE "%${value}%" OR i.description LIKE "%${value}%") AND c.title LIKE "%${tag}%"
+    `;
+    return query;
+};
+
 //get items with their categories and images
 const GET_ITEMS_WITH_CATEGORIES_AND_IMAGES = (
     page = 1,
     pageSize = 50,
-    value = ""
+    value = "",
+    tag = ""
 ) => {
     const query = `
         SELECT  
@@ -49,7 +63,7 @@ const GET_ITEMS_WITH_CATEGORIES_AND_IMAGES = (
             ON c.id = hc.category_id
         LEFT JOIN images img
             ON img.item_id = i.id
-        WHERE (i.title LIKE "%${value}%" OR i.description LIKE "%${value}%")
+        WHERE (i.title LIKE "%${value}%" OR i.description LIKE "%${value}%") AND c.title LIKE "%${tag}%"
         GROUP BY i.id
         LIMIT ${(page - 1) * pageSize} , ${pageSize}`;
     return query;
@@ -60,5 +74,6 @@ module.exports = {
     GET_SINGLE_ITEM,
     UPDATE_ITEM,
     GET_ITEMS_WITH_CATEGORIES,
+    GET_COUNT_OF_TOTAL_ITEMS,
     GET_ITEMS_WITH_CATEGORIES_AND_IMAGES,
 };
