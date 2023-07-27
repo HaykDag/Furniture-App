@@ -10,6 +10,7 @@ const {
     CREATE_USER,
     DELETE_USER,
     GET_USERS_WITH_BASKET,
+    GET_COUNT_OF_TOTAL_USERS,
 } = require("../Database/query/users");
 
 const signup = async (req, res, next) => {
@@ -71,18 +72,6 @@ const verifyUser = async (req, res, next) => {
     res.status(200).json(user);
 };
 
-const getUsers = async (req, res, next) => {
-    const isAdmin = await authCheck(req.username);
-
-    if (!isAdmin) {
-        next(createError(401, "You are not authenticated!"));
-    } else {
-        const [users] = await pool.query(GET_USERS);
-
-        res.status(200).json(users);
-    }
-};
-
 const deleteUser = async (req, res, next) => {
     const { id } = req.params;
 
@@ -97,21 +86,20 @@ const deleteUser = async (req, res, next) => {
 };
 
 //get users with basket joined
-const getUsersWithBasket = async (req, res, next) => {
+const getUsers = async (req, res, next) => {
     const isAdmin = await authCheck(req.username);
     const { page, pageSize, value = "" } = req.query;
 
     const sqlQuery = GET_USERS_WITH_BASKET(page, pageSize, value);
+    const totalUsersQuery = GET_COUNT_OF_TOTAL_USERS(value);
     if (!isAdmin) {
         next(createError(401, "You are not authenticated!"));
     } else {
         try {
-            const [totalUsers] = await pool.query(
-                `SELECT COUNT(*) as total FROM users`
-            );
+            const [totalUsers] = await pool.query(totalUsersQuery);
             const { total } = totalUsers[0];
-
             const [users] = await pool.query(sqlQuery);
+
             const result = [];
             for (let u of users) {
                 const user = await getSingleUserWithBasket({ id: u.id });
@@ -130,5 +118,4 @@ module.exports = {
     verifyUser,
     getUsers,
     deleteUser,
-    getUsersWithBasket,
 };

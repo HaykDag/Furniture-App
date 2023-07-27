@@ -5,9 +5,8 @@ import ListView from "../../Shared/ListView";
 import { AppUrl } from "../../components/AppData";
 
 const GetUsers = () => {
-
     const navigate = useNavigate();
-    
+
     const columns = [
         {
             title: "Thumbnail",
@@ -41,8 +40,13 @@ const GetUsers = () => {
                                         userSelect: "none",
                                         cursor: "pointer",
                                     }}
-                                    onClick={()=>navigate(`../store/${item.id}`)}
-                                >{item.title}{item.id}</Tag>
+                                    onClick={() =>
+                                        navigate(`../store/${item.id}`)
+                                    }
+                                >
+                                    {item.title}
+                                    {item.id}
+                                </Tag>
                             );
                         })}
                     </>
@@ -53,16 +57,15 @@ const GetUsers = () => {
             title: "Admin",
             dataIndex: "isAdmin",
             sorter: (a, b) => a.isAdmin - b.isAdmin,
-            render: (_,record) => {
+            render: (_, record) => {
                 return <p>{record.isAdmin ? "True" : "False"}</p>;
             },
-        }
+        },
     ];
 
     return (
-
         <ListView
-            getUrl = {AppUrl.Users.getUsersWithBasket}
+            getUrl={AppUrl.Users.base}
             deleteUrl={AppUrl.Users.base}
             columns={columns}
         />

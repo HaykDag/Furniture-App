@@ -15,7 +15,7 @@ const initialState = {
 
 export const fetchUsers = createAsyncThunk("user/fetchUsers", async () => {
     try {
-        const response = await axios.get(AppUrl.Users.getUsersWithBasket);
+        const response = await axios.get(AppUrl.Users.base);
         return response.data.users;
     } catch (err) {
         return err.response.data.errorMessage;

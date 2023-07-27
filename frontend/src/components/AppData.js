@@ -8,10 +8,9 @@ export const AppUrl = {
         loginUser: "http://localhost:3000/user/login/",
         logoutUser: "http://localhost:3000/user/logout/",
         signupUser: "http://localhost:3000/user/signup/",
-        getUsersWithBasket: "http://localhost:3000/user/getUsersWithBasket/",
     },
     Cloudinary_upload:
         "https://api.cloudinary.com/v1_1/furnitureappimages/image/upload",
 };
 
-export const pageSize = 3;
+export const pageSize = 5;

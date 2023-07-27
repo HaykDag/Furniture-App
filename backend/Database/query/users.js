@@ -53,6 +53,16 @@ LEFT JOIN items AS i
 WHERE u.id = ?
 GROUP BY u.id;`;
 
+//get count of the totalUsers for pagination
+const GET_COUNT_OF_TOTAL_USERS = (value = "") => {
+    const query = `
+        SELECT COUNT(DISTINCT id) as total FROM users 
+        WHERE username LIKE "%${value}%"
+        ORDER BY created DESC
+    `;
+    return query;
+};
+
 //get users with their basket
 const GET_USERS_WITH_BASKET = (page = 1, pageSize = 50, value = "") => {
     const query = `
@@ -67,6 +77,7 @@ const GET_USERS_WITH_BASKET = (page = 1, pageSize = 50, value = "") => {
         ON b.item_id = i.id
         WHERE u.username LIKE "%${value}%"
         GROUP BY u.id
+        ORDER BY u.created DESC
         LIMIT ${(page - 1) * pageSize} , ${pageSize}`;
     return query;
 };
@@ -81,5 +92,6 @@ module.exports = {
     DELETE_USER,
     GET_USER_WITH_BASKET_BY_ID,
     GET_USER_WITH_BASKET_BY_USERNAME,
+    GET_COUNT_OF_TOTAL_USERS,
     GET_USERS_WITH_BASKET,
 };

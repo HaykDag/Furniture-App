@@ -65,6 +65,7 @@ const GET_ITEMS_WITH_CATEGORIES_AND_IMAGES = (
             ON img.item_id = i.id
         WHERE (i.title LIKE "%${value}%" OR i.description LIKE "%${value}%") AND c.title LIKE "%${tag}%"
         GROUP BY i.id
+        ORDER BY i.created DESC
         LIMIT ${(page - 1) * pageSize} , ${pageSize}`;
     return query;
 };

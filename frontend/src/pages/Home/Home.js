@@ -80,7 +80,6 @@ const Home = () => {
                         className="CategoryFilter"
                         onChange={(value) => setSearchTag(value)}
                         value={searchTag}
-                        placeholder="Filter"
                     >
                         {tagOptions.map((tag) => {
                             return (
