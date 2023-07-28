@@ -27,7 +27,7 @@ const getItems = async (req, res) => {
     const { total } = totalItems[0];
 
     const [rows] = await pool.query(sqlQuery);
-    console.log(sqlQuery);
+
     for (let row of rows) {
         if (row.tags) {
             const tags = row.tags.split(",");

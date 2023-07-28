@@ -1,0 +1,25 @@
+.search-input-tag-cnt{
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+.input-cnt{
+    min-width: 350px;
+    max-width: 550px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.CategoryFilter-cnt{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    user-select: none;
+}
+.CategoryFilter{
+    width: 100px
+}

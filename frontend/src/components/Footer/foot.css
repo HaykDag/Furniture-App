@@ -1,0 +1,28 @@
+.footer{
+    height: 30px;
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background-color: white;
+}
+.pagination{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius:15px;
+    font-weight: bolder;
+    font-size: large;
+    cursor: pointer;
+    background-color: #555;
+    user-select: none;
+}
+.currentPage{
+    background-color: #792020;
+}
+.pagination:hover{
+    background-color: #a65151;
+}
