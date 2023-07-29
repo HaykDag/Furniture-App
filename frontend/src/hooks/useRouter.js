@@ -19,6 +19,7 @@ import Login from "../pages/Login/Login";
 import Signup from "../pages/Signup/Signup";
 import AddItem from "../pages/AddItem/AddItem";
 import GetItems from "../pages/GetItems/GetItems";
+import Orders from "../pages/Orders/Orders";
 import Details from "../pages/Details/Details";
 import GetUsers from "../pages/GetUsers/GetUsers";
 import NotFound from "../pages/NotFound/NotFound";
@@ -63,6 +64,7 @@ const MyRouter = () => {
                     <Route path="signup" element={<Signup />} />
                     <Route path="store/:id" element={<Details />} />
                     <Route path="store" element={<GetItems />} />
+                    <Route path="orders" element={<Orders />} />
                     <Route path="category" element={<Category />} />
                     <Route path="users" element={<GetUsers />} />
                 </Route>

@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { AppUrl } from "../../components/AppData";
 import axios from "axios";
-
-const CATEGORY_URL = "http://localhost:4000/categories/";
 
 const initialState = {
     categories: [],
@@ -12,7 +11,7 @@ export const fetchCategories = createAsyncThunk(
     "categories/fetchCategories",
     async () => {
         try {
-            const response = await axios.get(CATEGORY_URL);
+            const response = await axios.get(AppUrl.Categories);
             return response.data.result;
         } catch (err) {
             return err.message;
@@ -28,7 +27,7 @@ export const updateCategories = createAsyncThunk(
             categories: initialItem,
         };
         try {
-            const response = await axios.patch(CATEGORY_URL, obj);
+            const response = await axios.patch(AppUrl.Categories, obj);
             return response.data;
         } catch (err) {
             return err.message;

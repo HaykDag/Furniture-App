@@ -2,6 +2,7 @@ export const AppUrl = {
     Categories: "http://localhost:4000/categories/",
     Items: "http://localhost:3000/items/",
     Images: "http://localhost:3000/images/",
+    Orders: "http://localhost:4000/orders/",
     Users: {
         base: "http://localhost:3000/user/",
         verifyUser: "http://localhost:3000/user/verify/",
