@@ -13,6 +13,7 @@ import { selectUser, fetchUser } from "../features/users/usersSlice";
 import HomeLayout from "../layouts/HomeLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
 import Home from "../pages/Home/Home";
+import SingleItem from "../pages/SingleItem/SingleItem";
 import Dashboard from "../pages/dashboard/Dashboard";
 import Category from "../pages/Category";
 import Login from "../pages/Login/Login";
@@ -44,6 +45,7 @@ const MyRouter = () => {
                         path="register"
                         element={userName ? <Home /> : <Signup />}
                     />
+                    <Route path="items/:id" element={<SingleItem />} />
                 </Route>
 
                 {/* if there is an Admin show the Dashboard, else if there is user show not found else show login page */}

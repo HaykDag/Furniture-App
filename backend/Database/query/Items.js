@@ -1,8 +1,28 @@
 //get items
 const GET_ITEMS = `SELECT * FROM items`;
 
-//get one Item by id or title
-const GET_SINGLE_ITEM = `SELECT * FROM items WHERE id = ? OR title = ?`;
+//get items with their categories and images
+const GET_SINGLE_ITEM = () => {
+    const query = `
+        SELECT  
+            i.id, 
+            i.title, 
+            i.description, 
+            GROUP_CONCAT( DISTINCT c.title) as tags,
+            GROUP_CONCAT(DISTINCT img.image_url) as images, 
+            i.price, 
+            i.created
+        FROM items i
+        LEFT JOIN has_category hc
+            ON i.id = hc.item_id
+        LEFT JOIN categories c
+            ON c.id = hc.category_id
+        LEFT JOIN images img
+            ON img.item_id = i.id
+        WHERE i.id = ? OR i.title = ?
+        GROUP BY i.id`;
+    return query;
+};
 
 //update an item
 const UPDATE_ITEM = `

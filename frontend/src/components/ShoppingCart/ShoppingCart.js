@@ -48,19 +48,21 @@ const ShoppingCart = ({ user }) => {
             key: item.id,
             label: (
                 <div className="cart-list">
-                    <Link to={`items/${item.id}`}>
+                    <Link to={`http://localhost:3000/items/${item.id}`}>
                         <span>
                             {item?.title} - {item?.price}&#1423;
                         </span>
                     </Link>
-                    <PlusOutlined
-                        style={{ backgroundColor: "lightgreen" }}
-                        onClick={() => handleOrder(item.id)}
-                    />
-                    <MinusCircleOutlined
-                        style={{ backgroundColor: "red" }}
-                        onClick={() => handleRemove(item.id)}
-                    />
+                    <div className="cart-list-btn-cnt">
+                        <PlusOutlined
+                            style={{ backgroundColor: "lightgreen" }}
+                            onClick={() => handleOrder(item.id)}
+                        />
+                        <MinusCircleOutlined
+                            style={{ backgroundColor: "red" }}
+                            onClick={() => handleRemove(item.id)}
+                        />
+                    </div>
                 </div>
             ),
         };

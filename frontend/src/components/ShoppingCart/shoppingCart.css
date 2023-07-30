@@ -7,14 +7,19 @@
     font-size: 2.5rem;
 }
 .cart-list{
-   width:max-content;
+   width:100%;
    display: flex;
    align-items: center;
-   justify-content: center;
-   gap: 15px;
+   justify-content: space-between;
 }
 .cart-list span{
     border: 1px solid #555;
     padding: 8px;
+    margin: 0px 5px;
     border-radius: 5px;
+}
+.cart-list-btn-cnt{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

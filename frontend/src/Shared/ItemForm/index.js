@@ -28,6 +28,9 @@ const ItemForm = (props) => {
             setTagOptions(res.data.result);
         });
     };
+    const images = data?.images.split(",");
+    const Itemtags = data.tags.split(",");
+
     useEffect(() => {
         getCategories();
     }, []);
@@ -122,7 +125,7 @@ const ItemForm = (props) => {
                 className="form"
                 onFinish={handleSubmit}
                 initialValues={{
-                    tags: tags,
+                    tags: Itemtags,
                     title: title,
                     description: description,
                     price: price,
@@ -176,14 +179,14 @@ const ItemForm = (props) => {
                 {!isNew && (
                     <div className="img-cnt">
                         <Image.PreviewGroup
-                            preview={{
-                                onChange: (current, prev) =>
-                                    console.log(
-                                        `current index: ${current}, prev index: ${prev}`
-                                    ),
-                            }}
+                        // preview={{
+                        //     onChange: (current, prev) =>
+                        //         console.log(
+                        //             `current index: ${current}, prev index: ${prev}`
+                        //         ),
+                        // }}
                         >
-                            {data?.images?.map((imgUrl, i) => (
+                            {images?.map((imgUrl, i) => (
                                 <div key={i} className="img-btn-cnt">
                                     <Image className="pic" src={imgUrl} />
                                     <DeleteOutlined

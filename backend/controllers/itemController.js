@@ -48,14 +48,14 @@ const getItems = async (req, res) => {
 //get a single item by id or title
 const getItem = async (req, res, next) => {
     const { id } = req.params;
+    const sqlQuery = GET_SINGLE_ITEM();
+    const [item] = await pool.query(sqlQuery, [id, id]);
 
-    const [items] = await pool.query(GET_SINGLE_ITEM, [id, id]);
-
-    if (!items[0]) {
+    if (!item[0]) {
         next(createError(404, "no such item"));
     }
 
-    res.status(200).json(items[0]);
+    res.status(200).json(item[0]);
 };
 
 //create an item and then selecting categoty_id using category_title
