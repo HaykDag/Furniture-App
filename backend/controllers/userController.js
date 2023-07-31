@@ -1,7 +1,7 @@
 const { pool } = require("../Database/database");
 const createError = require("../utils/error");
 const generateToken = require("../utils/generateToken");
-const getSingleUserWithBasket = require("../utils/getSingleUserWithBasket");
+const getSingleUser = require("../utils/getSingleUser");
 const authCheck = require("../utils/authCheck");
 const bcrypt = require("bcrypt");
 const {
@@ -9,7 +9,6 @@ const {
     GET_PASSWORD,
     CREATE_USER,
     DELETE_USER,
-    GET_USERS_WITH_BASKET,
     GET_COUNT_OF_TOTAL_USERS,
 } = require("../Database/query/users");
 
@@ -59,7 +58,7 @@ const login = async (req, res, next) => {
             next(createError(401, "Wrong password"));
         } else {
             generateToken(res, username);
-            const user = await getSingleUserWithBasket({ username });
+            const user = await getSingleUser({ username });
             res.status(200).json(user);
         }
     }
@@ -67,7 +66,7 @@ const login = async (req, res, next) => {
 const verifyUser = async (req, res, next) => {
     const username = req.username;
 
-    const user = await getSingleUserWithBasket({ username });
+    const user = await getSingleUser({ username });
 
     res.status(200).json(user);
 };
@@ -90,7 +89,8 @@ const getUsers = async (req, res, next) => {
     const isAdmin = await authCheck(req.username);
     const { page, pageSize, value = "" } = req.query;
 
-    const sqlQuery = GET_USERS_WITH_BASKET(page, pageSize, value);
+    const sqlQuery = GET_USERS(page, pageSize, value);
+
     const totalUsersQuery = GET_COUNT_OF_TOTAL_USERS(value);
     if (!isAdmin) {
         next(createError(401, "You are not authenticated!"));
@@ -102,7 +102,7 @@ const getUsers = async (req, res, next) => {
 
             const result = [];
             for (let u of users) {
-                const user = await getSingleUserWithBasket({ id: u.id });
+                const user = await getSingleUser({ id: u.id });
                 result.push(user);
             }
             res.status(200).json({ result, total });

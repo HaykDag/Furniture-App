@@ -6,7 +6,7 @@
     gap: 15px;
     padding: 15px;
 }
-.info-cnt{
+.single-info-cnt{
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -17,7 +17,7 @@
     border-radius: 5px;
     gap: 10px;
 }
-.info-cnt h1{
+.single-info-cnt h1{
     display: flex;
     justify-content: center;
     text-align-last: center;
@@ -74,4 +74,11 @@
     border: 1px dashed #333;
     padding: 2px;
     border-radius: 5px;
+  }
+  .single-btn-cnt{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
   }

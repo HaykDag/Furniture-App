@@ -4,7 +4,7 @@ export const AppUrl = {
     Images: "http://localhost:3000/images/",
     Orders: "http://localhost:4000/orders/",
     Users: {
-        base: "http://localhost:3000/user/",
+        base: "http://localhost:4000/user/",
         verifyUser: "http://localhost:3000/user/verify/",
         loginUser: "http://localhost:3000/user/login/",
         logoutUser: "http://localhost:3000/user/logout/",

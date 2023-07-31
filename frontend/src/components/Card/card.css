@@ -23,6 +23,11 @@
     justify-content: center;
     align-items: center;
 }
+.info-link{
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
 .title{
     margin: 0px;
     font-size: 1.5rem;
@@ -50,4 +55,21 @@
 .btn-cnt button {
     max-width: 100px;
     padding: 5px;
+}
+.ordered {
+    margin: 0;
+    color: rgb(238, 58, 58);
+    font-size: 1.1rem;
+}
+.order-details{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 3px;
+}
+.order-details p {
+    margin: 0;
+    color: rgb(238, 58, 58);
+    font-size: 1.1rem;
 }

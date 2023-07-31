@@ -18,7 +18,7 @@ const Details = () => {
             setData(err.response.data.error);
         }
     };
-    console.log(data);
+
     useEffect(() => {
         getItem();
     }, [id]);

@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { useState } from "react";
 import { AppUrl } from "../AppData";
+import { Link } from "react-router-dom";
 
 const Card = ({ id }) => {
     const [item] = useSelector((state) =>
@@ -19,9 +20,6 @@ const Card = ({ id }) => {
 
     const [visible, setVisible] = useState(false);
 
-    let userBasketIds = "";
-
-    user?.basket?.forEach((item) => (userBasketIds += "," + item.id));
     const formattedNumber = Number(item?.price).toLocaleString("en-US");
 
     const dispatch = useDispatch();
@@ -31,7 +29,6 @@ const Card = ({ id }) => {
             user_id: user.id,
             item_id: item.id,
         });
-        console.log(res);
         console.log(`user with id:${user.id} ordered item with id:${item.id}`);
     };
     const handleRemove = async () => {
@@ -78,10 +75,39 @@ const Card = ({ id }) => {
                 </div>
             </div>
             <div className="info-cnt">
-                <h3 className="title">{item?.title}</h3>
-                <p className="description">{item?.description}</p>
-                <p className="Price">{formattedNumber} &#1423;</p>
-                {userBasketIds.includes(id) ? (
+                <Link
+                    className="info-link"
+                    to={`http://localhost:3000/items/${id}`}
+                >
+                    <h3 className="title">{item?.title}</h3>
+                    <p className="description">{item?.description}</p>
+                    <p className="Price">{formattedNumber} &#1423;</p>
+                </Link>
+                {user.orders_item_id?.includes(id) ? (
+                    <div>
+                        <p className="ordered">
+                            The item is successfuly ordered
+                        </p>
+                        {user.orders.map((item) => {
+                            if (item.id == id) {
+                                return (
+                                    <div
+                                        key={item.id}
+                                        className="order-details"
+                                    >
+                                        <p>Status: {item.order_status}</p>
+                                        <p>
+                                            Payment:
+                                            {item.payment_status
+                                                ? " done"
+                                                : " expected"}
+                                        </p>
+                                    </div>
+                                );
+                            }
+                        })}
+                    </div>
+                ) : user.basket_item_id?.includes(id) ? (
                     <div className="btn-cnt">
                         <Button type="primary" onClick={handleOrder}>
                             Order

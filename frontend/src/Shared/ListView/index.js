@@ -62,7 +62,7 @@ const ListView = (props) => {
     useEffect(() => {
         getData();
     }, [currentPage, searchText]);
-
+    console.log(data);
     const handleDelete = async (id) => {
         await axios.delete(deleteUrl + id, { withCredentials: true });
         const newData = data.filter((d) => d.key !== id);

@@ -21,3 +21,17 @@
 .table-header input{
     margin: 2px;
 }
+.tags-cnt{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 300px;
+    gap: 2px;
+}
+.tags{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: fit-content;
+}

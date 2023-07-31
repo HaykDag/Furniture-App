@@ -3,7 +3,7 @@ import NotFound from "../NotFound/NotFound";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { AppUrl } from "../../components/AppData";
-import { Image } from "antd";
+import { Button, Image } from "antd";
 import "./singleItem.css";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
@@ -27,9 +27,16 @@ const SingleItem = () => {
         getItem();
     }, [id]);
 
+    const handleOrder = () => {
+        console.log("order");
+    };
+    const handleRemove = () => {
+        console.log("remove");
+    };
+
     return data.title ? (
         <div className="item-info-cnt">
-            <div className="info-cnt">
+            <div className="single-info-cnt">
                 <h1>{data.title}</h1>
                 <p className="item-description">{data.description}</p>
                 <p className="item-price">{data.price} &#1423;</p>
@@ -52,6 +59,14 @@ const SingleItem = () => {
                         <Image key={i} className="pic" src={imgUrl} />
                     ))}
                 </Image.PreviewGroup>
+            </div>
+            <div className="single-btn-cnt">
+                <Button type="primary" onClick={handleOrder}>
+                    Order
+                </Button>
+                <Button type="primary" onClick={handleRemove}>
+                    Remove
+                </Button>
             </div>
         </div>
     ) : (

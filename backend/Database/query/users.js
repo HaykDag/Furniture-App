@@ -1,5 +1,12 @@
-//get just users - id, username, isAdmin
-const GET_USERS = `SELECT id, username, isAdmin, created FROM users`;
+//get users with their basket
+const GET_USERS = (page = 1, pageSize = 50, value = "") => {
+    const query = `
+        SELECT id FROM users
+        WHERE username LIKE "%${value}%"
+        ORDER BY created DESC
+        LIMIT ${(page - 1) * pageSize} , ${pageSize}`;
+    return query;
+};
 
 //get single user by id or username
 const GET_SINGLE_USER = `SELECT * FROM users WHERE username = ? OR id = ?`;
@@ -20,36 +27,38 @@ const CREATE_USER = `INSERT INTO users(username,password,isAdmin) VALUES(? , ?, 
 const DELETE_USER = `DELETE FROM users WHERE id = ?`;
 
 //get single user with their basket
-const GET_USER_WITH_BASKET_BY_USERNAME = `
+const GET_USER_BY_USERNAME = `
 SELECT 
     u.id,
     u.username,
     u.isAdmin,
     GROUP_CONCAT(DISTINCT i.id) as basket_item_id,
-    GROUP_CONCAT(DISTINCT i.title) as basket,
-    GROUP_CONCAT(DISTINCT i.price) as basket_price
-FROM users AS u
-LEFT JOIN basket AS b
+    GROUP_CONCAT(DISTINCT o.item_id) as orders_item_id
+FROM users u
+LEFT JOIN basket b
     ON u.id = b.user_id
-LEFT JOIN items AS i
+LEFT JOIN items i
     ON i.id = b.item_id
+LEFT JOIN orders o
+    ON u.id = o.user_id
 WHERE u.username = ?
 GROUP BY u.id;`;
 
 //get single user with their basket
-const GET_USER_WITH_BASKET_BY_ID = `
+const GET_USER_BY_ID = `
 SELECT 
     u.id,
     u.username,
     u.isAdmin,
     GROUP_CONCAT(DISTINCT i.id) as basket_item_id,
-    GROUP_CONCAT(DISTINCT i.title) as basket,
-    GROUP_CONCAT(DISTINCT i.price) as basket_price
-FROM users AS u
-LEFT JOIN basket AS b
+    GROUP_CONCAT(DISTINCT o.item_id) as orders_item_id
+FROM users u
+LEFT JOIN basket b
     ON u.id = b.user_id
-LEFT JOIN items AS i
+LEFT JOIN items i
     ON i.id = b.item_id
+LEFT JOIN orders o
+    ON u.id = o.user_id
 WHERE u.id = ?
 GROUP BY u.id;`;
 
@@ -63,25 +72,6 @@ const GET_COUNT_OF_TOTAL_USERS = (value = "") => {
     return query;
 };
 
-//get users with their basket
-const GET_USERS_WITH_BASKET = (page = 1, pageSize = 50, value = "") => {
-    const query = `
-        SELECT u.id, 
-            username, 
-            isAdmin, 
-            GROUP_CONCAT (DISTINCT i.title) as basket
-        FROM users u
-        LEFT JOIN basket b
-        ON b.user_id=u.id
-        LEFT JOIN items i
-        ON b.item_id = i.id
-        WHERE u.username LIKE "%${value}%"
-        GROUP BY u.id
-        ORDER BY u.created DESC
-        LIMIT ${(page - 1) * pageSize} , ${pageSize}`;
-    return query;
-};
-
 module.exports = {
     GET_USERS,
     GET_SINGLE_USER,
@@ -90,8 +80,7 @@ module.exports = {
     GET_PASSWORD,
     CREATE_USER,
     DELETE_USER,
-    GET_USER_WITH_BASKET_BY_ID,
-    GET_USER_WITH_BASKET_BY_USERNAME,
+    GET_USER_BY_ID,
+    GET_USER_BY_USERNAME,
     GET_COUNT_OF_TOTAL_USERS,
-    GET_USERS_WITH_BASKET,
 };

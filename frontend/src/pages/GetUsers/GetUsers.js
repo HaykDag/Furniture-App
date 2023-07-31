@@ -30,7 +30,7 @@ const GetUsers = () => {
             dataIndex: "basket",
             render: (items) => {
                 return (
-                    <>
+                    <div className="tags-cnt">
                         {items?.map((item) => {
                             return (
                                 <Tag
@@ -45,11 +45,37 @@ const GetUsers = () => {
                                     }
                                 >
                                     {item.title}
-                                    {item.id}
                                 </Tag>
                             );
                         })}
-                    </>
+                    </div>
+                );
+            },
+        },
+        {
+            title: "Orders",
+            dataIndex: "orders",
+            render: (items) => {
+                return (
+                    <div className="tags-cnt">
+                        {items?.map((item) => {
+                            return (
+                                <Tag
+                                    className="tags"
+                                    key={item.id}
+                                    style={{
+                                        userSelect: "none",
+                                        cursor: "pointer",
+                                    }}
+                                    onClick={() =>
+                                        navigate(`../store/${item.id}`)
+                                    }
+                                >
+                                    {item.title}
+                                </Tag>
+                            );
+                        })}
+                    </div>
                 );
             },
         },
