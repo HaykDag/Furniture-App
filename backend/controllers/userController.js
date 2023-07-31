@@ -92,12 +92,14 @@ const getUsers = async (req, res, next) => {
     const sqlQuery = GET_USERS(page, pageSize, value);
 
     const totalUsersQuery = GET_COUNT_OF_TOTAL_USERS(value);
+
     if (!isAdmin) {
         next(createError(401, "You are not authenticated!"));
     } else {
         try {
             const [totalUsers] = await pool.query(totalUsersQuery);
             const { total } = totalUsers[0];
+
             const [users] = await pool.query(sqlQuery);
 
             const result = [];
