@@ -3,6 +3,7 @@ export const AppUrl = {
     Items: "http://localhost:3000/items/",
     Images: "http://localhost:3000/images/",
     Orders: "http://localhost:4000/orders/",
+    Basket: "http://localhost:4000/basket/",
     Users: {
         base: "http://localhost:4000/user/",
         verifyUser: "http://localhost:3000/user/verify/",

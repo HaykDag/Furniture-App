@@ -18,15 +18,15 @@ const getSingleUser = async ({ username, id }) => {
     if (!user) {
         return undefined;
     } else {
-        if (user.basket_item_id) {
+        if (user.basket) {
             const [items] = await pool.query(
-                `SELECT id,title, price FROM items WHERE id IN (${user.basket_item_id})`
+                `SELECT id,title, price FROM items WHERE id IN (${user.basket})`
             );
             user.basket = items;
         } else {
             user.basket = [];
         }
-        if (!user.orders_item_id) {
+        if (!user.orders) {
             user.orders = [];
         } else {
             const [orders] = await pool.query(`
@@ -38,8 +38,8 @@ const getSingleUser = async ({ username, id }) => {
                     o.payment_status 
                 FROM items i
                 JOIN orders o
-                    ON i.id = o.item_id
-                WHERE i.id IN (${user.orders_item_id})`);
+                    ON i.id = o.item_id 
+                WHERE i.id IN (${user.orders}) AND o.user_id = ${user.id}`);
             user.orders = orders;
         }
     }

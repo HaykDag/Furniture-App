@@ -32,8 +32,8 @@ SELECT
     u.id,
     u.username,
     u.isAdmin,
-    GROUP_CONCAT(DISTINCT i.id) as basket_item_id,
-    GROUP_CONCAT(DISTINCT o.item_id) as orders_item_id
+    GROUP_CONCAT(DISTINCT i.id) as basket,
+    GROUP_CONCAT(DISTINCT o.item_id) as orders
 FROM users u
 LEFT JOIN basket b
     ON u.id = b.user_id
@@ -50,8 +50,8 @@ SELECT
     u.id,
     u.username,
     u.isAdmin,
-    GROUP_CONCAT(DISTINCT i.id) as basket_item_id,
-    GROUP_CONCAT(DISTINCT o.item_id) as orders_item_id
+    GROUP_CONCAT(DISTINCT i.id) as basket,
+    GROUP_CONCAT(DISTINCT o.item_id) as orders
 FROM users u
 LEFT JOIN basket b
     ON u.id = b.user_id

@@ -55,14 +55,14 @@ const GetUsers = () => {
         {
             title: "Orders",
             dataIndex: "orders",
-            render: (items) => {
+            render: (orders) => {
                 return (
                     <div className="tags-cnt">
-                        {items?.map((item) => {
+                        {orders?.map((item, i) => {
                             return (
                                 <Tag
                                     className="tags"
-                                    key={item.id}
+                                    key={i}
                                     style={{
                                         userSelect: "none",
                                         cursor: "pointer",

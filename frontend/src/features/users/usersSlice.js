@@ -71,6 +71,9 @@ const usersSlice = createSlice({
         addItemIntoBasket: (state, action) => {
             state.user.basket.push(action.payload);
         },
+        orderItem: (state, action) => {
+            state.user.orders.push(action.payload);
+        },
     },
     extraReducers(builder) {
         builder
@@ -105,5 +108,6 @@ export const {
     signupUser,
     removeItemFromBasket,
     addItemIntoBasket,
+    orderItem,
 } = usersSlice.actions;
 export default usersSlice.reducer;
