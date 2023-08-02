@@ -10,6 +10,16 @@ const Orders = () => {
         {
             title: "order_id",
             dataIndex: "id",
+            render: (id) => {
+                return (
+                    <div
+                        style={{ cursor: "pointer" }}
+                        onClick={() => navigate(`./${id}`)}
+                    >
+                        {id}
+                    </div>
+                );
+            },
         },
         {
             title: "user_id",

@@ -6,13 +6,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { AppUrl } from "../../components/AppData";
 
-const Details = () => {
+const OrderDetails = () => {
     const [data, setData] = useState();
     const { id } = useParams();
 
-    const getItem = async () => {
+    const getOrder = async () => {
         try {
-            const res = await axios(`${AppUrl.Items}/${id}`);
+            const res = await axios(`${AppUrl.Orders}/${id}`);
             setData(res.data);
         } catch (err) {
             setData(err.response.data.error);
@@ -20,12 +20,18 @@ const Details = () => {
     };
 
     useEffect(() => {
-        getItem();
+        getOrder();
     }, [id]);
 
     return (
-        <>{!data ? <NotFound /> : <ItemForm daddy="Details" data={data} />}</>
+        <>
+            {!data ? (
+                <NotFound />
+            ) : (
+                <ItemForm daddy="OrderDetails" data={data[0]} />
+            )}
+        </>
     );
 };
 
-export default Details;
+export default OrderDetails;

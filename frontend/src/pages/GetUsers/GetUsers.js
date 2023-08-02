@@ -10,7 +10,6 @@ const GetUsers = () => {
     const columns = [
         {
             title: "Thumbnail",
-            //dataIndex: "images",
             align: "center",
             render: () => {
                 return (

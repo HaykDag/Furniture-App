@@ -16,7 +16,7 @@ export const fetchOrders = createAsyncThunk("orders/fetchOrders", async () => {
     }
 });
 
-// export const updateCategories = createAsyncThunk(
+// export const updateOrder = createAsyncThunk(
 //     "categories/updateCategories",
 //     async (initialItem) => {
 //         //id is hardcodeed in backend
@@ -33,11 +33,20 @@ export const fetchOrders = createAsyncThunk("orders/fetchOrders", async () => {
 // );
 
 const ordersSlice = createSlice({
-    name: orders,
+    name: "orders",
     initialState,
     reducers: {
         getOrders: (state) => {
             return state.orders;
+        },
+        updateOrder: (state, action) => {
+            const order_status = action.payload.orderStaus;
+            const payment_status = action.payload.paymentStatus;
+            state.orders = state.orders.map((order) => {
+                return order.id === action.payload.id
+                    ? { ...order, payment_status, order_status }
+                    : order;
+            });
         },
     },
     extraReducers(builder) {
@@ -51,5 +60,5 @@ const ordersSlice = createSlice({
     },
 });
 
-export const { getOrders } = ordersSlice.actions;
+export const { getOrders, updateOrder } = ordersSlice.actions;
 export default ordersSlice.reducer;

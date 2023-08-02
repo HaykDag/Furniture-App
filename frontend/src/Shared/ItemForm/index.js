@@ -9,16 +9,20 @@ import { useDispatch } from "react-redux";
 import { addItem, updateItem } from "../../features/items/itemsSlice";
 import { useNavigate } from "react-router-dom";
 import { AppUrl } from "../../components/AppData";
+import { updateOrder } from "../../features/orders/ordersSlice";
 
 const ItemForm = (props) => {
-    const { data, isNew } = props;
-
+    const { data, daddy } = props;
+    console.log(data);
     const [imageData, setImageData] = useState(null);
     const title = data?.title;
     const description = data?.description;
     const price = data?.price;
     const tags = data?.tags || [];
-
+    const orderStatus = data?.order_status;
+    const orderStatusOptions = ["pending", "agreed", "finished"];
+    const paymentStatus = data?.payment_status;
+    const paymentStatusOptions = ["expected", "done"];
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -28,8 +32,11 @@ const ItemForm = (props) => {
             setTagOptions(res.data.result);
         });
     };
+    let Itemtags = [];
     const images = data?.images.split(",");
-    const Itemtags = data.tags.split(",");
+    if (daddy !== "OrderDetails") {
+        Itemtags = data?.tags.split(",");
+    }
 
     useEffect(() => {
         getCategories();
@@ -42,7 +49,7 @@ const ItemForm = (props) => {
     const handleSubmit = async (values) => {
         let imgUrl = null;
         let imgId = "";
-        if (imageData) {
+        if (imageData && daddy !== "OrderDetails") {
             const formData = new FormData();
             formData.append("upload_preset", "segebppr");
             formData.append("file", imageData);
@@ -59,23 +66,37 @@ const ItemForm = (props) => {
                 console.log(err);
             }
         }
-        if (imgUrl) {
+        if (imgUrl || daddy === "OrderDetails") {
             let tagIds = [];
-            for (let t of values.tags) {
-                for (let opt of tagOptions) {
-                    if (t === opt.title) {
-                        tagIds.push(opt.id);
+            if (daddy !== "OrderDetails") {
+                for (let t of values.tags) {
+                    for (let opt of tagOptions) {
+                        if (t === opt.title) {
+                            tagIds.push(opt.id);
+                        }
                     }
                 }
             }
             try {
-                if (isNew) {
+                if (daddy === "AddItem") {
                     const res = await axios.post(
                         AppUrl.Items,
                         { ...values, tagIds, imgUrl, imgId },
                         { withCredentials: true }
                     );
                     dispatch(addItem({ id: res.data, ...values }));
+                } else if (daddy === "OrderDetails") {
+                    const id = data.id;
+                    const { orderStatus, paymentStatus } = values;
+                    const res = await axios.put(
+                        AppUrl.Orders + id,
+                        {
+                            order_status: orderStatus,
+                            payment_status: paymentStatus,
+                        },
+                        { withCredentials: true }
+                    );
+                    dispatch(updateOrder({ id, orderStatus, paymentStatus }));
                 } else {
                     await axios.put(AppUrl.Items + data.id, {
                         ...values,
@@ -94,7 +115,11 @@ const ItemForm = (props) => {
                     );
                 }
                 setImageData(null);
-                navigate("../store");
+                if (daddy === "OrderDetails") {
+                    navigate("../");
+                } else {
+                    navigate("../store");
+                }
             } catch (err) {
                 console.log(err);
             }
@@ -121,6 +146,15 @@ const ItemForm = (props) => {
     };
     return (
         <div className="details-cnt">
+            {daddy === "OrderDetails" && (
+                <div className="orderDetails-header">
+                    <p>Order id: {data.id}</p>
+                    <p>
+                        User id:{data.user_id} username:{data.username}
+                    </p>
+                    <p>Item id:{data.item_id}</p>
+                </div>
+            )}
             <Form
                 className="form"
                 onFinish={handleSubmit}
@@ -129,31 +163,93 @@ const ItemForm = (props) => {
                     title: title,
                     description: description,
                     price: price,
+                    orderStatus: orderStatus,
+                    paymentStatus: paymentStatus,
                 }}
             >
+                {daddy === "OrderDetails" && (
+                    <>
+                        <Form.Item
+                            style={{
+                                width: 200,
+                                marginBottom: 10,
+                                userSelect: "none",
+                            }}
+                            value={orderStatus}
+                            name="orderStatus"
+                            rules={[{ type: "string" }]}
+                            label="order status"
+                        >
+                            <Select
+                                name="orderStatus"
+                                placeholder="order status"
+                            >
+                                {orderStatusOptions.map((status, i) => (
+                                    <Select.Option key={i} value={status}>
+                                        {status}
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            style={{
+                                width: 200,
+                                marginBottom: 10,
+                                userSelect: "none",
+                            }}
+                            value={paymentStatus}
+                            name="paymentStatus"
+                            rules={[{ type: "string" }]}
+                            label="payment status"
+                        >
+                            <Select
+                                name="paymentStatus"
+                                placeholder="payment status"
+                            >
+                                {paymentStatusOptions.map((status, i) => (
+                                    <Select.Option key={i} value={status}>
+                                        {status}
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                    </>
+                )}
                 <Form.Item name="title">
-                    <Input name="title" placeholder="Title" value={title} />
+                    <Input
+                        disabled={daddy === "OrderDetails"}
+                        name="title"
+                        placeholder="Title"
+                        value={title}
+                    />
                 </Form.Item>
-                <Form.Item
-                    style={{ width: 200, marginBottom: 10, userSelect: "none" }}
-                    value={tags}
-                    name="tags"
-                    rules={[{ type: "array" }]}
-                >
-                    <Select
+                {daddy !== "OrderDetails" && (
+                    <Form.Item
+                        style={{
+                            width: 200,
+                            marginBottom: 10,
+                            userSelect: "none",
+                        }}
+                        value={tags}
                         name="tags"
-                        mode="multiple"
-                        placeholder="Select tags"
+                        rules={[{ type: "array" }]}
                     >
-                        {tagOptions.map((tag) => (
-                            <Select.Option key={tag.id} value={tag.title}>
-                                {tag.title}
-                            </Select.Option>
-                        ))}
-                    </Select>
-                </Form.Item>
+                        <Select
+                            name="tags"
+                            mode="multiple"
+                            placeholder="Select tags"
+                        >
+                            {tagOptions.map((tag) => (
+                                <Select.Option key={tag.id} value={tag.title}>
+                                    {tag.title}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+                )}
                 <Form.Item name="price">
                     <InputNumber
+                        disabled={daddy === "OrderDetails"}
                         name="price"
                         placeholder="price"
                         value={price}
@@ -161,6 +257,7 @@ const ItemForm = (props) => {
                 </Form.Item>
                 <Form.Item name="description">
                     <TextArea
+                        disabled={daddy === "OrderDetails"}
                         name="description"
                         placeholder="description"
                         cols={30}
@@ -168,40 +265,39 @@ const ItemForm = (props) => {
                         value={description}
                     />
                 </Form.Item>
-                <Form.Item valuePropName="image" onChange={handleChange}>
-                    <Upload action={false} listType="picture-card">
-                        <div className="upload-cnt">
-                            <PlusOutlined />
-                            <div>Upload</div>
-                        </div>
-                    </Upload>
-                </Form.Item>
-                {!isNew && (
+                {daddy !== "OrderDetails" && (
+                    <Form.Item valuePropName="image" onChange={handleChange}>
+                        <Upload action={false} listType="picture-card">
+                            <div className="upload-cnt">
+                                <PlusOutlined />
+                                <div>Upload</div>
+                            </div>
+                        </Upload>
+                    </Form.Item>
+                )}
+                {daddy !== "AddItem" && (
                     <div className="img-cnt">
-                        <Image.PreviewGroup
-                        // preview={{
-                        //     onChange: (current, prev) =>
-                        //         console.log(
-                        //             `current index: ${current}, prev index: ${prev}`
-                        //         ),
-                        // }}
-                        >
+                        <Image.PreviewGroup>
                             {images?.map((imgUrl, i) => (
                                 <div key={i} className="img-btn-cnt">
                                     <Image className="pic" src={imgUrl} />
-                                    <DeleteOutlined
-                                        className="delete-btn"
-                                        onClick={() =>
-                                            handleDeleteImage(imgUrl)
-                                        }
-                                    />
+                                    {daddy !== "OrderDetails" && (
+                                        <DeleteOutlined
+                                            className="delete-btn"
+                                            onClick={() =>
+                                                handleDeleteImage(imgUrl)
+                                            }
+                                        />
+                                    )}
                                 </div>
                             ))}
                         </Image.PreviewGroup>
                     </div>
                 )}
                 <Form.Item>
-                    <Button htmlType="submit">Submit</Button>
+                    <Button type="primary" htmlType="submit">
+                        Submit
+                    </Button>
                 </Form.Item>
             </Form>
         </div>

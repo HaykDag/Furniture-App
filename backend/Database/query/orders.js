@@ -33,13 +33,17 @@ const GET_ORDER_BY_ID = (id) => {
             i.price,
             o.order_status,
             o.payment_status,
+            GROUP_CONCAT(DISTINCT img.image_url) as images, 
             o.created
         FROM orders AS o
         JOIN users AS u
             ON u.id = o.user_id
         JOIN items AS i
             ON i.id = o.item_id
+        LEFT JOIN images img
+            ON img.item_id = i.id
         WHERE o.id = ${id}
+        GROUP BY i.id
         `;
     return query;
 };

@@ -1,12 +1,7 @@
-import ItemForm from '../../Shared/ItemForm';
+import ItemForm from "../../Shared/ItemForm";
 
-const AddItem = ()=>{
-
-    return(
-        <ItemForm
-            isNew={true}
-        />
-    )
-}
+const AddItem = () => {
+    return <ItemForm daddy="AddItem" />;
+};
 
 export default AddItem;
