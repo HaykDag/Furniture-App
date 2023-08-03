@@ -35,6 +35,7 @@ const getSingleUser = async ({ username, id }) => {
                     i.title,
                     i.price,
                     o.order_status,
+                    o.id as order_id,
                     o.payment_status 
                 FROM items i
                 JOIN orders o

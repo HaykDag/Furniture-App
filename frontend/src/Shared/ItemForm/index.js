@@ -13,16 +13,14 @@ import { updateOrder } from "../../features/orders/ordersSlice";
 
 const ItemForm = (props) => {
     const { data, daddy } = props;
-    console.log(data);
+
     const [imageData, setImageData] = useState(null);
-    const title = data?.title;
-    const description = data?.description;
-    const price = data?.price;
+
     const tags = data?.tags || [];
-    const orderStatus = data?.order_status;
+    const { title, description, price, order_status, payment_status } = data;
     const orderStatusOptions = ["pending", "agreed", "finished"];
-    const paymentStatus = data?.payment_status;
     const paymentStatusOptions = ["expected", "done"];
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -87,16 +85,16 @@ const ItemForm = (props) => {
                     dispatch(addItem({ id: res.data, ...values }));
                 } else if (daddy === "OrderDetails") {
                     const id = data.id;
-                    const { orderStatus, paymentStatus } = values;
+                    const { order_status, payment_status } = values;
                     const res = await axios.put(
                         AppUrl.Orders + id,
                         {
-                            order_status: orderStatus,
-                            payment_status: paymentStatus,
+                            order_status,
+                            payment_status,
                         },
                         { withCredentials: true }
                     );
-                    dispatch(updateOrder({ id, orderStatus, paymentStatus }));
+                    dispatch(updateOrder({ id, order_status, payment_status }));
                 } else {
                     await axios.put(AppUrl.Items + data.id, {
                         ...values,
@@ -147,12 +145,13 @@ const ItemForm = (props) => {
     return (
         <div className="details-cnt">
             {daddy === "OrderDetails" && (
-                <div className="orderDetails-header">
-                    <p>Order id: {data.id}</p>
-                    <p>
-                        User id:{data.user_id} username:{data.username}
-                    </p>
-                    <p>Item id:{data.item_id}</p>
+                <div className="orderDetails">
+                    <div>
+                        <p>Order id: {data?.id}</p>
+                        <p>User id:{data?.user_id}</p>
+                    </div>
+                    <p>Username: {data?.username}</p>
+                    <p>Item id:{data?.item_id}</p>
                 </div>
             )}
             <Form
@@ -163,8 +162,8 @@ const ItemForm = (props) => {
                     title: title,
                     description: description,
                     price: price,
-                    orderStatus: orderStatus,
-                    paymentStatus: paymentStatus,
+                    order_status: order_status,
+                    payment_status: payment_status,
                 }}
             >
                 {daddy === "OrderDetails" && (
@@ -175,13 +174,13 @@ const ItemForm = (props) => {
                                 marginBottom: 10,
                                 userSelect: "none",
                             }}
-                            value={orderStatus}
-                            name="orderStatus"
+                            value={order_status}
+                            name="order_status"
                             rules={[{ type: "string" }]}
                             label="order status"
                         >
                             <Select
-                                name="orderStatus"
+                                name="order_status"
                                 placeholder="order status"
                             >
                                 {orderStatusOptions.map((status, i) => (
@@ -197,13 +196,13 @@ const ItemForm = (props) => {
                                 marginBottom: 10,
                                 userSelect: "none",
                             }}
-                            value={paymentStatus}
-                            name="paymentStatus"
+                            value={payment_status}
+                            name="payment_status"
                             rules={[{ type: "string" }]}
                             label="payment status"
                         >
                             <Select
-                                name="paymentStatus"
+                                name="payment_status"
                                 placeholder="payment status"
                             >
                                 {paymentStatusOptions.map((status, i) => (

@@ -67,7 +67,7 @@ const GetUsers = () => {
                                         cursor: "pointer",
                                     }}
                                     onClick={() =>
-                                        navigate(`../store/${item.id}`)
+                                        navigate(`../orders/${item.order_id}`)
                                     }
                                 >
                                     {item.title}

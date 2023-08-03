@@ -40,8 +40,7 @@ const ordersSlice = createSlice({
             return state.orders;
         },
         updateOrder: (state, action) => {
-            const order_status = action.payload.orderStaus;
-            const payment_status = action.payload.paymentStatus;
+            const { order_status, payment_status } = action.payload;
             state.orders = state.orders.map((order) => {
                 return order.id === action.payload.id
                     ? { ...order, payment_status, order_status }

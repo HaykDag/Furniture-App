@@ -6,8 +6,31 @@
     gap: 5px;
     
   }
+  .orderDetails{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    width: 350px;
+    gap: 15px;
+  }
+  .orderDetails div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+  .orderDetails  p {
+    margin:0;
+    font-size: 1.2rem;
+    border: 1px solid #333;
+    padding: 5px;
+    border-radius: 15px;
+  }
   .form{
-    margin-top: 35px;
+    margin-top: 5px;
     display: flex;
     flex-direction: column;
     justify-content: center;

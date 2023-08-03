@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import ItemForm from "../../Shared/ItemForm";
-import { useSelector } from "react-redux";
 import NotFound from "../NotFound/NotFound";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -13,7 +12,7 @@ const OrderDetails = () => {
     const getOrder = async () => {
         try {
             const res = await axios(`${AppUrl.Orders}/${id}`);
-            setData(res.data);
+            setData(res.data[0]);
         } catch (err) {
             setData(err.response.data.error);
         }
@@ -28,7 +27,7 @@ const OrderDetails = () => {
             {!data ? (
                 <NotFound />
             ) : (
-                <ItemForm daddy="OrderDetails" data={data[0]} />
+                <ItemForm daddy="OrderDetails" data={data} />
             )}
         </>
     );
