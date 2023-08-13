@@ -30,7 +30,9 @@ const ListView = (props) => {
                         .includes(value.toLowerCase()) ||
                     record?.username
                         ?.toLowerCase()
-                        .includes(value.toLowerCase())
+                        .includes(value.toLowerCase()) ||
+                    record?.id == value ||
+                    record?.user_id == value
                 );
             },
         },

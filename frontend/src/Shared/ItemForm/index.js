@@ -11,9 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { AppUrl } from "../../components/AppData";
 import { updateOrder } from "../../features/orders/ordersSlice";
 
-const ItemForm = (props) => {
-    const { data, daddy } = props;
-
+const ItemForm = ({ data = {}, daddy }) => {
     const [imageData, setImageData] = useState(null);
 
     const tags = data?.tags || [];
@@ -31,9 +29,9 @@ const ItemForm = (props) => {
         });
     };
     let Itemtags = [];
-    const images = data?.images.split(",");
+    const images = data?.images?.split(",");
     if (daddy !== "OrderDetails") {
-        Itemtags = data?.tags.split(",");
+        Itemtags = data?.tags?.split(",");
     }
 
     useEffect(() => {

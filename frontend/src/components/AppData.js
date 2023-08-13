@@ -15,4 +15,4 @@ export const AppUrl = {
         "https://api.cloudinary.com/v1_1/furnitureappimages/image/upload",
 };
 
-export const pageSize = 5;
+export const pageSize = 12;

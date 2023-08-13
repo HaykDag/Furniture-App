@@ -16,6 +16,7 @@ import Home from "../pages/Home/Home";
 import SingleItem from "../pages/SingleItem/SingleItem";
 import Dashboard from "../pages/dashboard/Dashboard";
 import Category from "../pages/Category";
+import AdminChat from "../pages/AdminChat/AdminChat";
 import Login from "../pages/Login/Login";
 import Signup from "../pages/Signup/Signup";
 import AddItem from "../pages/AddItem/AddItem";
@@ -71,6 +72,7 @@ const MyRouter = () => {
                     <Route path="orders/:id" element={<OrderDetails />} />
                     <Route path="category" element={<Category />} />
                     <Route path="users" element={<GetUsers />} />
+                    <Route path="chat" element={<AdminChat />} />
                 </Route>
                 {/* <Route path="/items/:id" element={isAdmin ? <Details /> : userName ? <NotFound/> : <Login />} /> */}
                 <Route path="*" element={<NotFound />} />

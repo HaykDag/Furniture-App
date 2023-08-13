@@ -1,7 +1,7 @@
 import Card from "../../components/Card/Card";
 import Foot from "../../components/Footer/Foot";
 import HomeSearch from "../../components/HomeSearch/HomeSearch";
-
+import Chat from "../../components/Chat/Chat";
 import "./home.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -49,6 +49,9 @@ const Home = () => {
                     {items &&
                         items.map((item, i) => <Card key={i} id={item.id} />)}
                 </div>
+            </div>
+            <div className="chat-cnt">
+                <Chat />
             </div>
             <Foot
                 currentPage={currentPage}

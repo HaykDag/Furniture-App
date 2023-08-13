@@ -7,6 +7,7 @@ import {
     UserAddOutlined,
     UsergroupAddOutlined,
     OrderedListOutlined,
+    WechatOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
@@ -49,6 +50,11 @@ const SideMenu = () => {
                         label: "Add ADMIN",
                         icon: <UserAddOutlined />,
                         key: "/admin/signup",
+                    },
+                    {
+                        label: "Support Chat",
+                        icon: <WechatOutlined />,
+                        key: "/admin/chat",
                     },
                 ]}
             />
