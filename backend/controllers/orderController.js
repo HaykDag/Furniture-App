@@ -7,17 +7,24 @@ const {
     ADD_ORDER,
     UPDATE_ORDER,
     DELETE_ORDER,
+GET_COUNT_OF_TOTAL_ORDERS
 } = require("../Database/query/orders");
 const authCheck = require("../utils/authCheck");
 const createError = require("../utils/error");
 
 //get all orders
 const getOrders = async (req, res, next) => {
-    const sqlQuery = GET_ORDERS();
+    const {value,page,pageSize} = req.query;
+
+    const query = GET_COUNT_OF_TOTAL_ORDERS(value);
+    const [totalItems] = await pool.query(query);
+    const { total } = totalItems[0];
+
+    const sqlQuery = GET_ORDERS({value,page,pageSize});
     try {
         const orders = await pool.query(sqlQuery);
         const result = orders[0];
-        res.status(200).json({ result });
+        res.status(200).json({ result, total });
     } catch (err) {
         next(err);
     }

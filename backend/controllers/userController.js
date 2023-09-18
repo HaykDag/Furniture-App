@@ -14,7 +14,12 @@ const {
 
 const signup = async (req, res, next) => {
     const { username, password, admin: isAdmin } = req.body;
-
+    if(username.length < 3) {
+	//throw new Error("Username must be at least 3 characters") 
+    }
+    if(password.length < 3) {
+	//throw new Error("password must be at least 3 characters") 
+    }
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
     try {
@@ -26,7 +31,7 @@ const signup = async (req, res, next) => {
         const id = result[0].insertId;
 
         generateToken(res, username);
-        res.status(201).json({ username, id, isAdmin });
+        res.status(201).json({ username, id, isAdmin, basket:[], orders:[] });
     } catch (err) {
         next(err);
     }
@@ -43,7 +48,6 @@ const logoutUser = async (req, res, next) => {
 
 const login = async (req, res, next) => {
     const { username, password } = req.body;
-
     const [row] = await pool.query(GET_PASSWORD, [username]);
 
     if (row.length === 0) {

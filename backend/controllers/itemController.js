@@ -19,7 +19,6 @@ const getItems = async (req, res) => {
         value,
         searchTag
     );
-
     const query = GET_COUNT_OF_TOTAL_ITEMS(value, searchTag);
 
     const [totalItems] = await pool.query(query);
@@ -143,7 +142,6 @@ const EditItem = async (req, res, next) => {
 //delete an item
 const deleteItem = async (req, res, next) => {
     const { id } = req.params;
-
     const isAdmin = await authCheck(req.username);
     if (!isAdmin) {
         next(createError(401, "You are not authenticated!"));

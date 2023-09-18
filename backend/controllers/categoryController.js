@@ -50,7 +50,6 @@ const addCategory = async (req, res, next) => {
 const updateCategory = async (req, res, next) => {
     const { id } = req.params;
     const { category_title } = req.body;
-
     const isAdmin = await authCheck(req.username);
     if (!isAdmin) {
         next(createError(401, "You are not authenticated!"));
