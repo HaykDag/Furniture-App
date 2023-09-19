@@ -1,15 +1,17 @@
+
+const BASE_URL = "http://localhost:4000/"
 export const AppUrl = {
-    Categories: "http://localhost:4000/categories/",
-    Items: "http://localhost:3000/items/",
-    Images: "http://localhost:3000/images/",
-    Orders: "http://localhost:4000/orders/",
-    Basket: "http://localhost:4000/basket/",
+    Categories: BASE_URL + "categories/",
+    Items: BASE_URL + "items/",
+    Images: BASE_URL + "images/",
+    Orders: BASE_URL + "orders/",
+    Basket: BASE_URL + "basket/",
     Users: {
-        base: "http://localhost:4000/user/",
-        verifyUser: "http://localhost:3000/user/verify/",
-        loginUser: "http://localhost:3000/user/login/",
-        logoutUser: "http://localhost:3000/user/logout/",
-        signupUser: "http://localhost:3000/user/signup/",
+        base: BASE_URL + "users/",
+        verifyUser: BASE_URL + "users/verify/",
+        loginUser: BASE_URL + "users/login/",
+        logoutUser: BASE_URL + "users/logout/",
+        signupUser: BASE_URL + "users/signup/",
     },
     Cloudinary_upload:
         "https://api.cloudinary.com/v1_1/furnitureappimages/image/upload",

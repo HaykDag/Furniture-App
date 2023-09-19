@@ -4,6 +4,7 @@ import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { pageSize } from "../../components/AppData";
+
 const ListView = (props) => {
     const { columns, getUrl, deleteUrl, isCategory = false } = props;
 

@@ -18,8 +18,6 @@ router.get("/verify", verifyToken, verifyUser);
 //get all users
 router.get("/", verifyToken, getUsers);
 
-//get all users basket joined to them
-//router.get('/getUsersWithBasket',verifyToken, getUsersWithBasket);
 
 // //login
 router.post("/login", login);

@@ -58,7 +58,6 @@ const SingleItem = () => {
             payment_status: false,
         };
         if (res.status === 200) {
-            console.log(`user with id:${user.id} ordered item with id:${id}`);
             dispatch(orderItem(newOrderItem));
         }
     };

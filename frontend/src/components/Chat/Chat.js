@@ -13,7 +13,7 @@ import io from "socket.io-client";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/users/usersSlice";
 
-const socket = io.connect("http://localhost:4000");
+//const socket = io.connect("http://localhost:4000");
 
 const Chat = () => {
     const [isChatOpen, setIsChatOpen] = useState(false);
@@ -29,20 +29,20 @@ const Chat = () => {
         },
     ]);
 
-    useEffect(() => {
-        socket?.on("receive_message", (message) => {
-            const data = {
-                message,
-                sentTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
-                sender: "Admin",
-                direction: "incoming",
-            };
+    // useEffect(() => {
+    //     socket?.on("receive_message", (message) => {
+    //         const data = {
+    //             message,
+    //             sentTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
+    //             sender: "Admin",
+    //             direction: "incoming",
+    //         };
 
-            setMessageList((currentList) => {
-                return [...currentList, data];
-            });
-        });
-    }, []);
+    //         setMessageList((currentList) => {
+    //             return [...currentList, data];
+    //         });
+    //     });
+    // }, []);
 
     const handleSend = (messageText) => {
         const data = {
@@ -52,7 +52,7 @@ const Chat = () => {
             user_id: user?.id,
             direction: "outgoing",
         };
-        socket.emit("send_message", { ...data, id: socket.id });
+        ///socket.emit("send_message", { ...data, id: socket.id });
         setMessageList((currMessList) => {
             return [...currMessList, data];
         });

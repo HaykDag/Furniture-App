@@ -74,7 +74,6 @@ const MyRouter = () => {
                     <Route path="users" element={<GetUsers />} />
                     <Route path="chat" element={<AdminChat />} />
                 </Route>
-                {/* <Route path="/items/:id" element={isAdmin ? <Details /> : userName ? <NotFound/> : <Login />} /> */}
                 <Route path="*" element={<NotFound />} />
             </>
         )

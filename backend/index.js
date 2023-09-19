@@ -8,8 +8,6 @@ const ImagesRoutes = require("./routes/images");
 const orderRoutes = require("./routes/orders");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const authCheck = require("./utils/authCheck");
-const verifyUser = require("./utils/verifyToken");
 
 // express app
 const app = express();
@@ -28,7 +26,7 @@ app.use(express.json());
 // routes
 app.use("/items", itemRoutes);
 app.use("/categories", categoryRoutes);
-app.use("/user", userRoutes);
+app.use("/users", userRoutes);
 app.use("/basket", basketRoutes);
 app.use("/images", ImagesRoutes);
 app.use("/orders", orderRoutes);
@@ -59,6 +57,7 @@ io.on("connection", (socket) => {
             io.to(data.id).emit("receive_message", data.message);
         });
     });
+    
     //client sends message
     socket.on("send_message", (data) => {
         if (adminSocket) {
