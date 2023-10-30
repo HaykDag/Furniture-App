@@ -72,6 +72,10 @@ const Auth = ({isLogin=false})=>{
                     value={admin}
                 />
                 </div>}
+                <div className='demo'>
+                    <span>login: demo</span>
+                    <span>password: demo123</span>
+                </div>
                 <button>Register</button>
                 {error && <div className="error">{error}</div>}
             </form>
